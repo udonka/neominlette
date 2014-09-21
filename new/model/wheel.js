@@ -1,5 +1,3 @@
-alert("wheel");
-
 var Wheel = {
   forces : 0,
   v :0,

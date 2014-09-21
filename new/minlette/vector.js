@@ -45,7 +45,7 @@
 	}
 
 	Vec2.prototype.getTheta = function() {
-		Math.atan2(this.y, this.x);
+		return Math.atan2(this.y, this.x);
 	}
 
 	Vec2.prototype.zero = function() {
@@ -119,16 +119,16 @@
 
 	Vec2.prototype.normalize = function() {
 	    var len = getLength();
-	    if (len < 0.0001f)
-	    len = 1.0f;
+	    if (len < 0.0001)
+	    len = 1.0;
 	    this.x /= len;
 	    this.y /= len;
 	    return this;
 	}
 	Vec2.prototype.getNormalize = function() {
 	    var len = getLength();
-	    if (len < 0.0001f)
-	    len = 1.0f;
+	    if (len < 0.0001)
+	    len = 1.0;
 	    return new Vec2(this.x / len, this.y / len);
 	}
 	Vec2.prototype.reverse = function() {
