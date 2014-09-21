@@ -30,7 +30,7 @@
     	}).map(function(l, index) {
     		return l.attr({
     			fill : colors[index],
-    			stroke : "#333"
+    			stroke : "#fff"
     		})
     	}).map(function(l) {
     		self.group.append(l);

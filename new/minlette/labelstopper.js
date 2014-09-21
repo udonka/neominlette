@@ -1,4 +1,4 @@
-(function() {
+(function(global) {
 	function LabelStopper(ang, str, text) {
 		this.angle = ang;
 		this.labelString = str;
@@ -16,7 +16,8 @@
 	LabelStopper.prototype.getText = function() {
 		return this.labelText;
 	}
+	global.LabelStopper = LabelStopper;
 
-}());
+}(window));
 
 

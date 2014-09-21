@@ -181,4 +181,6 @@
 	Wind.prototype.drawWind = function() {
 	}
 
+	global.Wind = Wind;
+
 }())
