@@ -102,7 +102,7 @@ var Wheel = {
     //registance force
     if (this.isMoving()) {
       // v is not 0
-      this.forces += (v > 0 ? -1 : 1) * GLOBAL.masatu;
+      this.forces += (this.v > 0 ? -1 : 1) * GLOBAL.masatu;
     }
     else { // if(this.isStopped()){
       if (Math.abs(this.forces) <= GLOBAL.maxMasatu) {
@@ -126,9 +126,9 @@ var Wheel = {
     this.v=0;
     //??????s
 
-    GLOBAL.dx = 1 / frameRate;
+    GLOBAL.dx = 1 / GLOBAL.frameRate;
 
-    if(Math.abs(v) > GLOBAL.vlimit){
+    if(Math.abs(this.v) > GLOBAL.vlimit){
       this.v= (this.v > 0) ? GLOBAL.vlimit : -GLOBAL.vlimit;
     }
 
