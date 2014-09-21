@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<style>
+		body {
+			margin: 0px;
+			padding: 0px;
+		}
+	</style>
+</head>
+<body onmousedown="return false;">
+<div id="container"></div>
+<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
+<script defer="defer">
+	function writeMessage(message) {
+		text.setText(message);
+		layer.draw();
+	}
+
+	var stage = new Kinetic.Stage({
+		container: 'container',
+		width: 578,
+		height: 200
+	});
+	var layer = new Kinetic.Layer();
+
+	var text = new Kinetic.Text({
+		x: 10,
+		y: 10,
+		fontFamily: 'Calibri',
+		fontSize: 24,
+		text: '',
+		fill: 'black'
+	});
+
+	var circle = new Kinetic.Circle({
+		x: 200,
+		y: stage.height()/2,
+		radius: 120,
+		fill: 'red',
+		stroke: 'black',
+		strokeWidth: 4
+	});
+
+	var calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
+		// TODO
+		return 2;
+	};
+
+	circle.rouletteStart = function(speed) {
+		console.log("roulette start with speed: " + speed);
+		// TODO
+	};
+
+	var touchStartX, touchStartY, touchStartTime, touchEndX, touchEndY, touchEndTime;
+
+	/*
+	 * mousedown and touchstart are desktop and
+	 * mobile equivalents so they are often times
+	 * used together
+	 */
+	circle.on('mousedown touchstart', function(touchObj) {
+		touchStartX = touchObj.evt.changedTouches[0].clientX;
+		touchStartY = touchObj.evt.changedTouches[0].clientY;
+		touchStartTime = touchObj.evt.timeStamp;
+		writeMessage('Mousedown or touchstart');
+	}, this);
+	/*
+	 * mouseup and touchend are desktop and
+	 * mobile equivalents so they are often times
+	 * used together
+	 */
+	circle.on('mouseup touchend', function(touchObj) {
+		touchEndX = touchObj.evt.changedTouches[0].clientX;
+		touchStartY = touchObj.evt.changedTouches[0].clientY;
+		touchEndTime = touchObj.evt.timeStamp;
+		writeMessage('Mouseup or touchend');
+		circle.rouletteStart(calcSpeed(circle.getX(), circle.getY(),
+				touchStartX, touchStartY,
+				touchEndX, touchEndY,
+				touchStartTime, touchEndTime));
+	}, this);
+
+	layer.add(circle);
+	layer.add(text);
+	stage.add(layer);
+
+</script>
+</body>
+</html>      
