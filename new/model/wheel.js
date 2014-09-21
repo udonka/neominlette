@@ -2,14 +2,17 @@ var Wheel = {
   forces : 0,
   v :0,
   Angle ang = Angle();
-  stoppers: [],//配列のリテラル？
+  stoppers: [],//配列のリテラル これでOK
 
   //view information
+
+  /* いらないかもしれない
   r :0 ,
   
   pos: new Vec2(),
 
   im: 0, //image
+  */
   
   init: function(theta, v, num) {//
     this.ang.set(theta);
@@ -18,120 +21,140 @@ var Wheel = {
   } ,
 
 
-//not yet
-  setView :fucntion (Vec2 p, int r){
-    pos = p;
+  setView :fucntion (pos, r){
+    this.pos = pos;
     this.r = r;
   },
 
-  setStoppers :function(int num) {
-    stoppers = new LabelStopper[num];
-    float unit = 2 * PI / num;
+  setStoppers :function(num) {
+    this.stoppers = [];//配列のコンストラクタ???
+    var unit = 2 * PI / num;
     for (int i = 0; i < num; i++) {
-      stoppers[i] = new LabelStopper(new AbsAngle(unit * i /*i*0.13*/), ""+(i+1),texts[i%texts.length]);//the angle is from Wheel
+      stoppers.push(
+        new LabelStopper(
+          new AbsAngle(unit * i /*i*0.13*/), 
+          ""+(i+1),
+          texts[i%texts.length]
+        )
+      );//the angle is from Wheel
     }
-  }
+  } ,
 
-  getStoppersNum() {
-    return stoppers.length;
-  }
+  getStoppersNum:function() {
+    return stoppers.length;//JSこれでいいのか??? -> OK
+  },
 
-  LabelStopper[] getStoppers() {
+//not yet
+
+  //LabelStopper[] 
+  getStoppers: function() {
     return stoppers;//better to copy
-  }
+  },
 
-  AbsAngle[] getStoppersAbs() {
-    AbsAngle[] res = new AbsAngle[getStoppersNum()];
+  //AbsAngle[] 
+  getStoppersAbs:function() {
+    var res = [];
     for (int i = 0; i < getStoppersNum(); i++) {
-      res[i] = stoppers[i].getAngle().getAdd(ang);
+      res.push(stoppers[i].getAngle().getAdd(ang));
     }
     return res;
-  }
+  },
   
-  LabelStopper getPrevStopper(LabelStopper ls){
-    List<LabelStopper> stoppersList = Arrays.asList(wheel.getStoppers());
+  //List<LabelStopper>
+  getPrevStopper:function(ls){//ls : label stopper
 
-    int index = stoppersList.indexOf(ls);
-    int prevIndex;
+    var stoppersList = wheel.getStoppers();
+
+    var index = stoppersList.indexOf(ls);
+    var prevIndex;
+
     if(index == 0){
-      prevIndex = stoppersList.size() -1;
+      prevIndex = stoppersList.length -1;
     }
     else{
       prevIndex = index -1;
     }
     
-    return stoppersList.get(prevIndex);
-  }
+    return stoppersList[prevIndex];
+  },
 
-  AbsAngle getAngle() {
-    return ang;
-  }
+  //AbsAngle 
+  getAngle:function() {
+    return this.ang;
+  },
 
-  void addForce(float f) {
-    forces += f;
-  }
+  // void 
+  addForce:function(float f) {
+    this.forces += f;
+  },
 
-  void move() {
-    internalMove(calcForce());
-  }
+  //void 
+  move:function() {
+    this.internalMove(this.calcForce());
+  },
 
-  float calcForce() {
-    float a = 0;
+  //float 
+  calcForce:function() {
+    var a = 0;
 
     //registance force
     if (this.isMoving()) {
       // v is not 0
-      forces += (v > 0 ? -1 : 1) * masatu;
+      this.forces += (v > 0 ? -1 : 1) * GLOBAL.masatu;
     }
     else { // if(this.isStopped()){
-      if (abs(forces) <= maxMasatu) {
-        forces = 0 ;
+      if (Math.abs(this.forces) <= GLOBAL.maxMasatu) {
+        this.forces = 0 ;
       }
     }
 
-    a += forces; // mass is 1 F = 1a
+    a += this.forces; // mass is 1 F = 1a
 
     return a;
-  }
+  },
 
-  boolean isMoving() {
-    boolean res = abs(v) > stop;
+  //boolean 
+  isMoving:function() {
+    var res = Math.abs(this.v) > GLOBAL.stop;
     return res;
-  }
+  },
 
-  void internalMove(float a) {
-    v=0;
+  //void 
+  internalMove:function(a) { //float
+    this.v=0;
     //??????s
 
-    dx = 1 / frameRate;
+    GLOBAL.dx = 1 / frameRate;
 
-    if(abs(v) > vlimit){
-      v= (v > 0) ? vlimit : -vlimit;
+    if(Math.abs(v) > GLOBAL.vlimit){
+      this.v= (this.v > 0) ? GLOBAL.vlimit : -GLOBAL.vlimit;
     }
 
 
-    v += a *dx;
+    this.v += a *GLOBAL.dx;
     
     
-    if (abs(v) <= stop){
-      v = 0;
+    if (Math.abs(this.v) <= GLOBAL.stop){
+      this.v = 0;
     }
 
 
 
-    ang.add( v *dx );
-  }
+    this.ang.add( this.v *GLOBAL.dx );
+  } ,
 
 
+  dragged : false,
 
-  boolean dragged = false;
-  void dragStart() {
-    dragged = true;
-    v = 0;
-  }
+  //void 
+  dragStart:function() {
+    this.dragged = true;
+    this.v = 0;
+  },
 
-  void drag(DiffAngle diff,float ms) {
-    if (!dragged) {
+  //void 
+  drag:function(diff,ms) {
+    if (!this.dragged) {
       return ;
     }
 
@@ -144,11 +167,13 @@ var Wheel = {
     
 //    ang.add( v *dx );
 //    v = diff.get();  
-    println("drag" + v);
-  }
+    console.log("drag" + this.v);
+  },
 
-  void dragEnd(DiffAngle diff, int ms) {
-    dragged = false;
+  //void 
+
+  dragEnd:function(diff, ms) {
+    this.dragged = false;
 
     if (ms == 0) {
       return ;
@@ -161,12 +186,14 @@ var Wheel = {
     float a = v / s;//mass is 1
 
    
-    addForce(a);
-  }
+    this.addForce(a);
+  },
   
   
-  void cacheImage(){
-    drawWheel();
+  //void 
+  /*
+  cacheImage:function(){
+    this.drawWheel();
     im = createImage(r*2,r*2,RGB);
     im.loadPixels();
     loadPixels();
@@ -184,8 +211,14 @@ var Wheel = {
     background(bgColor);
 
   }
+  */
   
-  void draw() {
+  //void 
+
+  draw:function() {
+    //TODO
+
+    /*
     println("X= " + ang.get() + ",\tV= "+v);
     
     pushMatrix();
@@ -200,14 +233,20 @@ var Wheel = {
         drawWheel();
       }
     popMatrix();
+    */
   }
 
   
-  private void drawWheelByCache(){
+  //private void 
+  /*
+  drawWheelByCache:function(){
     image(im,-im.width/2,-im.height/2);
-  }
+  },
+  */
   
-  private void drawWheel(){
+  //private void 
+  /*
+  drawWheel:function(){
     pushMatrix();
     translate(width/2, height/2);
 //    rotate(ang.get());
@@ -262,6 +301,7 @@ var Wheel = {
     popMatrix();
   }
   
+  */
   
 
 }
