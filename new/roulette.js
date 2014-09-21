@@ -1,9 +1,12 @@
 (function(global){
 
-	var RANGE = 150;
+	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
 
+	var RANGE = 150;
 	function Roulette(s) {
 		var self = this;
+		this.ds = milkcocoa.dataStore('roulette');
+		this.id = "id" + String(Math.random()).substr(2);
 		this.r = 0;
     	self.group = s.group();
     	var lines = [];
@@ -29,7 +32,21 @@
     	}).map(function(l) {
     		self.group.append(l);
     	});
+    	this.ds.on("set", function(e) {
+    		if(e.id == "force") {
+    			addForceInternal(e.value.f);
+			}
+    	});
     }
+
+	Roulette.prototype.addForce = function(f) {
+		this.ds.set("force", {f : f});
+	}
+
+	Roulette.prototype.addForceInternal = function(f) {
+
+
+	}
 
 	Roulette.prototype.rotate = function(r) {
 		this.r += r;
