@@ -100,7 +100,3 @@ Angle.prototype.calcDiff = function(other){
     	return new Angle(diff - 2*Math.PI, -Math.PI, Math.PI);
     }
 }
-
-
-
-alert("aiu");
