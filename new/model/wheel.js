@@ -1,7 +1,9 @@
+alert("wheel");
+
 var Wheel = {
   forces : 0,
   v :0,
-  Angle ang = Angle();
+  ang : new Angle(),
   stoppers: [],//配列のリテラル これでOK
 
   //view information
@@ -21,7 +23,7 @@ var Wheel = {
   } ,
 
 
-  setView :fucntion (pos, r){
+  setView :function (pos, r){
     this.pos = pos;
     this.r = r;
   },
@@ -29,7 +31,7 @@ var Wheel = {
   setStoppers :function(num) {
     this.stoppers = [];//配列のコンストラクタ???
     var unit = 2 * PI / num;
-    for (int i = 0; i < num; i++) {
+    for (var i = 0; i < num; i++) {
       stoppers.push(
         new LabelStopper(
           new AbsAngle(unit * i /*i*0.13*/), 
@@ -54,7 +56,7 @@ var Wheel = {
   //AbsAngle[] 
   getStoppersAbs:function() {
     var res = [];
-    for (int i = 0; i < getStoppersNum(); i++) {
+    for (var i = 0; i < getStoppersNum(); i++) {
       res.push(stoppers[i].getAngle().getAdd(ang));
     }
     return res;
@@ -84,8 +86,8 @@ var Wheel = {
   },
 
   // void 
-  addForce:function(float f) {
-    this.forces += f;
+  addForce:function(force) {
+    this.forces += force;
   },
 
   //void 
@@ -162,8 +164,8 @@ var Wheel = {
       return ;
     }
     
-    float s = ms/1000.0;
-    float v = diff.get() / s;
+    var s = ms/1000.0;
+    var v = diff.get() / s;
     
 //    ang.add( v *dx );
 //    v = diff.get();  
@@ -179,11 +181,11 @@ var Wheel = {
       return ;
     }
     
-    float s = ms/1000.0;
-    float v = diff.get() / s;
+    var s = ms/1000.0;
+    var v = diff.get() / s;
 
     
-    float a = v / s;//mass is 1
+    var a = v / s;//mass is 1
 
    
     this.addForce(a);

@@ -102,3 +102,5 @@ Angle.prototype.calcDiff = function(other){
 }
 
 
+
+alert("aiu");
