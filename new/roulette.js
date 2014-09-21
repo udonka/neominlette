@@ -8,6 +8,7 @@
 		this.ds = milkcocoa.dataStore('roulette');
 		this.id = "id" + String(Math.random()).substr(2);
 		this.r = 0;
+		this.v = 0;
     	self.group = s.group();
     	var lines = [];
     	var colors = ["#947fff", "#7fefff", "#7fff8a", "#f9ff7f", "#947fff", "#ff7f7f"];
@@ -44,8 +45,12 @@
 	}
 
 	Roulette.prototype.addForceInternal = function(f) {
+		this.v += f;
+	}
 
-
+	Roulette.prototype.run = function(f) {
+		this.rotate(this.v);
+		this.v *= 0.9;
 	}
 
 	Roulette.prototype.rotate = function(r) {

@@ -7,12 +7,44 @@
 			margin: 0px;
 			padding: 0px;
 		}
+		.container {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
 	</style>
 </head>
 <body onmousedown="return false;">
-<div id="container"></div>
+<svg width="320" height="480"></svg>
+<div id="container" class="container"></div>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+
 <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
+    <script src="roulette.js"></script>
+    <script src="snap.svg-min.js"></script>
 <script defer="defer">
+$(function(){
+
+	    var s = Snap("svg");
+	    var roulette = new Roulette(s);
+		var r = 0;
+
+		function render() {
+			roulette.render();
+		}
+
+		setInterval(function() {
+			roulette.run()
+		}, 1000 / 30);
+
+
+		function animationLoop(){
+			render();
+			requestAnimationFrame(animationLoop);
+		}
+		animationLoop();
+
 	function writeMessage(message) {
 		text.setText(message);
 		layer.draw();
@@ -20,8 +52,8 @@
 
 	var stage = new Kinetic.Stage({
 		container: 'container',
-		width: 578,
-		height: 200
+		width: 320,
+		height: 320
 	});
 	var layer = new Kinetic.Layer();
 
@@ -35,11 +67,9 @@
 	});
 
 	var circle = new Kinetic.Circle({
-		x: 200,
-		y: stage.height()/2,
-		radius: 120,
-		fill: 'red',
-		stroke: 'black',
+		x: 160,
+		y: 160,
+		radius: 150,
 		strokeWidth: 4
 	});
 
@@ -50,6 +80,7 @@
 
 	circle.rouletteStart = function(speed) {
 		console.log("roulette start with speed: " + speed);
+		roulette.addForceInternal(2);
 		// TODO
 	};
 
@@ -85,6 +116,9 @@
 	layer.add(circle);
 	layer.add(text);
 	stage.add(layer);
+
+
+})
 
 </script>
 </body>
