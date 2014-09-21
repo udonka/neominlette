@@ -25,9 +25,13 @@
     <script src="snap.svg-min.js"></script>
 <script defer="defer">
 $(function(){
-
+	var width = window.screen.width;
+	var height = window.screen.height;
+	$("svg").attr("width", width);
+	$("svg").attr("height", height);
+	$("#container").attr("style", "width:" + width + "px; width:" + height + "px");
 	    var s = Snap("svg");
-	    var roulette = new Roulette(s);
+	    var roulette = new Roulette(s, width / 2 - 30, width / 2);
 		var r = 0;
 
 		function render() {
@@ -52,8 +56,8 @@ $(function(){
 
 	var stage = new Kinetic.Stage({
 		container: 'container',
-		width: 320,
-		height: 320
+		width: width,
+		height: height
 	});
 	var layer = new Kinetic.Layer();
 
@@ -67,9 +71,9 @@ $(function(){
 	});
 
 	var circle = new Kinetic.Circle({
-		x: 160,
-		y: 160,
-		radius: 150,
+		x: width / 2,
+		y: height / 2,
+		radius: width / 2 - 10,
 		strokeWidth: 4
 	});
 
@@ -80,7 +84,7 @@ $(function(){
 
 	circle.rouletteStart = function(speed) {
 		console.log("roulette start with speed: " + speed);
-		roulette.addForceInternal(2);
+		roulette.addForce(2);
 		// TODO
 	};
 

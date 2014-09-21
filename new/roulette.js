@@ -3,8 +3,10 @@
 	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
 
 	var RANGE = 150;
-	function Roulette(s) {
+	function Roulette(s, r, x) {
 		var self = this;
+		this.range = r - 20;
+		this.x = x;
 		this.ds = milkcocoa.dataStore('roulette');
 		this.id = "id" + String(Math.random()).substr(2);
 		this.r = 0;
@@ -19,11 +21,11 @@
     		}
     	}).map(function(e, index) {
 	    	return (s.path('M 0 0 L '+
-	    		(RANGE * Math.sin(e.th / 180 * Math.PI))+' '
-	    		+(RANGE * Math.cos(e.th / 180 * Math.PI))+
-	    		' A 150 150 0 0 0 '+
-	    		(RANGE * Math.sin(e.next / 180 * Math.PI))+' '+
-	    	(RANGE * Math.cos(e.next / 180 * Math.PI))+
+	    		(self.range * Math.sin(e.th / 180 * Math.PI))+' '
+	    		+(self.range * Math.cos(e.th / 180 * Math.PI))+
+	    		' A '+self.range+' '+self.range+' 0 0 0 '+
+	    		(self.range * Math.sin(e.next / 180 * Math.PI))+' '+
+	    	(self.range * Math.cos(e.next / 180 * Math.PI))+
 	    		' Z'));
     	}).map(function(l, index) {
     		return l.attr({
@@ -34,18 +36,19 @@
     		self.group.append(l);
     	});
     	this.ds.on("set", function(e) {
-    		if(e.id == "force") {
-    			addForceInternal(e.value.f);
+    		if(self.id != e.id) {
+    			self.addForceInternal(e.value.f);
 			}
     	});
     }
 
 	Roulette.prototype.addForce = function(f) {
-		this.ds.set("force", {f : f});
+    	this.addForceInternal(f);
+		this.ds.set(this.id, {f : f});
 	}
 
 	Roulette.prototype.addForceInternal = function(f) {
-		this.v += f;
+		this.v += (f * 10);
 	}
 
 	Roulette.prototype.run = function(f) {
@@ -58,7 +61,8 @@
 	}
 
 	Roulette.prototype.render = function() {
-		this.group.transform("translate("+160+","+160+") rotate("+this.r+")");
+		var self = this;
+		this.group.transform("translate("+self.x+","+self.x+") rotate("+this.r+")");
 	}
 
 
