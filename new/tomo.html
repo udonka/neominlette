@@ -83,9 +83,13 @@ $(function(){
 	});
 
 	var calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
-		var vec1 = new Vec2(Math.abs(startX - centerX), Math.abs(startY - centerY));
-		var vec2 = new Vec2(Math.abs(endX - centerX), Math.abs(endY - centerY));
-		var res = (Math.abs(vec2.getTheta() - vec1.getTheta())) * 10000 / (timeStampY - timeStampX);
+		var vec1 = new Vec2(startX - centerX, startY - centerY);
+		var vec2 = new Vec2(endX - centerX, endY - centerY);
+		var timeDiff = (timeStampY - timeStampX);
+		var v = ((vec2.getTheta() - vec1.getTheta())) / timeDiff;
+		var res = v / timeDiff;
+
+
 		return res;
 	};
 
