@@ -30,9 +30,12 @@ $(function(){
 	$("svg").attr("width", width);
 	$("svg").attr("height", height);
 	$("#container").attr("style", "width:" + width + "px; width:" + height + "px");
-	    var s = Snap("svg");
-	    var roulette = new Roulette(s, width / 2 - 30, width / 2);
-		var r = 0;
+	var s = Snap("svg");
+	var roulette = new Roulette(s, width / 2 - 30, width / 2);
+	s.rect(width / 2 - 10, 0, 20, 100);
+	s.attr({
+		fill: "#777"
+	})
 
 		function render() {
 			roulette.render();

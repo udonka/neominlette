@@ -53,7 +53,7 @@
 
 	Roulette.prototype.run = function(f) {
 		this.rotate(this.v);
-		this.v *= 0.9;
+		this.v *= 0.95;
 	}
 
 	Roulette.prototype.rotate = function(r) {
