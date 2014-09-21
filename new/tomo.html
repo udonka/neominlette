@@ -86,11 +86,10 @@ $(function(){
 		var vec1 = new Vec2(startX - centerX, startY - centerY);
 		var vec2 = new Vec2(endX - centerX, endY - centerY);
 		var timeDiff = (timeStampY - timeStampX);
-		var v = ((vec2.getTheta() - vec1.getTheta())) / timeDiff;
-		var res = v / timeDiff;
+		var v = ((vec2.getTheta() - vec1.getTheta()))*100 / timeDiff;
 
 
-		return res;
+		return v;
 	};
 
 	circle.rouletteStart = function(speed) {
