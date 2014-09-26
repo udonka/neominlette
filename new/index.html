@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -19,6 +20,8 @@
 <div id="container" class="container"></div>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+    <script src="./minlette/vector.js"></script>
+    <script src="./angle.js"></script>
 
 <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
     <script src="roulette.js"></script>
@@ -82,12 +85,25 @@ $(function(){
 
 	var calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
 		// TODO
-		return 2;
+		var vec1 = new Vec2(startX - centerX, startY - centerY);
+		var vec2 = new Vec2(endX - centerX, endY - centerY);
+		var timeDiff = (timeStampY - timeStampX);
+		var theta1 = Angle.createAbsAngle(vec1.getTheta());
+		var theta2 = Angle.createAbsAngle(vec2.getTheta());
+		var dtheta = theta2.calcDiff(theta1);
+
+		var v = (dtheta.get())*100 / timeDiff;
+
+		console.log("theta1 = " + theta1);
+		console.log("theta2 = " + theta2);
+		console.log("dtheta1 = " + dtheta);
+
+		return v;
 	};
 
 	circle.rouletteStart = function(speed) {
 		console.log("roulette start with speed: " + speed);
-		roulette.addForce(2);
+		roulette.addForce(speed);
 		// TODO
 	};
 
@@ -111,7 +127,7 @@ $(function(){
 	 */
 	circle.on('mouseup touchend', function(touchObj) {
 		touchEndX = touchObj.evt.changedTouches[0].clientX;
-		touchStartY = touchObj.evt.changedTouches[0].clientY;
+		touchEndY = touchObj.evt.changedTouches[0].clientY;
 		touchEndTime = touchObj.evt.timeStamp;
 		writeMessage('Mouseup or touchend');
 		circle.rouletteStart(calcSpeed(circle.getX(), circle.getY(),
@@ -129,4 +145,4 @@ $(function(){
 
 </script>
 </body>
-</html>      
+</html>
