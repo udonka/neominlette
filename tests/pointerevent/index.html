@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<style>
+		body {
+			margin: 0px;
+			padding: 0px;
+		}
+		.container {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	</style>
+
+	<script type="text/javascript" src="./hand.minified-1.2.1.js"></script>
+	<script type="text/javascript">
+
+window.onload = function(){
+	alert("hello pointer is ");
+	div = document.getElementById('mydiv');
+
+	eventTable = ["up","down", "move"];
+	eventDevice = ["mouse", "touch"];
+
+	div.addEventListener("pointerdown",function(){
+		div.innerHTML = ("down!" + event.clientX +" "+ event.clientY) +"<br>"+ div.innerHTML;
+	})
+
+	div.addEventListener("pointerup",function(){
+		div.innerHTML = ("up!" + event.clientX +" "+ event.clientY) +"<br>"+ div.innerHTML;
+	})
+
+	div.addEventListener("pointermove",function(){
+		div.innerHTML = ("move!" + event.clientX +" "+ event.clientY) +"<br>"+ div.innerHTML;
+	})
+
+/*
+	for (var ev in eventTable) {
+		//for(var dev in eventDevice){
+			(function(){
+				//var eventString = ;
+				var func = myevents["onpointer" +eventTable[ev]];
+				div.addEventListener(//eventDevice[dev]+
+
+					"mouse" + eventTable[ev]
+
+					//eventTable[ev]
+					,
+					//function(){}
+					func
+				);
+			})();
+		//}
+	};
+
+*/
+
+/*
+	div.addEventListener("mousedown",
+		function(event){
+			var func = myevents["onpointerdown"];
+			func(event);
+		}
+	);
+
+	div.addEventListener("mouseup",
+		function(event){
+			var func = myevents["onpointerup"];
+			func(event);
+		}
+	);
+*/
+}
+
+/*
+var myevents = {};
+myevents.onpointerdown = function(event){
+	div.innerHTML = ("down!" + event.clientX +" "+ event.clientY) +"<br>"+ div.innerHTML;
+}
+
+myevents.onpointerup = function(event){
+
+	div.innerHTML = ("up!" + event.clientX +" "+ event.clientY) +"<br>"+ div.innerHTML;
+}
+
+i = 0;
+myevents.onpointermove = function(event){
+	div.innerHTML = ("moved!" + event.clientX +" "+ event.clientY) +"<br>"+ div.innerHTML;
+
+}
+
+*/
+	</script>
+</head>
+<body>
+
+	<div id="mydiv" style="width:300px;height:300px;background:red;">
+
+	</div>
+</body>
+</html>
