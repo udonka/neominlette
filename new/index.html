@@ -13,6 +13,7 @@
 			left: 0;
 			top: 0;
 		}
+
 	</style>
 </head>
 <body id="body" onmousedown="return false;">
@@ -140,15 +141,17 @@ $(function(){
 
 	var body = document.getElementById("body");
 
-	body.addEventListener("pointerdown", function(){
+	body.addEventListener("pointerdown", function(event){
 		touchStartX = event.clientX;
 		touchStartY = event.clientY;
 		touchStartTime =  parseInt((new Date).getTime());
-		// writeMessage('Mousedown or touchstart');
+		// writeMessage('Mousedown or touchstart')	;
 		console.log("pointerdown");
-	})
+		event.stopPropagation();
+		event.preventDefault();
+	},false);
 
-	body.addEventListener("pointerup", function(){
+	body.addEventListener("pointerup", function(event){
 		touchEndX = event.clientX;
 		touchEndY = event.clientY;
 		touchEndTime =  parseInt((new Date).getTime());
@@ -160,7 +163,13 @@ $(function(){
 				touchStartTime, touchEndTime
 				)
 			);
-	})
+		event.stopPropagation();
+		event.preventDefault();
+
+	},false);
+
+
+
 
 	// layer.add(circle);
 	// layer.add(text);
