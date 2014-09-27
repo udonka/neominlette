@@ -48,6 +48,7 @@ Angle.prototype.add = function(ang) {
 	else if(isNumber(ang)){
 		this.set(this.get() + ang);
 	}
+	return this;
 };
 
 //オーバーロードできた
@@ -93,7 +94,7 @@ Angle.prototype.calcDiff = function(other){
 
     if((-Math.PI <= diff) && (diff <= Math.PI))
     {
-      return new Angle(diff, -Math.PI, Math.PI);
+    	return new Angle(diff, -Math.PI, Math.PI);
     }
     else if(diff < -Math.PI)
     {
