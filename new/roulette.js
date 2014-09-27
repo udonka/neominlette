@@ -20,21 +20,29 @@
     			next : e + 60
     		}
     	}).map(function(e, index) {
-	    	return (s.path('M 0 0 L '+
-	    		(self.range * Math.sin(e.th / 180 * Math.PI))+' '
-	    		+(self.range * Math.cos(e.th / 180 * Math.PI))+
+	    	e.path =(s.path('M 0 0 L '+
+		    		(self.range * Math.sin(e.th / 180 * Math.PI))+' '
+		    		+(self.range * Math.cos(e.th / 180 * Math.PI))+
 	    		' A '+self.range+' '+self.range+' 0 0 0 '+
-	    		(self.range * Math.sin(e.next / 180 * Math.PI))+' '+
-	    	(self.range * Math.cos(e.next / 180 * Math.PI))+
+		    		(self.range * Math.sin(e.next / 180 * Math.PI))+' '+
+			    	(self.range * Math.cos(e.next / 180 * Math.PI))+
 	    		' Z'));
-    	}).map(function(l, index) {
+			return e;
+    	}).map(function(e, index) {
+    		var l = e.path;
     		return l.attr({
-    			fill : colors[index],
+    			fill : Snap.hsb(e.th/360, 0.7,0.8), 
+    			//fill : colors[index],
     			stroke : "#fff"
     		})
     	}).map(function(l) {
     		self.group.append(l);
+    		var circle = 
+    		self.group.append(s.circle(0,0,300).attr({fill:Snap.rgb(255,255,255),stroke:Snap.rgb(0,0,0,0)}));
+
     	});
+
+    	//受信したら力をかける
     	this.ds.on("set", function(e) {
     		if(self.id != e.id) {
     			self.addForceInternal(e.value.f);
