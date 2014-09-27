@@ -95,6 +95,10 @@ $(function(){
 		var theta2 = Angle.createAbsAngle(vec2.getTheta());
 		var dtheta = theta2.calcDiff(theta1);
 
+		if(timeDiff == 0){
+			return 0;	
+		}
+		
 		var v = (dtheta.get())*100 / timeDiff;
 
 		console.log("theta1 = " + theta1);
