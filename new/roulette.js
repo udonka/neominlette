@@ -1,3 +1,4 @@
+
 (function(global){
 
 	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
@@ -12,14 +13,25 @@
 		this.r = 0;
 		this.v = 0;
     	self.group = s.group();
+
     	var lines = [];
-    	var colors = ["#947fff", "#7fefff", "#7fff8a", "#f9ff7f", "#947fff", "#ff7f7f"];
-    	[1, 61, 121, 181, 241, 301].map(function(e, index) {
+
+    	var angles = [];
+
+    	var length = 8;
+    	for (var i = 1; i <=length; i++) {
+    		angles.push(i * 360/length);
+    	};
+
+    	angles.map(function(e, index) {
     		return {
     			th : e,
-    			next : e + 60
+    			next : angles[(index + 1) % angles.length] 
     		}
     	}).map(function(e, index) {
+
+    		e.path = s.pie(0,0,self.range,e.th,e.next);
+    		/* *
 	    	e.path =(s.path('M 0 0 L '+
 		    		(self.range * Math.sin(e.th / 180 * Math.PI))+' '
 		    		+(self.range * Math.cos(e.th / 180 * Math.PI))+
@@ -27,6 +39,7 @@
 		    		(self.range * Math.sin(e.next / 180 * Math.PI))+' '+
 			    	(self.range * Math.cos(e.next / 180 * Math.PI))+
 	    		' Z'));
+//*/
 			return e;
     	}).map(function(e, index) {
     		var l = e.path;
