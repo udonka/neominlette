@@ -55,14 +55,15 @@
     			ang * 180 / Math.PI,
     			label.next * 180 / Math.PI );
 
-    		var r = self.range /2;
+    		var r = self.range ;
 
     		var diffAng = new Angle(label.next).calcDiff(label.getAngle());
+
     		var middleAng = new Angle(label.getAngle()).add(diffAng.get()/2);
 
 
     		label.strPath = s.text(0,0, label.getLabel())
-    			.transform("rotate("+ (-middleAng.get() * 180 / Math.PI) + ") translate(80,0) rotate(90)");
+    			.transform("rotate("+ (-middleAng.get() * 180 / Math.PI) + ") translate("+(r*0.8)+",0) rotate(90)");
 
 			return label;
     	}).map(function(label, index) {
