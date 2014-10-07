@@ -2,43 +2,37 @@
 //getImageData()で描画内容をImageDataオブジェクトとして出力
 //putImageData(imageData)でImageDataオブジェクトを受け取り自身のcanvasに描画
 
+// function Spot(canvasId){
 function Spot(canvasId){
+	this.canvasId = canvasId;
 	this.canvas = document.getElementById(canvasId);
 	this.ctx = this.canvas.getContext('2d');
-	console.log(this.ctx);
 
 	var x1,
 		y1,
 		x2,
 		y2,
 		borderWidth = ($("#"+canvasId).outerWidth()-$("#"+canvasId).innerWidth()) / 2;
+		//もしborderの太さが縦と横で違う場合はそれぞれ取得する必要あり
 		isDrawing = false;
-
-	console.log(borderWidth);
 
 	var self = this;
 
 	$("#"+canvasId).mousedown(function(e){
 		isDrawing = true;
-		console.log(self.ctx);
 		x1 = e.pageX - $(this).offset().left - borderWidth;
 		y1 = e.pageY - $(this).offset().top - borderWidth;
-		console.log("mousedown: "+x1+","+y1);
+		console.log("mousedown");
 	})
 	.mousemove(function(e){
 		if(!isDrawing) return;
 		x2 = e.pageX - $(this).offset().left - borderWidth;
 		y2 = e.pageY - $(this).offset().top - borderWidth;
 
-		//-----------------------------------------
-		//この部分，本当はSpotのthis.ctxを使いたいのに
-		//thisが $("#"+canvasId) になってしまっている
-		//Spotのthis.ctxを使うにはどうしたら良い？
 		self.ctx.beginPath();
  		self.ctx.moveTo(x1,y1);
  		self.ctx.lineTo(x2,y2);
  		self.ctx.stroke();
- 		//-----------------------------------------
 
  		x1 = x2;
  		y1 = y2;
@@ -54,13 +48,22 @@ function Spot(canvasId){
 	});
 }
 
-Spot.prototype = {
-	//canvasの描画内容を返す
-	getImageData : function(){
-		return this.ctx.getImageData(0,0,$("#"+canvasId).width(),$("#"+canvasId).height());
-	},
-	//引数で受け取ったcanvasの描画内容を描画する
-	putImageData : function(imageData){ 
-		this.ctx.putImageData(imageData,0,0,0,0,imageData.width,imagedata.height);
-	}
+Spot.prototype.penColor = function(color){
+	this.ctx.strokeStyle = color;
+}
+
+Spot.prototype.penWidth = function(width){
+	this.ctx.lineWidth = width;
+}
+
+Spot.prototype.clear = function(){
+	this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+}
+
+Spot.prototype.getImageData = function(){
+	return this.ctx.getImageData(0,0,$("#"+this.canvasId).width(),$("#"+this.canvasId).height());
+}
+
+Spot.prototype.putImageData = function(imageData){
+	this.ctx.putImageData(imageData,0,0,0,0,imageData.width,imageData.height);
 }
