@@ -1,0 +1,28 @@
+<html kang="ja">
+	<head>
+		<meta charset="utf-8">
+		<title="お絵かきテスト">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="./Spot.js"></script>
+		<!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+		<style>
+			#mycanvas,#mycanvas2 {
+				border: 10px solid #999;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas width="400" height="400" id="mycanvas">
+			Canvas未対応のブラウザです．
+		</canvas>
+		<canvas width="400" height="400" id="mycanvas2">
+			Canvas未対応のブラウザです．
+		</canvas>
+		<script>
+		 $(function(){
+		 	var mycanvas1 = new Spot("mycanvas");
+		 	var mycanvas2 = new Spot("mycanvas2");
+		 });
+		</script>
+	</body>
+</html>
