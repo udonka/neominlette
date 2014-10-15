@@ -1,8 +1,9 @@
+//ルーレットのラベルの手書き対応用クラス
+
 //canvasのidを引数で受け取ってそのcanvasを手書きエリアにする
 //getImageData()で描画内容をImageDataオブジェクトとして出力
-//putImageData(imageData)でImageDataオブジェクトを受け取り自身のcanvasに描画
+//putImageData(imageData)でImageDataオブジェクトを外部から受け取り自身のcanvasに描画
 
-// function Spot(canvasId){
 function Spot(canvasId){
 	this.canvasId = canvasId;
 	this.canvas = document.getElementById(canvasId);
