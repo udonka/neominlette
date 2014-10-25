@@ -1,4 +1,4 @@
 minlette
 ========
 
-roulette for everyone
+roulette for everyone.
