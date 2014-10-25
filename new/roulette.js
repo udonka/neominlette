@@ -1,5 +1,7 @@
 
 (function(global){
+    if(MilkCocoa)
+
 
 	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
 
@@ -10,7 +12,9 @@
 		this.x = x;
 		this.y = y;
 
-		this.ds = milkcocoa.dataStore('roulette');
+        if(MilkCocoa)
+    		this.ds = milkcocoa.dataStore('roulette');
+
 		this.id = "id" + String(Math.random()).substr(2);
 		this.r = 0;
 		this.v = 0;
@@ -19,19 +23,57 @@
 
     	var lines = [];
     	var angles = [];
-    	var length = 8;
 
-    	for (var i = 1; i <=length; i++) {
-    		angles.push(i * 2*Math.PI/length);
-    	};
 
     	var PI = Math.PI;
-    	angles = [0, PI/2, PI/3 *4];
+
+
+        /* *
+        var day = [
+            "地域で探す",
+            "やりたいことで探す",
+            "食べたいもので探す",
+            "見たい景色で探す",
+        ];
+        //*/
+        /* *
+        var day = [
+
+            "アメリカ",
+            "アジア",
+            "ヨーロッパ ", 
+            "アフリカ", 
+            "日本国内", 
+            "その他",
+        ];
+        //*/
+
+        /* *
+        var day = [
+            "東海岸",
+            "西海岸",
+            "内陸",
+        ];
+        //*/
+
+        /* */
+        var day = [
+            "月",
+            "火",
+            "水",
+            "木",
+            "金",
+        ];
+
+        //*/
+        for (var i = 0; i < day.length; i++) {
+            angles.push(i * 2*PI/day.length);
+        };
 
 
     	angles.map(function(e, index) {
     		//LabelStopperオブジェクトを生成する
-    		var label = new LabelStopper(new Angle(e), index + 1 + "", index + 1 +"message");
+    		var label = new LabelStopper(new Angle(e), day[index], day[index]+"message");
 
     		self.labels.push(label);
 
@@ -63,13 +105,13 @@
 
 
     		label.strPath = s.text(0,0, label.getLabel())
-    			.transform("rotate("+ (-middleAng.get() * 180 / Math.PI) + ") translate("+(r*0.8)+",0) rotate(90)");
+    			.transform("rotate("+ (-middleAng.get() * 180 / Math.PI) + ") translate("+(r*0.75)+",0) rotate(90)");
 
 			return label;
     	}).map(function(label, index) {
     		//図形の色をぬる
     		label.path.attr({
-    			fill : Snap.hsb(label.getAngle().get()/(2*Math.PI), 0.7,0.8), 
+    			fill : Snap.hsb(label.getAngle().get()/(2*Math.PI), 0.5,0.9), 
     			//fill : colors[index],
     			stroke : "#fff"
     		});
@@ -77,8 +119,10 @@
     		//文字を追加
     		label.strPath.attr({
 
-    			fill : Snap.hsb(0, 0,1), 
-    			"text-anchor": "middle"
+    			fill : Snap.hsb(0, 0,0), 
+    			"text-anchor": "middle",
+                "font-size":40,
+
     			//fill : colors[index],
 	    		//textpath: "M0,0L100,50"
 	    	});
@@ -102,6 +146,7 @@
 
 	Roulette.prototype.addForce = function(f) {
     	this.addForceInternal(f);
+            if(MilkCocoa)
 		this.ds.set(this.id, {f : f});
 	}
 
