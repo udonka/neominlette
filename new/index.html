@@ -3,138 +3,36 @@
 <head>
 	<meta charset="UTF-8"/>
 	<meta name="viewport" content="width=device-width"/>
-	<style>
-		body {
-			margin: 0px;
-			padding: 0px;
-		}
-		.container {
-			position: absolute;
-			left: 0;
-			top: 0;
-		}
 
-	</style>
+<!--  -->
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+
+<!--　通信用のライブラリ -->
+    <script charset="UTF-8" type="text/javascript" src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/jquery-2.1.1.min.js"></script>
+<!-- 入力系 -->
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/hand.minified-1.2.1.js"></script>
+<!-- SVG -->
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/Snap.svg-0.3.0/dist/snap.svg.udonka.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/snap.svg.pie.js"></script>
+
+<!-- 自作ライブラリ -->
+    <script charset="UTF-8" type="text/javascript" src="./js/vector.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="./js/angle.js"></script>
+
+<!-- ルーレット用-->
+	<script charset="UTF-8" type="text/javascript" src="./js/labelstopper.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="./js/roulette.js"></script>
 </head>
 
 <body id="body" onmousedown="return false;">
-<svg style="width:100%;height:100%;"></svg>
-<div id="container" class="container"></div>
-    <script charset="UTF-8" type="text/javascript" src="./jquery-1.10.2.min.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="./hand.minified-1.2.1.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="./minlette/vector.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="./angle.js"></script>
+<!-- 描画用フィールド -->
+<svg id="viewarea" style="width:100%;height:100%;"></svg>
+<!-- タッチ検知領域を重ねる (position absolute) -->
+<div id="container"></div>
 
-	
-	<script charset="UTF-8" type="text/javascript" src="labelstopper.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="roulette.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="snap.svg-min.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="snap.svg.pie.js"></script>
-<script defer="defer">
+<script defer="defer" charset="UTF-8" type="text/javascript" src="./js/main.js"> </script>
 
-
-
-
-
-
-$(function(){
-	var width  = $(window).width();
-	var height = $(window).height();
-
-	$("svg").attr("width", width);
-	$("svg").attr("height", height);
-	$("#container").attr("style", "width:" + width + "px; width:" + height + "px");
-	var s = Snap("svg");
-	var roulette = new Roulette(s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
-	var w = 5;
-	var h = 50;
-	s.rect(width / 2 - w/2, 0, w, h);
-	s.attr({
-		fill: "#777"
-	})
-
-		function render() {
-			roulette.render();
-		}
-
-		setInterval(function() {
-			roulette.run()
-		}, 1000 / 30);
-
-
-		function animationLoop(){
-			render();
-			requestAnimationFrame(animationLoop);
-		}
-		animationLoop();
-
-	var calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
-		// TODO
-		var vec1 = new Vec2(startX - centerX, startY - centerY);
-		var vec2 = new Vec2(endX - centerX, endY - centerY);
-		var timeDiff = (timeStampY - timeStampX);
-		var theta1 = Angle.createAbsAngle(vec1.getTheta());
-		var theta2 = Angle.createAbsAngle(vec2.getTheta());
-		var dtheta = theta2.calcDiff(theta1);
-
-		if(timeDiff == 0){
-			return 0;	
-		}
-
-		var v = (dtheta.get())*1000 / timeDiff;
-
-
-		return v;
-	};
-
-	var rouletteStart = function(speed) {
-		console.log("roulette start with speed: " + speed);
-		roulette.addForce(speed);
-		// TODO
-	};
-
-	var touchStartX, touchStartY, touchStartTime, touchEndX, touchEndY, touchEndTime;
-
-	var body = document.getElementById("body");
-
-	body.addEventListener("pointerdown", function(event){
-		touchStartX = event.clientX;
-		touchStartY = event.clientY;
-		touchStartTime =  parseInt((new Date).getTime());
-		// writeMessage('Mousedown or touchstart')	;
-		event.stopPropagation();
-		event.preventDefault();
-	},false);
-
-	
-
-	body.addEventListener("pointerup", function(event){
-		touchEndX = event.clientX;
-		touchEndY = event.clientY;
-		touchEndTime =  parseInt((new Date).getTime());
-		rouletteStart(
-			calcSpeed(
-				roulette.x, roulette.y, //しっかり中心を決める必要がある
-				touchStartX, touchStartY,
-				touchEndX, touchEndY,
-				touchStartTime, touchEndTime
-				)
-			);
-		event.stopPropagation();
-		event.preventDefault();
-
-	},false);
-
-
-
-
-	// layer.add(circle);
-	// layer.add(text);
-	// stage.add(layer);
-
-})
-
-</script>
 </body>
 </html>

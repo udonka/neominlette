@@ -1,9 +1,35 @@
-
 (function(global){
+
+    function SwipeInfo(sx,sy,st, ex,ey,et){
+        if(sx && sy && ex && ey)
+        {
+            this.sx = sx;
+            this.sy = sy;
+            this.st = st;
+
+            this.ex = ex;
+            this.ey = ey;
+            this.et = et;
+        }
+        else{
+            this.sx = 0;
+            this.sy = 0;
+            this.st = 0;
+
+            this.ex = 0;
+            this.ey = 0;
+            this.et = 0;
+        }
+    }
+
+    SwipeInfo.prototype.isZero = function(){
+        return this.sx*this.sx + this.sy*this.sy + this.st*this.st 
+             + this.ex*this.ex + this.ey*this.ey + this.et*this.et  == 0;
+    }
+
+
     if(MilkCocoa)
-
-
-	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
+    	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
 
 	var RANGE = 150;
 	function Roulette(s, r, x, y ) {
@@ -58,18 +84,15 @@
 
         /* */
         var day = [
-            "月",
-            "火",
-            "水",
-            "木",
-            "金",
+            "うどんか",
+            "ごにょごにょ",
+            "うっきー",
         ];
 
         //*/
         for (var i = 0; i < day.length; i++) {
             angles.push(i * 2*PI/day.length);
         };
-
 
     	angles.map(function(e, index) {
     		//LabelStopperオブジェクトを生成する
@@ -127,6 +150,7 @@
 	    		//textpath: "M0,0L100,50"
 	    	});
     		return label;
+            
     	}).map(function(label) {
     		//グループに図形を追加
     		self.group.append(label.path);
@@ -138,29 +162,111 @@
 
     	//受信したら力をかける
     	this.ds.on("set", function(e) {
-    		if(self.id != e.id) {
+    		if(self.id != e.id && (e.value.f)) {
     			self.addForceInternal(e.value.f);
+
+                var swipe = e.value.swipe;
+                if(swipe)
+                {
+                    console.log("hello swipe");
+
+
+                    (function(){
+
+                        self.range;
+                        var otherline = s.line(
+                            self.x + self.range * Math.cos(swipe.st), 
+                            self.y + self.range * Math.sin(swipe.st), 
+                            self.x + self.range * Math.cos(swipe.et), 
+                            self.y + self.range * Math.sin(swipe.et)
+                        )
+                        .attr({
+                            stroke:Snap.rgb(0,0,255),
+                            "stroke-opacity":0.5,
+                            strokeWidth:30
+                        })
+                        .animate({
+                            "stroke-opacity":0,
+                            strokeWidth:30
+                        },1000,null,function(){
+                            otherline.remove();
+                            otherline = null;
+                        });
+
+                    })();
+                }
 			}
     	});
+
+        //止まった時に同期
+        this.ds.on("set", function(e) {
+            console.log("receive");
+
+            if(e.id == "currentstate"){
+                var theta = e.value.theta
+ console.log("receive"+theta);
+
+                self.r = theta;
+                self.v = 0;
+
+self.render();
+
+            }
+
+        });
+
+
+
+        this.swipeInfo = new SwipeInfo();
+
     }
+
 
 	Roulette.prototype.addForce = function(f) {
     	this.addForceInternal(f);
             if(MilkCocoa)
-		this.ds.set(this.id, {f : f});
+
+		this.ds.set(this.id, {
+            f : f,
+            swipe:
+                ((!(this.swipeInfo) || this.swipeInfo.isZero())? 
+                    null: this.swipeInfo)
+        });
 	}
+
+    Roulette.prototype.swipe = function(sx,sy,st,ex,ey,et) {
+        this.swipeInfo = new SwipeInfo(sx,sy,st,ex,ey,et);
+
+    }
 
 	Roulette.prototype.addForceInternal = function(f) {
 		this.v += (f * 10);
 	}
 
 	Roulette.prototype.run = function(f) {
+        //現在動いているか
+        var th = 0.01;
+        var was_running = false;
+        if(Math.abs(this.v) < th)
+            was_running = false;
+        else
+            was_running = true;
+
+        //回す
 		this.rotate(this.v);
 		this.v *= 0.95;
+
+        //回っていたのに止まった
+        if(was_running && Math.abs(this.v) < th && MilkCocoa)
+        {
+            console.log("sent");
+            this.ds.set("currentstate", {theta:this.r});
+        }
+
 	}
 
-	Roulette.prototype.rotate = function(r) {
-		this.r += r;
+	Roulette.prototype.rotate = function(v) {
+		this.r += v;
 	}
 
 	Roulette.prototype.render = function() {
@@ -171,3 +277,5 @@
     global.Roulette = Roulette;
 
 }(window))
+
+
