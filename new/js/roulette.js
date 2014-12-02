@@ -87,6 +87,9 @@
             "うどんか",
             "ごにょごにょ",
             "うっきー",
+            "石井",
+            "後藤",
+            "宮下",
         ];
 
         //*/
@@ -134,7 +137,7 @@
     	}).map(function(label, index) {
     		//図形の色をぬる
     		label.path.attr({
-    			fill : Snap.hsb(label.getAngle().get()/(2*Math.PI), 0.5,0.9), 
+    			fill : Snap.hsb(label.getAngle().get()/(2*Math.PI), 0.6,0.8), 
     			//fill : colors[index],
     			stroke : "#fff"
     		});
@@ -142,7 +145,7 @@
     		//文字を追加
     		label.strPath.attr({
 
-    			fill : Snap.hsb(0, 0,0), 
+    			fill : Snap.hsb(0, 0,1), 
     			"text-anchor": "middle",
                 "font-size":40,
 
@@ -168,8 +171,8 @@
                 var swipe = e.value.swipe;
                 if(swipe)
                 {
-                    console.log("hello swipe");
 
+                    console.log("hello swipe");
 
                     (function(){
 
@@ -204,13 +207,12 @@
 
             if(e.id == "currentstate"){
                 var theta = e.value.theta
- console.log("receive"+theta);
+                console.log("receive"+theta);
 
                 self.r = theta;
                 self.v = 0;
 
-self.render();
-
+                self.render();
             }
 
         });

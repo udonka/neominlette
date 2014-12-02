@@ -5,21 +5,22 @@ $(function(){
 	var width  = $(window).width();
 	var height = $(window).height();
 
-	$("svg").attr("width" , width);
-	$("svg").attr("height", height);
+	var minlength = Math.min(width,height);
+	$("svg").attr("width" , minlength);
+	$("svg").attr("height", minlength);
 	$("#container").attr("style", "width:" + width + "px; width:" + height + "px");
 
 	var s = Snap("#viewarea");
 
-	var roulette = new Roulette(s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
+	var roulette = new Roulette(s, minlength / 2 * 0.8, minlength/2,minlength/2);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
 	var w = 5;
 	var h = 50;
 
-	s.rect(width / 2 - w/2, 0, w, h);
+	s.rect(minlength / 2 - w/2, 0, w, h);
 	s.attr({
-		fill: "#777"
+		fill: "#700"
 	})
 
 	function render() {
