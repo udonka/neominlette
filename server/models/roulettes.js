@@ -11,7 +11,6 @@ var db = mongoose.createConnection(url, function(err, res){
 var RouletteSchema = new mongoose.Schema({
   name: {type: String, unique: true},
   author: {type: String, unique: false},
-  group: {type: String},
   tags: [String]
 });
 

@@ -20,10 +20,9 @@ router.get('/', loginCheck,function(req, res) {
 
 router.post('/', loginCheck, function(req, res){
   var newRoulette = new Roulette(req.body);
-  newRoulette.group = "one";
   console.log(req.body);
   User.findOne({name: req.session.user, email: req.session.email},
-               function(e, user){
+                function(e, user){
                  if(e) {
                    console.log(e);
                  }
@@ -40,6 +39,9 @@ router.post('/', loginCheck, function(req, res){
 
   });
   console.log(newRoulette);
+});
+router.post('/hoge', function(req, res){
+  var newRoulette = new Roulette(req.body);
 });
 
 module.exports = router;

@@ -11,7 +11,8 @@ var db = mongoose.createConnection(url, function(err, res){
 var UserSchema = new mongoose.Schema({
 	name: {type: String, unique: true},
   email: {type: String, unique: true},
-  password: String
+  password: String,
+  rouletteGroup: [{ name: String, id: mongoose.Schema.Types.ObjectId}]
 });
 
 module.exports.User = db.model('User', UserSchema);

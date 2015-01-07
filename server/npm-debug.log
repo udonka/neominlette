@@ -20,7 +20,7 @@
 11 error There is likely additional logging output above.
 12 error System Linux 3.13.0-43-generic
 13 error command "/usr/bin/node" "/usr/bin/npm" "start"
-14 error cwd /home/minlette/miyashita/express/minlette
+14 error cwd /home/minlette/miyashita/neominlette/server
 15 error node -v v0.10.35
 16 error npm -v 1.4.28
 17 error code ELIFECYCLE
