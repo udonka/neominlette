@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<% include head %>
+<body>
+	<h2>ルーレット作成</h2>
+  <form action="/roulette" method="POST">
+		<input type="text" name="name" placeholder="Name"/><br>
+		<input id="list1" type="text" name="tags" placeholder="Tag"/><br>
+		<input id="list2" type="text" name="tags" placeholder="Tag"/><br>
+		<input id="last" type="text" name="tags" placeholder="Tag"/><br>
+		<input type="button" onClick="add()" value="追加"/>
+    <button type="submit">作成</button>
+  </form>
+
+</body>
+<script>
+	var last = $('#last');
+	function add(){
+		$("form input").last().prev().after('<input id="last" type="text" name="tags" placeholder="Tag"/><br>');
+	}
+</script>
+</html>
