@@ -2,42 +2,50 @@
 //すべてをつなげる処理
 
 $(function(){
+
 	var width  = $(window).width();
 	var height = $(window).height();
 
 	var minlength = Math.min(width,height);
 	$("svg").attr("width" , minlength);
 	$("svg").attr("height", minlength);
+
 	$("#container").attr("style", "width:" + width + "px; width:" + height + "px");
 
-	var s = Snap("#viewarea");
+	//snapsvgのインスタンス
+	var snap = Snap("#rouletteArea");
 
-	var roulette = new Roulette(s, minlength / 2 * 0.8, minlength/2,minlength/2);
+    var labels = [
+        "ごにょごにょ",
+        "うっきー",
+        "石井",
+        "後藤",
+        "宮下",
+    ];
+
+	var roulette = new Roulette(snap,labels);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
 	var w = 5;
 	var h = 50;
 
-	s.rect(minlength / 2 - w/2, 0, w, h);
-	s.attr({
+	snap.rect(minlength / 2 - w/2, 0, w, h);
+	snap.attr({
 		fill: "#700"
 	})
 
-	function render() {
-		roulette.render();
-	}
+	var angle = 0;
+
 
 	setInterval(function() {
-		roulette.run()
-	}, 1000 / 30);
+		angle += Math.PI/6;
+		roulette.setAngle(angle);
+		roulette.render();
 
+		console.log('setInterval');
 
-	function animationLoop(){
-		render();
-		requestAnimationFrame(animationLoop);
-	}
+	}, 1000);
 
-	animationLoop();
 
 	var calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
 		// TODO
@@ -67,6 +75,7 @@ $(function(){
 	};
 
 
+/*
 	var touchStartX, touchStartY, touchStartTime, touchEndX, touchEndY, touchEndTime;
 
 	var body = document.getElementById("body");
@@ -153,4 +162,5 @@ $(function(){
 	// layer.add(circle);
 	// layer.add(text);
 	// stage.add(layer);
-})
+*/
+});

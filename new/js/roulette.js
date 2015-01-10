@@ -1,16 +1,9 @@
 (function(global){
-	function Roulette(s, r, x, y ) {
+	function Roulette(s,labels) {
 		var self = this;
-		this.range = r;
-		this.x = x;
-		this.y = y;
+		this.range = 50;
 
-
-        if(MilkCocoa)
-    		this.ds = milkcocoa.dataStore('roulette');
-
-		this.id = "id" + String(Math.random()).substr(2);
-		this.r = 0;
+		this.angle = 0;
 		this.v = 0;
 		this.labels = [];
     	self.group = s.group();
@@ -18,27 +11,20 @@
     	var lines = [];
     	var angles = [];
 
-
     	var PI = Math.PI;
 
         /* */
-        var day = [
-            "うどんか",
-            "ごにょごにょ",
-            "うっきー",
-            "石井",
-            "後藤",
-            "宮下",
-        ];
 
         //*/
-        for (var i = 0; i < day.length; i++) {
-            angles.push(i * 2*PI/day.length);
+
+
+        for (var i = 0; i < labels.length; i++) {
+            angles.push(i * 2*PI/labels.length);
         };
 
-    	angles.map(function(e, index) {
+    	angles.map(function(e, index){
     		//LabelStopperオブジェクトを生成する
-    		var label = new LabelStopper(new Angle(e), day[index], day[index]+"message");
+    		var label = new LabelStopper(new Angle(e), labels[index], labels[index]+"message");
 
     		self.labels.push(label);
 
@@ -83,30 +69,48 @@
 
     		//文字を追加
     		label.strPath.attr({
-
-    			fill : Snap.hsb(0, 0,1), 
+    			fill : Snap.hsb(0, 0, 1), 
     			"text-anchor": "middle",
-                "font-size":40,
-
-    			//fill : colors[index],
-	    		//textpath: "M0,0L100,50"
+                "font-size":10,
 	    	});
+
     		return label;
             
     	}).map(function(label) {
     		//グループに図形を追加
     		self.group.append(label.path);
     		self.group.append(label.strPath);
-
     	});
 
 		var circle = self.group.append(s.circle(0,0,self.range/3 *2).attr({fill:Snap.rgb(255,255,255),stroke:Snap.rgb(0,0,0,0)}));
+
+        this.str = s.text(0,0, "asdfasdfasdflakjsdaf");
+        console.log(this.str);
+        this.str.attr({
+            fill : Snap.hsb(0, 1,1), 
+            "text-anchor": "middle",
+            "font-size":5,
+        })
+
+        s.append(this.str);
+
     }
 
-    Roulette.prototype.setAngle = function(angle) {
-        this.
+    //requestAnimationFrameにより呼ばれる
+    Roulette.prototype.render = function() {
+        this.group.transform("translate("+this.x+","+this.y+") rotate("+this.angle/Math.PI*180+")");
+        this.str.attr({"text": "hello" + this.angle});
+
+    }
+
+    //setIntervalとかに呼ばれる？
+    Roulette.prototype.setAngle = function(angle_rad) {
+        this.angle = angle_rad;
     };
 
     global.Roulette = Roulette;
 
 }(window));
+
+
+
