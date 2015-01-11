@@ -3,6 +3,20 @@
 
 $(function(){
 
+/* 通信系処理 封印しとこう
+	var roomname = window.location.host;
+	var socket = io.connect(
+		roomname,//これが部屋名
+		{transports : ["websocket", "polling"]});
+
+	function sendForce(force){
+		socket.emit(roomname,{f:force,who:0},function(data){
+			//who:自分が誰なのか
+
+		});
+	}
+	*/
+
 	var width  = $(window).width();
 	var height = $(window).height();
 
@@ -58,24 +72,26 @@ $(function(){
 
 		if(timeDiff == 0){
 			return 0;	
+
 		}
+
+
+
 
 		var v = (dtheta.get())*1000 / timeDiff;
 
-		roulette.swipe(startX, startY, theta1.get(), endX, endY, theta2.get());
+
+		//!!!!!!!!!!!sendForce(v);
+
 
 		return v;
 	};
 
 	var rouletteStart = function(speed) {
 		console.log("roulette start with speed: " + speed);
-		roulette.addForce(speed);
-
-		// TODO
 	};
 
 
-/*
 	var touchStartX, touchStartY, touchStartTime, touchEndX, touchEndY, touchEndTime;
 
 	var body = document.getElementById("body");
@@ -89,7 +105,7 @@ $(function(){
 		event.stopPropagation();
 		event.preventDefault();
 
-		arrow =  s.line(touchStartX,touchStartY,touchStartX,touchStartY)
+		arrow =  snap.line(touchStartX,touchStartY,touchStartX,touchStartY)
 			.attr({
 				stroke:Snap.rgb(255,0,0),
 				"stroke-opacity":0.5,
@@ -162,5 +178,4 @@ $(function(){
 	// layer.add(circle);
 	// layer.add(text);
 	// stage.add(layer);
-*/
 });
