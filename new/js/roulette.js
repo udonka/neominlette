@@ -1,19 +1,16 @@
 (function(global){
 	function Roulette(s,labels) {
 		var self = this;
-		this.range = 50;
-
-		this.angle = 0;
-		this.v = 0;
-		this.labels = [];
+		self.range = s.width;
+		self.angle = 0;
+		self.v = 0;
+		self.labels = [];
     	self.group = s.group();
 
     	var lines = [];
     	var angles = [];
-
     	var PI = Math.PI;
 
-        //*/
 
 
         for (var i = 0; i < labels.length; i++) {
