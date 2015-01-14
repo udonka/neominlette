@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width"/>
+
+
+<!-- jquery -->
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/jquery-2.1.1.min.js"></script>
+<!-- SVG -->
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/Snap.svg-0.3.0/dist/snap.svg.udonka.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="./js/lib/snap.svg.pie.js"></script>
+
+<style>
+svg{
+    display: block;
+    height: auto;
+    max-width: 100%; 
+}
+
+</style>
+</head>
+
+<body id="body" onmousedown="return false;" style="background:red">
+
+<!-- 描画用フィールド -->
+    
+<div id="wrapper">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         style="background:#fff; margin:0 auto; display:block;height:500px;width:500px" 
+         viewBox="0 0 200 200"
+         >
+
+      <circle cx="100" cy="100" r="100" fill="green" />
+      <rect x="130" y="130" width="300" height="200" fill="blue" />
+    </svg>    
+</div> <!--#wrapper-->
+
+<script>
+body = $(window);
+min = Math.min(body.width(), body.height())
+
+console.log(body.width() + " " + body.height() + " " + min);
+svg = $('svg');
+//svg.width(min).height(min);
+
+svg.attr("width" , min);
+svg.attr("height" , min);
+
+
+</script>
+</body>
+</html>
