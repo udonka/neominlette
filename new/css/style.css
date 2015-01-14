@@ -13,7 +13,6 @@ body {
 }
 
 
-
 #wrapper{
 	position:relative;
     height:100%;
@@ -25,7 +24,7 @@ body {
 }
 
 
-#wrapper #rouletteContainer #rouletteArea{
+#wrapper #rouletteContainer #rouletteArea{ 
 	margin:0 auto;
 
 	
