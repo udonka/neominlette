@@ -1,4 +1,3 @@
-
 var isServer = function(){
   console.log("This is server");
   return (typeof window == "undefined")
@@ -18,7 +17,6 @@ GLOBAL.stop = Math.PI/50;
 var Wheel = function(theta, v){
 
   this.forces = 0;
-  this.v = 0;
   this.ang = new Angle();
   //this.stoppers = [];//配列のリテラル これでOK
   this.ang.set(theta);
@@ -27,15 +25,6 @@ var Wheel = function(theta, v){
   this.frameNum = 0;
 
   //view information
-
-  /* いらないかもしれない
-  r :0 ,
-  
-  pos: new Vec2(),
-
-  im: 0, //image
-  */
-  
 
 
   //this.dragged = false;
@@ -134,6 +123,11 @@ Wheel.prototype.setView = function (pos, r){
 //AbsAngle 
 Wheel.prototype.getAngle = function() {
   return this.ang;
+}
+
+//AbsAngle 
+Wheel.prototype.getVel = function() {
+  return this.v;
 }
 
 //void 
