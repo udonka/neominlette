@@ -23,9 +23,11 @@ $(function(){
 /* !!!!!!!!!!繋げなかった場合は諦めるように設定
   socket.on("move", function(data){
       wheel.setAngle(data.r);
+      wheel.setVelocity(data.v);
       wheel.addForce(data.f);
+
+      //Viewは角度だけ知ってればよし
       roulette.setAngle(data.r);
-      //roulette.setAngle(wheel.getAngle().get()); //どっちがいいのか？
       roulette.render();
   //    console.log("位置: " + data.r);
     //  console.log("力: " + data.f);

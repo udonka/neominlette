@@ -1,7 +1,7 @@
 //あんまり独立性高くない良くないクラス
 (function(global){
 
-	var Finger = function(snap, snapdom, centerx,centery, sio){
+	var Finger = function(snap, snapdom, centerx, centery, sio){
 		var self = this;
 
 		self.socket = sio;
@@ -70,7 +70,7 @@
 
 		this.touchEndX = event.offsetX;
 		this.touchEndY = event.offsetY;
-		this.touchEndTime =  parseInt((new Date).getTime());
+		this.touchEndTime = parseInt((new Date).getTime());
 
 
     //力を送信
@@ -80,7 +80,14 @@
 				this.touchEndX, this.touchEndY,
 				this.touchStartTime, this.touchEndTime
 			)
-    this.sendForce(f);
+
+    var swipeData = {
+      "f": f,
+      //スタート角度とストップ角度、かかった時間を送ればよかろう
+
+    }
+
+    this.sendForce(swipeData);
 
 
 		//s. タッチ場所を描画
@@ -117,8 +124,8 @@
 		event.preventDefault();
 	}
 
-	Finger.prototype.sendForce = function(force){
-		this.socket.emit('swipe',{f:force,who:0},function(data){
+	Finger.prototype.sendForce = function(swipeData){
+		this.socket.emit('swipe',{swipeData:swipeData, who:0},function(data){
 			//who:自分が誰なのか
 
 		});
