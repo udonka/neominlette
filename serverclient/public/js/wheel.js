@@ -1,1 +1,1 @@
-/home/minlette/neominlette/serverclient/models/wheel.js
+../../models/wheel.js
