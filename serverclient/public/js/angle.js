@@ -37,7 +37,6 @@ Angle.createAbsAngle = function(theta){
 	return new Angle(theta, 0, 2* Math.PI);
 }
 
-//これのfloat版もほしい
 Angle.prototype.add = function(ang) {
 	if(ang instanceof Angle)
 	{
@@ -50,6 +49,16 @@ Angle.prototype.add = function(ang) {
 	}
 	return this;
 };
+
+Angle.prototype.getAdded = function(ang){
+	if(ang instanceof Angle)
+	{
+		return new Angle(this.get() + ang.get());
+	}
+	else if(isNumber(ang)){
+		return new Angle(this.get() + ang);
+	}
+}
 
 //オーバーロードできた
 Angle.prototype.set = function(th){ // min <= th < max
