@@ -8,11 +8,9 @@ $(function(){
 	var roomname = window.location.host;
 
 	var socket = {};
-	/*
 	var socket = io.connect(
 		roomname,//これが部屋名
 		{transports : ["websocket", "polling"]});
-*/
 
 
   var wheel = new Wheel(0,0);
@@ -21,7 +19,6 @@ $(function(){
     roulette.render();
   });
 
-/*
 
   socket.on("move", function(data){
       wheel.setAngle(data.r);
@@ -35,7 +32,6 @@ $(function(){
     //  console.log("力: " + data.f);
   });
 
-*/
 
 
 	var container = $("#rouletteContainer");
@@ -65,6 +61,7 @@ $(function(){
 	var roulette = new Roulette(snap,length,labels);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
+/*
 	var theta = 0;
 	setInterval(function(){
 		theta += Math.PI /12;
@@ -75,6 +72,7 @@ $(function(){
 		roulette.render();
 
 	},1000/10);
+	*/
 
 
 
