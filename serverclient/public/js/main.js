@@ -6,11 +6,10 @@ $(function(){
 /* 通信系処理* */
 
 	var roomname = window.location.host;
-/* !!!!!!!!!!繋げなかった場合は諦めるように設定
 	var socket = io.connect(
 		roomname,//これが部屋名
 		{transports : ["websocket", "polling"]});
-*/
+
 
 
   var wheel = new Wheel(0,0);
@@ -20,7 +19,6 @@ $(function(){
   });
 
 
-/* !!!!!!!!!!繋げなかった場合は諦めるように設定
   socket.on("move", function(data){
       wheel.setAngle(data.r);
       wheel.setVelocity(data.v);
@@ -32,7 +30,6 @@ $(function(){
   //    console.log("位置: " + data.r);
     //  console.log("力: " + data.f);
   });
-*/
 
 
 	var container = $("#rouletteContainer");
