@@ -1,3 +1,23 @@
+
+/*
+console.log("start underscore test");
+
+list = [1,2,3];
+
+list2 = _.map(list, function(v){return v*2});
+_.each(list2,function(v){
+  
+  console.log(v);
+
+});
+
+
+_.chain(list).map(function(v){return v * v;})
+    .each(function(v){return console.log(v);});
+
+console.log("stop underscore test");
+*/
+
 var isServer = function(){
   console.log("This is server");
   return (typeof window == "undefined")
@@ -5,6 +25,8 @@ var isServer = function(){
 
 if(isServer()){
   var Angle = require('./angle');
+  var _ = require('underscore');
+  var LabelStopper = require('./labelstopper');
 }
 
 GLOBAL = {};
@@ -14,24 +36,19 @@ GLOBAL.gensui = 0.95;
 GLOBAL.stop = Math.PI/50;
 
 //function Wheel(theta, v, num){
-var Wheel = function(theta, v){
+var Wheel = function(theta, v, labels){
 
   this.forces = 0;
-  this.ang = new Angle();
-  //this.stoppers = [];//配列のリテラル これでOK
-  this.ang.set(theta);
+  this.ang = new Angle(theta);
   this.v = v;
-  //setStoppers(num);
-  this.frameNum = 0;
 
-  //view information
+  this.frameNum = 0;//for debugging
 
+  this.setLabelStoppers(labels);
 
-  //this.dragged = false;
-
-  
   console.log("Wheelのインスタンスが作成");
 }
+
 
 //looper はmoveの後に実行される
 Wheel.prototype.onloop = function (looper){
@@ -66,6 +83,35 @@ Wheel.prototype.stopLoop = function (){
 Wheel.prototype.setView = function (pos, r){
   this.pos = pos;
   this.r = r;
+}
+
+
+Wheel.prototype.setLabelStoppers = function (labels ){
+ 
+  var self = this;
+
+  //ラベルの文字列から、ストッパーの列に変換する
+  self.labelStoppers = _(labels).map(function(labelStr, index,labels){
+    //LabelStopperオブジェクトを生成する
+    var labelStopper = new LabelStopper(
+            new Angle(index * 2*PI/labels.length), 
+            labelStr, labelStr + "message");
+
+    return labelStopper;
+  });
+
+  console.log(self.labelStoppers);
+
+  //前後とのリンクを貼る
+  self.labelStoppers.map(function(labelStopper,index){
+
+    labelStopper.next = self.labelStoppers[(index + 1) % self.labelStoppers.length];
+    labelStopper.prev = self.labelStoppers[(index - 1) < 0 ? self.labelStoppers.length-1 : (index -1)];
+  });
+}
+
+Wheel.prototype.getLabelStoppers = function (){
+  return this.labelStoppers;
 }
 
 //Wheel.prototype.setStoppers = function(num) {

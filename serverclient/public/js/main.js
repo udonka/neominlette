@@ -12,8 +12,25 @@ $(function(){
 		roomname,//これが部屋名
 		{transports : ["websocket", "polling"]});
 
+  var labels = [
+      "後藤",
+      "宮下",
+      "石井",
+      /*
+      "うどんか",
+      "後藤",
+      "うっきー",
+      "宮下",
+      "市民A",
+      "市民B",
+      "市民C",
+      "市民D",
+      */
+  ];
 
-  var wheel = new Wheel(0,0);
+  var wheel = new Wheel(0,0,labels);
+  var labelStoppers = wheel.getLabelStoppers();
+
   wheel.onloop(function(){
     roulette.setAngle(wheel.getAngle().get());
     roulette.render();
@@ -42,23 +59,8 @@ $(function(){
 	snap.dom = document.getElementById("rouletteArea");
 	snap.attr({"style": "width:"+length+"px; height:"+length+"px;"});
 
-    var labels = [
-        "後藤",
-        "宮下",
-        "石井",
-        /*
-        "うどんか",
-        "後藤",
-        "うっきー",
-        "宮下",
-        "市民A",
-        "市民B",
-        "市民C",
-        "市民D",
-        */
-    ];
 
-	var roulette = new Roulette(snap,length,labels);
+	var roulette = new Roulette(snap,length,labelStoppers);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
 /*

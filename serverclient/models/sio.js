@@ -1,7 +1,7 @@
 var socketio = require('socket.io');
 var Wheel = require('./wheel');
 
-var wheel = new Wheel(0,0);
+var wheel = new Wheel(0,0,["aiueo", "kaki", "kukeko", ]);
 //var wheel = {roomid:new Wheel(0,0), roomid2: wheel2, roomid3:wheel3};
 
 

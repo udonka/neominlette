@@ -1,5 +1,5 @@
 (function(global){
-	function Roulette(paper,length,labels) {
+	function Roulette(paper,length,labelStoppers) {
 		var self = this;
 		self.angle = 0;
 		self.width = length;
@@ -24,37 +24,17 @@
 
         self.x = self.width/2;
         self.y = self.height/2;
-		self.labelStoppers = [];
-    	self.group = paper.group();
+        self.labelStoppers = labelStoppers;
+        self.group = paper.group();
 
-    	var lines = [];
-    	var angles = [];
-    	var PI = Math.PI;
+        var lines = [];
+        var angles = [];
+        var PI = Math.PI;
 
 
 
-        for (var i = 0; i < labels.length; i++) {
-            angles.push();
-        };
 
-        //モデルの処理じゃん！！!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        //ラベルの文字列から、ストッパーの列に変換する
-    	self.labelStoppers = labels.map(function(e, index){
-    		//LabelStopperオブジェクトを生成する
-    		var labelStopper = new LabelStopper(
-                new Angle(index * 2*PI/labels.length), 
-                labels[index], labels[index]+"message");
-
-    		return labelStopper;
-    	});
-
-        //前後とのリンクを貼る
-        self.labelStoppers.map(function(labelStopper,index){
-
-    		labelStopper.next = self.labelStoppers[(index + 1) % self.labelStoppers.length];
-    		labelStopper.prev = self.labelStoppers[(index - 1) < 0 ? self.labelStoppers.length-1 : (index -1)];
-    	});
 
         //LabelStopperに対応する図形を描く.{pie,text}という形式で帰ってくる
         //とっておく必要あるかな・・・？
