@@ -6,9 +6,13 @@ $(function(){
 /* 通信系処理* */
 
 	var roomname = window.location.host;
+
+	var socket = {};
+	/*
 	var socket = io.connect(
 		roomname,//これが部屋名
 		{transports : ["websocket", "polling"]});
+*/
 
 
   var wheel = new Wheel(0,0);
@@ -17,6 +21,7 @@ $(function(){
     roulette.render();
   });
 
+/*
 
   socket.on("move", function(data){
       wheel.setAngle(data.r);
@@ -30,6 +35,7 @@ $(function(){
     //  console.log("力: " + data.f);
   });
 
+*/
 
 	var container = $("#rouletteContainer");
 	var width = container.width();

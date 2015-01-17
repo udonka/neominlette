@@ -20,6 +20,9 @@
             angles.push(i * 2*PI/labels.length);
         };
 
+
+        
+
     	angles.map(function(e, index){
     		//LabelStopperオブジェクトを生成する
     		var label = new LabelStopper(new Angle(e), labels[index], labels[index]+"message");

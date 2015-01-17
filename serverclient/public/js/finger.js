@@ -125,10 +125,12 @@
 	}
 
 	Finger.prototype.sendForce = function(swipeData){
+		/*
 		this.socket.emit('swipe',{swipeData:swipeData, who:0},function(data){
 			//who:自分が誰なのか
 
 		});
+*/
 	}
 	//最終的に速度を計算する
 	Finger.prototype.calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
