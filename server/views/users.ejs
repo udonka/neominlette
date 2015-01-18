@@ -2,7 +2,9 @@
 <html>
 <% include head %>
 <body>
-<h2><%= user %></h2>
+<% include top %>
+<div>
+  <h2><%= user %></h2>
   <div>
     <form action="/<%= user %>/one/roulette" method="GET">
       <button type="submit">private roulette</button>
@@ -16,6 +18,7 @@
       </form>
     <% }); %>
   </div>
+</div>
 
 <script>
 </script>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<% include head %>
+<body>
+<% include top %>
+<div id="wrapper" class="container"> 
+  <div class="m-content">
+    <h2><%= name %></h2>
+    <div>
+      <form action="/<%= name %>/one/roulette" method="GET">
+        <button type="submit">private roulette</button>
+      </form>
+
+      <% rouletteGroup.forEach(function(roulette){ %>
+        <form action="/<%= name %>/<%= roulette.name %>/<%= roulette._id %>" method="GET">
+          <button type="submit"><%= roulette.name %></button>
+        </form>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
+<script>
+</script>
+
+</body>
+</html>

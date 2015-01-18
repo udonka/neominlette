@@ -10,8 +10,7 @@ var db = mongoose.createConnection(url, function(err, res){
 
 var RouletteSchema = new mongoose.Schema({
   name: {type: String, unique: true},
-  author: {type: String, unique: false},
-  tags: [String]
+  labels: [String]
 });
 
 module.exports.Roulette = db.model('Roulette', RouletteSchema);

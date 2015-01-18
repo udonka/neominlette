@@ -4,6 +4,9 @@ var router = express.Router();
 var model = require('../models/roulettes.js');
 var Roulette = model.Roulette;
 
+var userModel = require('../models/users.js');
+var User = userModel.User;
+
 //add login check function
 var loginCheck = function(req, res, next){
     if(req.session.user){
@@ -40,28 +43,34 @@ router.get('/:name/one/:rname', function(req, res){
     }
   });
 });
+/*
+router.get('/:name/:group/:id', function(req, res){
+});
+*/
 router.get('/:name', loginCheck,function(req, res) {
-  console.log("index call"+req.params.name);
-  Roulette.find({author: req.params.name}, function(err, roulettes){
-    if(err){
+  console.log('/:name');
+  console.log({name: req.params.name});
+  User.findOne({name: req.params.name}, function(err, data){
+    if(err) {
       console.log(err);
-      res.redirect('/login');
+    }else if(data == null){
+      console.log(data);
+    }else{
+      console.log(data);
+      res.render('user',
+        {name: data.name,
+         rouletteGroup: data.rouletteGroup});
     }
-    console.log(roulettes);
-    res.render('users', { title: 'Express' , user: req.session.user, roulettes: roulettes});
   });
-  console.log(req.session.user);
 });
 
 router.get('/', loginCheck, function(req, res){
   res.redirect('/login');
 });
-/*
 router.use('/', function(req, res){
   console.log('/ use');
   res.send('use');
 });
-*/
 
 
 module.exports = router;

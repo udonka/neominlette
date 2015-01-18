@@ -17,7 +17,26 @@ router.get('/', loginCheck,function(req, res) {
   res.render('roulette');
   console.log(req.session.user);
 });
-
+router.post('/', loginCheck, function(req, res){
+  var newRoulette = new Roulette(req.body);
+  newRoulette.save(function(e){
+    if(e){
+      console.log(e);
+      res.redirect('/'+req.session.user.name);
+    }else{
+      console.log(newRoulette);
+      User.update({_id: req.session.user._id}, 
+        {$push:{rouletteGroup: {name: newRoulette.name, rouletteId: newRoulette._id}}},
+        function(err, number, raw){
+          console.log(err);
+          console.log(number);
+          console.log(raw);
+        });
+      res.redirect('/'+req.session.user.name);
+    }
+  });
+});
+/*
 router.post('/', loginCheck, function(req, res){
   var newRoulette = new Roulette(req.body);
   console.log(req.body);
@@ -40,8 +59,18 @@ router.post('/', loginCheck, function(req, res){
   });
   console.log(newRoulette);
 });
+*/
 router.post('/hoge', function(req, res){
   var newRoulette = new Roulette(req.body);
+  console.log("new roulette" + newRoulette);
+  newRoulette.save(function(e){
+    if(e){
+      console.log(e);
+      res.redirect('back');
+    }else{
+      res.redirect('/' + req.session.user);
+    }
+  });
 });
 
 module.exports = router;

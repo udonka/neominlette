@@ -38,17 +38,17 @@ app.use(session({
   }),
   cookie: {
     httpOnly: false,
-    maxAge: 60 * 1000
+    maxAge: 60 * 60 * 10000
   }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/login', login);
+app.use('/login', login);
 app.use('/add', add);
 app.get('/logout', logout);
 app.use('/roulette', roulette);
-app.use('/', routes);
 app.use('/users', users);
+app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,59 +3,31 @@ var router = express.Router();
 
 var model = require('../models/users.js');
 var User = model.User;
+var rouletteModel = require('../models/roulettes.js');
+var Roulette = rouletteModel.Roulette;
 
 
-router.get('/login', function(req, res){
-	var name = req.query.name;
-  var email = req.query.email;
-  var password = req.query.password;
-  var query = { "email": email, "password": password };
-  User.find(query, function(err, data){
-    if(err){
-      console.log(err);
-    }else if(data == ""){
-      res.render('login');
-    }else{
-			var max = req.session.cookie.maxAge;
-			/*
-			if(max < 0 ){
-				console.log("call regenerate");
-				req.session.regenerate(function(err){
-					if(err) console.log(err);
-				});
-			}
-			*/
-			if(max > 0) console.log("u");
-			else console.log("d");
-			console.log("data:" + data);
-			console.log("maxAge"+ max);
-			req.session.user = data[0].name;
-      req.session.email = email;
-			console.log('name '+req.session.user);
-			res.redirect('/' + req.session.user);
-    }
-  });
+router.get('/', function(req, res){
+  res.render('login');
 });
 
-
-/*
-router.get('/login', function(req, res){
-      res.render('login');
-}
-*/
-router.post('/login', function(req, res){
-  var email = req.query.email;
-  var password = req.query.password;
-  var query = { "email": email, "password": password };
-  User.find(query, function(err, data){
+router.post('/', function(req, res){
+  var query = req.body;
+  User.findOne(query, function(err, data){
     if(err){
       console.log(err);
     }else if(data == ""){
-			//user is not registered
+      res.render('login');
+    }else if(data == null){
+      console.log('null');
+      console.log(data);
       res.render('login');
     }else{
-      req.session.user = email;
-      res.redirect('/');
+      console.log(data);
+      req.session.user = data;
+      req.session.userName = data.name;
+      req.session.userEmail = data.email;
+      res.redirect('/'+req.session.userName);
     }
   });
 });
