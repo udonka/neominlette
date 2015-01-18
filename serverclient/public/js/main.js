@@ -1,9 +1,17 @@
 //main
 //すべてをつなげる処理
 
+if(typeof window === "undefined"){
+  var Wheel = require("./common/wheel");
+  var Wind = require("./common/wind").Wind;
+  
+}
+
 $(function(){
 
-/* 通信系処理* */
+  
+
+  /* 通信系処理* */
 
 	var roomname = window.location.host;
 
@@ -16,9 +24,9 @@ $(function(){
       "後藤",
       "宮下",
       "石井",
-      /*
       "うどんか",
       "後藤",
+      /*
       "うっきー",
       "宮下",
       "市民A",
@@ -29,6 +37,8 @@ $(function(){
   ];
 
   var wheel = new Wheel(0,0,labels);
+  //var wind = new Wind(wheel);
+
   var labelStoppers = wheel.getLabelStoppers();
 
   wheel.onloop(function(){

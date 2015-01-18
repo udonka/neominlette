@@ -32,10 +32,6 @@
         var PI = Math.PI;
 
 
-
-
-
-
         //LabelStopperに対応する図形を描く.{pie,text}という形式で帰ってくる
         //とっておく必要あるかな・・・？
         var pathes = self.labelStoppers.map(function(labelStopper, index){
@@ -44,7 +40,8 @@
 
 
             var diffAng   = nextang.calcDiff(ang);
-            var middleAng = ang.getAdded(diffAng.get()/2);
+            
+            var middleAng = ang.getAdd(diffAng.get()/2);
 
     		var pie = paper.pie(
     			0,

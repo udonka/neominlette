@@ -1,5 +1,5 @@
 var socketio = require('socket.io');
-var Wheel = require('./wheel');
+var Wheel = require('./common/wheel').Wheel;
 
 var wheel = new Wheel(0,0,["aiueo", "kaki", "kukeko", ]);
 //var wheel = {roomid:new Wheel(0,0), roomid2: wheel2, roomid3:wheel3};
@@ -22,7 +22,7 @@ function sio(server){
 		// スワイプを受信
 		socket.on('swipe', function(data){
       var force = data.swipeData.f;
-      wheel.addForce(force);
+      wheel.addForce(force)
       console.log("力受信: " + force);
 
       sio.sockets.emit('move', { f : force, r : wheel.getAngle().get(), v : wheel.getVelocity() });
