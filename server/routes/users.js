@@ -13,6 +13,20 @@ router.get('/', function(req, res) {
   });
 });
 
+router.post('/:id', function(req, res) {
+  console.log(req.body);
+  var conditions = { _id: req.params.id}
+    , update = {$set: req.body};
+  User.update(conditions, update, function(err, num){
+    if(err){
+      console.log(err);
+    }
+    req.session.destroy();
+    res.redirect('/login');
+  });
+});
+
+
 router.post('/', function(req, res){
   var newUser = new User(req.body);
   console.log(req.body);
@@ -25,6 +39,7 @@ router.post('/', function(req, res){
     }
   });
 });
+
 
 
 module.exports = router;

@@ -27,7 +27,7 @@ router.post('/', function(req, res){
       req.session.user = data;
       req.session.userName = data.name;
       req.session.userEmail = data.email;
-      res.redirect('/'+req.session.userName);
+      res.redirect('/home');
     }
   });
 });

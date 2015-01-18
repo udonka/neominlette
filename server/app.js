@@ -11,6 +11,7 @@ var login = require('./routes/login');
 var signup = require('./routes/signup');
 var logout = require('./routes/logout');
 var roulette = require('./routes/roulette');
+var home = require('./routes/home');
 
 var app = express();
 //add
@@ -45,12 +46,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'bower_components')));
 
 app.use('/login', login);
 app.use('/signup', signup);
 app.get('/logout', logout);
 app.use('/roulette', roulette);
 app.use('/users', users);
+app.use('/home', home);
 app.use('/', routes);
 
 // catch 404 and forward to error handler

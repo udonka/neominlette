@@ -43,10 +43,20 @@ router.get('/:name/one/:rname', function(req, res){
     }
   });
 });
-/*
+
 router.get('/:name/:group/:id', function(req, res){
+  console.log(req.params.id);
+  Roulette.findById(req.params.id, function(err, roulette){
+    if(err){
+      console.log(err);
+      return ;
+    }
+    console.log('roulette');
+    console.log(roulette);
+    res.send(roulette);
+  });
 });
-*/
+
 router.get('/:name', loginCheck,function(req, res) {
   console.log('/:name');
   console.log({name: req.params.name});
