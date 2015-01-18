@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
-var add = require('./routes/add');
+var signup = require('./routes/signup');
 var logout = require('./routes/logout');
 var roulette = require('./routes/roulette');
 
@@ -16,6 +16,7 @@ var app = express();
 //add
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var passport = require('passport');
 
 
 // view engine setup
@@ -41,10 +42,12 @@ app.use(session({
     maxAge: 60 * 60 * 10000
   }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/login', login);
-app.use('/add', add);
+app.use('/signup', signup);
 app.get('/logout', logout);
 app.use('/roulette', roulette);
 app.use('/users', users);

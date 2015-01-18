@@ -5,7 +5,7 @@ var model = require('../models/users.js');
 var User = model.User;
 
 router.get('/', function(req, res){
-	res.render('add');
+  res.render('signup');
 });
 
 router.post('/', function(req, res){
