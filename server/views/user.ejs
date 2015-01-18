@@ -12,7 +12,7 @@
       </form>
 
       <% rouletteGroup.forEach(function(roulette){ %>
-        <form action="/<%= name %>/<%= roulette.name %>/<%= roulette._id %>" method="GET">
+        <form action="/<%= name %>/<%= roulette.name %>/<%= roulette.rouletteId %>" method="GET">
           <button type="submit"><%= roulette.name %></button>
         </form>
       <% }); %>
