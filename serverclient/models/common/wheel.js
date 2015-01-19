@@ -30,11 +30,11 @@ var Wheel = function(theta, v, labels){
   console.log("Wheelのインスタンスが作成");
 }
 
-
 //looper はmoveの後に実行される
 Wheel.prototype.onloop = function (looper){
   this.looper = looper;
 }
+
 
 Wheel.prototype.startLoop = function (){
   var self = this;
@@ -49,9 +49,11 @@ Wheel.prototype.startLoop = function (){
   }
 }
 
+
 Wheel.prototype.timerWorking = function (){
   return !(typeof this.timer === 'undefined' || this.timer === null);
 }
+
 
 Wheel.prototype.stopLoop = function (){
   if(this.timerWorking()){

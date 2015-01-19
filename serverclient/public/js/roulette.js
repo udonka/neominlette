@@ -132,7 +132,7 @@
         var stateText = ("angle is " + this.angle.toFixed(2));
 
         this.centerText.attr({
-            "text": this.text || stateText
+            "text": this.text //|| stateText
         });
 
         this.triangle
@@ -140,7 +140,7 @@
                 "rotate("+ this.fure * 180/10 +")"
             );
 
-        this.text = null; //1回表示したら消すようにしてみる
+        //this.text = null; //1回表示したら消すようにしてみる
     }
 
     Roulette.prototype.setAngle = function(angle_rad) {

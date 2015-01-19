@@ -187,38 +187,44 @@ Wind.prototype.draw = function() {
 }
 
 
-function Wind(wheel){
+function Wind2(wheel){
   this.wheel = wheel;
   this.windAngle = new Angle(Math.PI /2);
 
 }
 
-Wind.prototype.currentLabel = function (){
-  var labelStoppers = this.wind.getLabelStoppers();
+Wind2.prototype.getCurrentLabel = function (){
+  var labelStoppers = this.wheel.getLabelStoppers();
 
   var wheelAngle = this.wheel.getAngle();
+  //
   //最も近いやつをみつける。
-  var nearest = null;//{label, diffAngle} 
+  var nearest = {label : {}, diff:Math.PI} ;
+
+  var self = this;
 
   _(labelStoppers).each(function(label, index){
     var labelAngle = label.getAngle().getAdd(wheelAngle);
 
-    var diffAngle = windAngle.calcDiff(labelAngle);
+    var diffAngle = self.windAngle.calcDiff(labelAngle);
 
     var diff = diffAngle.get();
 
-    var abs = Math.Abs;
+    var abs = Math.abs;
     nearest = (abs(diff)< abs(nearest.diff)) ? 
       {
         label : label,
         diff : diff
-      }
-      : nearestLabel;
+      } : nearest;
   });
+
+
+  console.log(nearest.label.getLabel());
 
   //そいつの右だったらそいつ
   //そいつの左だったらそいつの前
   
+  return nearest.label.getLabel();
 
 }
 

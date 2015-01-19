@@ -24,15 +24,8 @@ $(function(){
       "後藤",
       "宮下",
       "石井",
-      "うどんか",
-      "後藤",
+      "tinko",
       /*
-      "うっきー",
-      "宮下",
-      "市民A",
-      "市民B",
-      "市民C",
-      "市民D",
       */
   ];
 
@@ -42,21 +35,44 @@ $(function(){
 
   wheel.onloop(function(){
     roulette.setAngle(wheel.getAngle().get());
+    roulette.setText(wind.getCurrentLabel());
     roulette.render();
   });
 
 
-  socket.on("move", function(data){
-      wheel.setAngle(data.r);
-      wheel.setVelocity(data.v);
-      wheel.addForce(data.f);
+  var id = 0;
+$("#start").click(function(){
+    var theta = 0;
+    id = setInterval(function(){
+      theta += Math.PI/12;
 
-      //Viewは角度だけ知ってればよし
-      roulette.setAngle(data.r);
+      roulette.setAngle(theta);
+      roulette.setText(theta);
       roulette.render();
-  //    console.log("位置: " + data.r);
-    //  console.log("力: " + data.f);
+
+    },30);
+
   });
+
+$("#stop").click(function(){
+  console.log("aiu" + id);
+
+  clearInterval(id);
+});
+
+socket.on("move", function(data){
+    wheel.setAngle(data.r);
+    wheel.setVelocity(data.v);
+    wheel.addForce(data.f);
+
+    //Viewは角度だけ知ってればよし
+    roulette.setAngle(data.r);
+    roulette.setText(wind.getCurrentLabel());
+    console.log("label" + wind.getCurrentLabel());
+    roulette.render();
+//    console.log("位置: " + data.r);
+  //  console.log("力: " + data.f);
+});
 
 
 
