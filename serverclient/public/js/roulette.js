@@ -4,7 +4,6 @@
 		self.angle = 0;
 		self.width = length;
         self.height = length;
-        self.radius = length * (0.5 - 0.05);
         var sizes = {
             r : self.radius,
             r1_2 : self.radius/2,
@@ -24,13 +23,11 @@
 
         self.x = self.width/2;
         self.y = self.height/2;
-        self.labelStoppers = labelStoppers;
-        self.group = paper.group();
+    	self.group = paper.group();
 
-        var lines = [];
-        var angles = [];
-        var PI = Math.PI;
-
+    	var lines = [];
+    	var angles = [];
+    	var PI = Math.PI;
 
         //LabelStopperに対応する図形を描く.{pie,text}という形式で帰ってくる
         //とっておく必要あるかな・・・？
@@ -40,8 +37,7 @@
 
 
             var diffAng   = nextang.calcDiff(ang);
-            
-            var middleAng = ang.getAdd(diffAng.get()/2);
+            var middleAng = ang.getAdded(diffAng.get()/2);
 
     		var pie = paper.pie(
     			0,
@@ -132,7 +128,7 @@
         var stateText = ("angle is " + this.angle.toFixed(2));
 
         this.centerText.attr({
-            "text": this.text //|| stateText
+            "text": this.text || stateText
         });
 
         this.triangle

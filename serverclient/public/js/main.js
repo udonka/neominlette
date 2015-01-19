@@ -40,26 +40,6 @@ $(function(){
   });
 
 
-  var id = 0;
-$("#start").click(function(){
-    var theta = 0;
-    id = setInterval(function(){
-      theta += Math.PI/12;
-
-      roulette.setAngle(theta);
-      roulette.setText(theta);
-      roulette.render();
-
-    },30);
-
-  });
-
-$("#stop").click(function(){
-  console.log("aiu" + id);
-
-  clearInterval(id);
-});
-
 socket.on("move", function(data){
     wheel.setAngle(data.r);
     wheel.setVelocity(data.v);
@@ -75,7 +55,6 @@ socket.on("move", function(data){
 });
 
 
-
 	var container = $("#rouletteContainer");
 	var width = container.width();
 	var height = $("html").height() - 200;
@@ -88,18 +67,6 @@ socket.on("move", function(data){
 	var roulette = new Roulette(snap,length,labelStoppers);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
-/*
-	var theta = 0;
-	setInterval(function(){
-		theta += Math.PI /12;
-
-		roulette.setAngle(theta);
-		roulette.setFure(0 + Math.cos(theta*3)*0.8 );
-		roulette.setText("fure is " + (Math.cos(theta*3 - Math.PI /2)*0.8).toFixed(3) );
-		roulette.render();
-
-	},1000/10);
-	*/
 
 
 
