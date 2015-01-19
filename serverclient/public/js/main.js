@@ -37,8 +37,7 @@ $(function(){
   ];
 
   var wheel = new Wheel(0,0,labels);
-  //var wind = new Wind(wheel);
-
+  var wind = new Wind(wheel);
   var labelStoppers = wheel.getLabelStoppers();
 
   wheel.onloop(function(){

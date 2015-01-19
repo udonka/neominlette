@@ -6,18 +6,20 @@ if(typeof window === "undefined"){
 
 
 function Wind(wheel) {
-  this.wheel
+  this.wheel = wheel;
   this.myAng = new Angle(-Math.PI/2);
-  this.diff = new Angle(0).calcDiff(this.myAng);
-  this.length = Math.floor(Number(wheel.r * 0.4));
-  this.bendingRange = Global.windRange || Math.PI / 24;//global
+
+
+  /*
+  this.diff  =  Angle.createDiffAngle(0);
   this.bending = window.BendingState.NOBEND;
+  */
 }
 
 Wind.prototype.move = function() {
   var stoppers = this.wheel.getStoppersAbs();
 
-    this.diff = this.calcMinDiff(stoppers);
+  this.diff = this.calcMinDiff(stoppers);
     
     //if stopped 0, positive 1, negative -1
     var direction = this.wheel.isMoving() ? 1:0;
@@ -185,5 +187,46 @@ Wind.prototype.draw = function() {
 }
 
 
-this['Wind'] = Wind;
+function Wind(wheel){
+  this.wheel = wheel;
+  this.windAngle = new Angle(Math.PI /2);
+
+}
+
+Wind.prototype.currentLabel = function (){
+  var labelStoppers = this.wind.getLabelStoppers();
+
+  var wheelAngle = this.wheel.getAngle();
+  //最も近いやつをみつける。
+  var nearest = null;//{label, diffAngle} 
+
+  _(labelStoppers).each(function(label, index){
+    var labelAngle = label.getAngle().getAdd(wheelAngle);
+
+    var diffAngle = windAngle.calcDiff(labelAngle);
+
+    var diff = diffAngle.get();
+
+    var abs = Math.Abs;
+    nearest = (abs(diff)< abs(nearest.diff)) ? 
+      {
+        label : label,
+        diff : diff
+      }
+      : nearestLabel;
+  });
+
+  //そいつの右だったらそいつ
+  //そいつの左だったらそいつの前
+  
+
+}
+
+
+function findNearestLabel(labelStoppers, wheelAngle, windAngle){
+
+}
+
+
+this['Wind'] = Wind2;
 

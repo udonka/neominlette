@@ -33,9 +33,12 @@ var Angle = function(init, min, max){
 
 
 //static method
-
 Angle.createAbsAngle = function(theta){
   return new Angle(theta, 0, 2* Math.PI);
+}
+
+Angle.createDiffAngle = function(theta){
+  return new Angle(theta, -Math.PI, Math.PI);
 }
 
 Angle.prototype.add = function(ang) {
