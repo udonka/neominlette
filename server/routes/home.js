@@ -43,4 +43,8 @@ router.get('/userinfo', loginCheck, function(req, res){
     });
 });
 
+router.get('/create', loginCheck, function(req, res){
+  res.render('createRoulette');
+})
+
 module.exports = router;
