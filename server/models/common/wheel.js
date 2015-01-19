@@ -1,33 +1,14 @@
-
-/*
-console.log("start underscore test");
-
-list = [1,2,3];
-
-list2 = _.map(list, function(v){return v*2});
-_.each(list2,function(v){
-  
-  console.log(v);
-
-});
-
-
-_.chain(list).map(function(v){return v * v;})
-    .each(function(v){return console.log(v);});
-
-console.log("stop underscore test");
-*/
-
 var isServer = function(){
   console.log("This is server");
   return (typeof window == "undefined")
 }
 
 if(isServer()){
-  var Angle = require('./angle');
-  var _ = require('underscore');
-  var LabelStopper = require('./labelstopper');
+  var _ = require('underscore'); //node_moduleから探してくれる
+  var Angle = require('./angle').Angle; //同じディレクトリ
+  var LabelStopper = require('./labelstopper').LabelStopper;//同じディレクトリ
 }
+
 
 GLOBAL = {};
 GLOBAL.frameRate = 1000/30;
@@ -49,11 +30,11 @@ var Wheel = function(theta, v, labels){
   console.log("Wheelのインスタンスが作成");
 }
 
-
 //looper はmoveの後に実行される
 Wheel.prototype.onloop = function (looper){
   this.looper = looper;
 }
+
 
 Wheel.prototype.startLoop = function (){
   var self = this;
@@ -68,9 +49,11 @@ Wheel.prototype.startLoop = function (){
   }
 }
 
+
 Wheel.prototype.timerWorking = function (){
   return !(typeof this.timer === 'undefined' || this.timer === null);
 }
+
 
 Wheel.prototype.stopLoop = function (){
   if(this.timerWorking()){
@@ -94,7 +77,7 @@ Wheel.prototype.setLabelStoppers = function (labels ){
   self.labelStoppers = _(labels).map(function(labelStr, index,labels){
     //LabelStopperオブジェクトを生成する
     var labelStopper = new LabelStopper(
-            new Angle(index * 2*PI/labels.length), 
+            new Angle(index * 2*Math.PI/labels.length), 
             labelStr, labelStr + "message");
 
     return labelStopper;
@@ -406,7 +389,5 @@ Wheel.prototype.getVelocity = function(){
   
   */
   
-if(isServer()){
-  module.exports = Wheel;
-}
+this['Wheel'] = Wheel;
 

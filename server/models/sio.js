@@ -1,31 +1,35 @@
 var socketio = require('socket.io');
+var Wheel = require('./common/wheel').Wheel;
 
-//exports.listen = function(server){
-module.exports = sio;
+var wheel = new Wheel(0,0,["aiueo", "kaki", "kukeko", ]);
+//var wheel = {roomid:new Wheel(0,0), roomid2: wheel2, roomid3:wheel3};
+
+
 function sio(server){
 	sio = socketio.listen(server);
-	//console.log("socket server starting...");
-	//sio.set('transports', [ 'websocket','polling' ]);// いらないっぽい
-	sio.set('transports', [ 'websocket' ]);// いらないっぽい
+	sio.set('transports', [ 'websocket','polling' ]);// いらないっぽい
+	//sio.set('transports', [ 'websocket' ]);// いらないっぽい
+  
 
+	//setInterval(function(){
+  //    sio.sockets.emit('move', { f : wheel.getForces(), r : wheel.getAngle().get() })
+  //  },10);
+    
 	// 接続
 	sio.sockets.on('connection', function(socket){
-
-    socket.on('hello', function(data){
-      socket.join(data.room);
-      console.log("hello user");
-    });
 		
 		//console.log('Client connected. Type: '+sio.transports[socket.id].name);
 		// スワイプを受信
 		socket.on('swipe', function(data){
-			
+      var force = data.swipeData.f;
+      wheel.addForce(force)
+      console.log("力受信: " + force);
+
+      sio.sockets.emit('move', { f : force, r : wheel.getAngle().get(), v : wheel.getVelocity() });
 			// 受信したものを配信
-			socket.join(data.room);
-			socket.broadcast.to(data.room).emit('move', { f : data.f });
-			console.log(data.room);
-			console.log(data.f);
-		
+			//socket.broadcast.emit('move', { f : data.f });
+			//sio.sockets.emit('move', { f : data.f, r : wheel.getAngle().get() });
+		  // sio.sockets.in('room1').emit('msg','Hello!!'); //roomを指定する場合
 		});
 
 		// 切断
@@ -33,4 +37,7 @@ function sio(server){
 	
 	});
 }
+
+
+module.exports = sio;
 

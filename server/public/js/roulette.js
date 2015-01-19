@@ -1,331 +1,159 @@
 (function(global){
+  function Roulette(paper,length,labelStoppers) {
+    var self = this;
+    self.angle = 0;
+    self.width = length;
+    self.height = length;
+    var sizes = {
+      r : self.radius,
+      r1_2 : self.radius/2,
+      r1_3 : self.radius/3,
+      r2_3 : self.radius*2/3,
+      r1_4 : self.radius*1/4,
+      r3_4 : self.radius*3/4,
+      r1_5 : self.radius*1/5,
+      r1_6 : self.radius*1/6,
+      r1_10 : self.radius*1/10,
+      r1_12 : self.radius*1/12,
+      r1_24 : self.radius*1/24,
+    };
+    sizes.fontsize = sizes.r1_12;
 
-    function SwipeInfo(sx,sy,st, ex,ey,et){
-        if(sx && sy && ex && ey)
-        {
-            this.sx = sx;
-            this.sy = sy;
-            this.st = st;
+    self.sizes = sizes;
 
-            this.ex = ex;
-            this.ey = ey;
-            this.et = et;
-        }
-        else{
-            this.sx = 0;
-            this.sy = 0;
-            this.st = 0;
+    self.x = self.width/2;
+    self.y = self.height/2;
+    self.group = paper.group();
+    self.labelStoppers = labelStoppers;
 
-            this.ex = 0;
-            this.ey = 0;
-            this.et = 0;
-        }
-    }
+    var lines = [];
+    var angles = [];
+    var PI = Math.PI;
 
-    SwipeInfo.prototype.isZero = function(){
-        return this.sx*this.sx + this.sy*this.sy + this.st*this.st 
-             + this.ex*this.ex + this.ey*this.ey + this.et*this.et  == 0;
-    }
-
-/*
-    if(MilkCocoa)
-    	var milkcocoa = new MilkCocoa("https://io-fi0bzpl89.mlkcca.com/");
-*/
-	var RANGE = 150;
-	function Roulette(s, r, x, y , list, r_room) {
-		var self = this;
-		this.range = r;
-		this.x = x;
-		this.y = y;
-		this.room = r_room;
-		this.socket = io.connect(
-				window.location.host,
-				{ transports : ["websocket", "polling"]});
-    this.socket.emit("hello",{room: this.room});
-/*
-        if(MilkCocoa)
-    		this.ds = milkcocoa.dataStore('roulette');
-*/
-		this.id = "id" + String(Math.random()).substr(2);
-		this.r = 0;
-		this.v = 0;
-		this.labels = [];
-    	self.group = s.group();
-
-    	var lines = [];
-    	var angles = [];
+    //LabelStopperに対応する図形を描く.{pie,text}という形式で帰ってくる
+    //とっておく必要あるかな・・・？
+    var pathes = self.labelStoppers.map(function(labelStopper, index){
+      var ang = labelStopper.getAngle();
+      var nextang = labelStopper.next.getAngle();
 
 
-    	var PI = Math.PI;
+      var diffAng   = nextang.calcDiff(ang);
+      var middleAng = ang.getAdd(diffAng.get()/2);
 
-			if(Array.isArray(list) && list.length >1)
-				var day = list;
+      var pie = paper.pie(
+        0,
+        0,
+        sizes.r,
+        ang.get() * 180 / Math.PI,
+        nextang.get() * 180 / Math.PI ).remove()
 
-        /* *
-        var day = [
-            "地域で探す",
-            "やりたいことで探す",
-            "食べたいもので探す",
-            "見たい景色で探す",
-        ];
-        //*/
-        /* *
-        var day = [
-
-            "アメリカ",
-            "アジア",
-            "ヨーロッパ ", 
-            "アフリカ", 
-            "日本国内", 
-            "その他",
-        ];
-        //*/
-
-        /* *
-        var day = [
-            "東海岸",
-            "西海岸",
-            "内陸",
-        ];
-        //*/
-
-        /* */
-        var day = day || [
-            "うどんか",
-            "ごにょごにょ",
-            "うっきー",
-            "石井",
-            "後藤",
-            "宮下",
-        ];
-
-        //*/
-        for (var i = 0; i < day.length; i++) {
-            angles.push(i * 2*PI/day.length);
-        };
-
-    	angles.map(function(e, index) {
-    		//LabelStopperオブジェクトを生成する
-    		var label = new LabelStopper(new Angle(e), day[index], day[index]+"message");
-
-    		self.labels.push(label);
-
-    		return label;
-
-    	}).map(function(label,index){
-    		//前後とのリンクを貼る
-
-    		label.next = angles[(index + 1) % angles.length];
-    		label.prev = angles[(index - 1) < 0 ? angles.length-1 : (index -1)];
-
-    		return label;
-
-    	}).map(function(label, index) {
-    		//対応する図形を描く
-    		var ang = label.getAngle().get();
-    		label.path = s.pie(
-    			0,
-    			0,
-    			self.range,
-    			ang * 180 / Math.PI,
-    			label.next * 180 / Math.PI );
-
-    		var r = self.range ;
-
-    		var diffAng = new Angle(label.next).calcDiff(label.getAngle());
-
-    		var middleAng = new Angle(label.getAngle()).add(diffAng.get()/2);
-
-
-    		label.strPath = s.text(0,0, label.getLabel())
-    			.transform("rotate("+ (-middleAng.get() * 180 / Math.PI) + ") translate("+(r*0.75)+",0) rotate(90)");
-
-			return label;
-    	}).map(function(label, index) {
-    		//図形の色をぬる
-    		label.path.attr({
-    			fill : Snap.hsb(label.getAngle().get()/(2*Math.PI), 0.6,0.8), 
-    			//fill : colors[index],
-    			stroke : "#fff"
-    		});
-
-    		//文字を追加
-    		label.strPath.attr({
-
-    			fill : Snap.hsb(0, 0,1), 
-    			"text-anchor": "middle",
-                "font-size":40,
-
-    			//fill : colors[index],
-	    		//textpath: "M0,0L100,50"
-	    	});
-    		return label;
-            
-    	}).map(function(label) {
-    		//グループに図形を追加
-    		self.group.append(label.path);
-    		self.group.append(label.strPath);
-
-    	});
-
-		var circle = self.group.append(s.circle(0,0,self.range/3 *2).attr({fill:Snap.rgb(255,255,255),stroke:Snap.rgb(0,0,0,0)}));
-/*
-    	//受信したら力をかける
-    	this.ds.on("set", function(e) {
-    		if(self.id != e.id && (e.value.f)) {
-    			self.addForceInternal(e.value.f);
-
-                var swipe = e.value.swipe;
-                if(swipe)
-                {
-
-                    console.log("hello swipe");
-
-                    (function(){
-
-                        self.range;
-                        var otherline = s.line(
-                            self.x + self.range * Math.cos(swipe.st), 
-                            self.y + self.range * Math.sin(swipe.st), 
-                            self.x + self.range * Math.cos(swipe.et), 
-                            self.y + self.range * Math.sin(swipe.et)
-                        )
-                        .attr({
-                            stroke:Snap.rgb(0,0,255),
-                            "stroke-opacity":0.5,
-                            strokeWidth:30
-                        })
-                        .animate({
-                            "stroke-opacity":0,
-                            strokeWidth:30
-                        },1000,null,function(){
-                            otherline.remove();
-                            otherline = null;
-                        });
-
-                    })();
-                }
-			}
-    	});
-*/
-			this.socket.on('move', function(e) {
-				console.log('Someone swiped');
-				if(e.f) {
-    			self.addForceInternal(e.f);
-
-                var swipe = e.value.swipe;
-                if(swipe)
-                {
-
-                    console.log("hello swipe");
-
-                    (function(){
-
-                        self.range;
-                        var otherline = s.line(
-                            self.x + self.range * Math.cos(swipe.st), 
-                            self.y + self.range * Math.sin(swipe.st), 
-                            self.x + self.range * Math.cos(swipe.et), 
-                            self.y + self.range * Math.sin(swipe.et)
-                        )
-                        .attr({
-                            stroke:Snap.rgb(0,0,255),
-                            "stroke-opacity":0.5,
-                            strokeWidth:30
-                        })
-                        .animate({
-                            "stroke-opacity":0,
-                            strokeWidth:30
-                        },1000,null,function(){
-                            otherline.remove();
-                            otherline = null;
-                        });
-
-                    })();
-                }
-			}
-			});
-/*
-        //止まった時に同期
-        this.ds.on("set", function(e) {
-            console.log("receive");
-
-            if(e.id == "currentstate"){
-                var theta = e.value.theta
-                console.log("receive"+theta);
-
-                self.r = theta;
-                self.v = 0;
-
-                self.render();
-            }
+        //色を設定
+        .attr({
+          fill : Snap.hsb(ang.get()/(2*Math.PI) + Math.PI/6, 0.5,0.9), 
+          stroke : "#000",
+          strokeWidth: sizes.r1_24
 
         });
-*/
 
-
-        this.swipeInfo = new SwipeInfo();
-
-    }
-
-
-	Roulette.prototype.addForce = function(f) {
-    	this.addForceInternal(f);
-            if(MilkCocoa)
-/*
-		this.ds.set(this.id, {
-            f : f,
-            swipe:
-                ((!(this.swipeInfo) || this.swipeInfo.isZero())? 
-                    null: this.swipeInfo)
+      var text = paper.text(0, 0, labelStopper.getLabel()).remove()
+        .transform(
+            "rotate("+ (-middleAng.get() * 180 / Math.PI) + ") "+
+            "translate("+ (sizes.r*0.75 - sizes.fontsize/2) +",0) "+ //;
+            "rotate(90) ")
+        .attr({
+          fill : Snap.hsb(0, 0, 0), 
+          "text-anchor": "middle",
+          "font-size" : self.sizes.fontsize, //サイズは半径に依存しなければならない
         });
-				*/
-			this.socket.emit('swipe', { f: f, room: this.room});
-			console.log('You swiped');
-	}
 
-    Roulette.prototype.swipe = function(sx,sy,st,ex,ey,et) {
-        this.swipeInfo = new SwipeInfo(sx,sy,st,ex,ey,et);
+      self.group.append(pie);
+      self.group.append(text);
 
-    }
+      var res = {pie: pie, text:text};
 
-	Roulette.prototype.addForceInternal = function(f) {
-		this.v += (f * 10);
-	}
+      return res;
+    })
 
-	Roulette.prototype.run = function(f) {
-        //現在動いているか
-        var th = 0.01;
-        var was_running = false;
-        if(Math.abs(this.v) < th)
-            was_running = false;
-        else
-            was_running = true;
 
-        //回す
-		this.rotate(this.v);
-		this.v *= 0.95;
+    //中央固定要素
+    var centerObj = paper.group().remove()
+      .transform("translate("+ self.x +","+self.y+")");
 
-        //回っていたのに止まった
-        if(was_running && Math.abs(this.v) < th && MilkCocoa)
-        {
-            console.log("sent");
-            //this.ds.set("currentstate", {theta:this.r});
-        }
 
-	}
+    var borderWidth = sizes.r1_24;
 
-	Roulette.prototype.rotate = function(v) {
-		this.r += v;
-	}
+    //上の三角▲
+    this.triAngle = PI/24;
+    this.triangle = centerObj.path(
+        "M"+ 0    +","+ -sizes.r1_10 +
+        "L"+sizes.r1_10  +","+(sizes.r1_12)+
+        "L"+(-sizes.r1_10)  +","+(sizes.r1_12)+"z")
+      .attr({
+        fill:Snap.rgb(255,255,255),
+        stroke:Snap.rgb(0,0,0,1),
+        strokeWidth:borderWidth 
+      })
+    .transform("translate("+ 0 +","+ -sizes.r1_2 +") "+
+        "rotate("+ this.fure * 180/10 +")"
+        );
 
-	Roulette.prototype.render = function() {
-		var self = this;
-		this.group.transform("translate("+self.x+","+self.y+") rotate("+this.r+")");
-	}
+    //真ん中の円
+    var circle = centerObj.circle(0, 0, self.radius *(1/2))
+      .attr({
+        fill:Snap.rgb(255,255,255),
+        stroke:Snap.rgb(0,0,0,1),
+        strokeWidth:borderWidth 
+      });
 
-    global.Roulette = Roulette;
 
-}(window))
+    //真ん中の文字列
+    this.centerText = centerObj.text(0,0, "asdfasdfasdflakjsdaf")
+      .attr({
+        fill : Snap.hsb(0,0,0), 
+        "text-anchor": "middle",
+        "font-size":sizes.fontsize,
+      });
+
+    //self.group.append(circle);
+    paper.append(centerObj);
+
+
+    this.render();
+  }
+
+  //requestAnimationFrameにより呼ばれる
+  Roulette.prototype.render = function() {
+    this.group.transform("translate("+this.x+","+this.y+") rotate("+this.angle/Math.PI*180+")");
+
+    var stateText = ("angle is " + this.angle.toFixed(2));
+
+    this.centerText.attr({
+      "text": this.text || stateText
+    });
+
+    this.triangle
+      .transform("translate("+ 0 +","+ -this.sizes.r1_2 +") "+
+          "rotate("+ this.fure * 180/10 +")"
+          );
+
+    //this.text = null; //1回表示したら消すようにしてみる
+  }
+
+  Roulette.prototype.setAngle = function(angle_rad) {
+    this.angle = angle_rad;
+  };
+
+  Roulette.prototype.setFure= function(fure) {
+    this.fure= fure;
+  };
+
+  Roulette.prototype.setText = function(text) {
+    this.text = text;
+  };
+
+  global.Roulette = Roulette;
+
+}(window));
+
 
 

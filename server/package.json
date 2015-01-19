@@ -22,5 +22,8 @@
     "passport-twitter": "^1.0.2",
     "serve-favicon": "~2.1.3",
     "socket.io": "^1.2.1"
+  },
+  "devDependencies": {
+    "underscore": "^1.7.0"
   }
 }

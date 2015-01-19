@@ -4,6 +4,7 @@
     self.angle = 0;
     self.width = length;
     self.height = length;
+    self.radius = length * 0.8 /2;
     var sizes = {
       r : self.radius,
       r1_2 : self.radius/2,
