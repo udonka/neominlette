@@ -62,11 +62,11 @@ router.get('/:name', loginCheck,function(req, res) {
   User.findOne({name: req.params.name}, function(err, data){
     if(err) {
       console.log(err);
-    }else if(data == null){
+     }else if(data == null){
       console.log(data);
-    }else{
-      console.log(data);
-      res.render('user',
+     }else{
+        console.log(data);
+        res.render('user',
         {name: data.name,
          rouletteGroup: data.rouletteGroup});
     }
