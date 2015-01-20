@@ -1,12 +1,69 @@
 <!DOCTYPE HTML>
 <html>
 	<% include head %>
-<body>
-<div id="qrcode"></div>
+
+<body id="body" onmousedown="return false;">
+
+<% include top %>
+
+
+<div id="wrapper" class="container"> 
+    <div id="rouletteContainer">
+        <!-- 描画用フィールド -->
+        <svg id="rouletteArea" 
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+        </svg>
+
+
+           <!-- ここからモーダルウィンドウ -->
+<div id="modal-content">
+  <div id="qrcode"></div>
+   <!-- モーダルウィンドウのコンテンツ開始 -->
+   <!--
+   <p>モーダルウィンドウのコンテンツをHTMLで自由に編集することができます。画像や、動画埋め込みなど、お好きなものを入れて下さい。</p>
+   <p>「閉じる」か「背景」をクリックするとモーダルウィンドウを終了します。</p>
+   -->
+   <p><a id="modal-close" class="button-link">閉じる</a></p>
+   <!-- モーダルウィンドウのコンテンツ終了 -->
+</div>
+
+
+
+    </div>
+
+    <p></p>
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+      <div class="btn-group" role="group">
+        <button id="start" type="button" class="btn btn-default">start</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button id="stop" type="button" class="btn btn-default">stop</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default">編集</button>
+      </div>
+    </div>
+
+
+<p><a id="modal-open" class="button-link">クリックするとモーダルウィンドウを開きます。</a></p>
+<!-- ここまでモーダルウィンドウ -->
+
+</div>
+
+
+
+<script charset="UTF-8" type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
 <script src="/components/jquery-qrcode/jquery.qrcode.min.js"></script>
+
 <script>
 $('#qrcode').qrcode(location.href);
 </script>
+<script>
+  var labels = <%- JSON.stringify(labels) %>;
+</script>
+<script src="/js/modal.js"></script>
+<script charset="UTF-8" type="text/javascript" src="/js/main.js"> </script>
 </body>
 </html>
 

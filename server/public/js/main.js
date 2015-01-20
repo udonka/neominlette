@@ -7,20 +7,7 @@ if(typeof window === "undefined"){
   
 }
 
-$(function(){
-
-  
-
-  /* 通信系処理* */
-
-	var roomname = window.location.host;
-
-	var socket = {};
-	var socket = io.connect(
-		roomname,//これが部屋名
-		{transports : ["websocket", "polling"]});
-
-  var labels = [
+var labels = labels ||  [
       "後藤",
       "宮下",
       "石井",
@@ -28,6 +15,22 @@ $(function(){
       /*
       */
   ];
+
+
+$(function(){
+
+  
+
+  /* 通信系処理* */
+
+	var roomname = window.location.host;
+      var room = window.location.href;
+
+	var socket = {};
+	var socket = io.connect(
+		roomname,//これが部屋名
+		{transports : ["websocket", "polling"]});
+  socket.emit('hello', {room: room},function(data){});
 
   var wheel = new Wheel(0,0,labels);
   var wind = new Wind(wheel);
@@ -76,5 +79,6 @@ socket.on("move", function(data){
 	var angle = 0;
 
 
-	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, socket);
+	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, socket, room);
+
 });

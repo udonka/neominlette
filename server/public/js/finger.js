@@ -1,10 +1,11 @@
 //あんまり独立性高くない良くないクラス
 (function(global){
 
-	var Finger = function(snap, snapdom, centerx, centery, sio){
+	var Finger = function(snap, snapdom, centerx, centery, sio, room){
 		var self = this;
 
 		self.socket = sio;
+		self.room = room;
 
 		self.snap = snap;
 		self.snapdom = snapdom;
@@ -125,7 +126,7 @@
 	}
 
 	Finger.prototype.sendForce = function(swipeData){
-		this.socket.emit('swipe',{swipeData:swipeData, who:0},function(data){
+		this.socket.emit('swipe',{swipeData:swipeData, who:0, room: this.room},function(data){
 			//who:自分が誰なのか
 
 		});

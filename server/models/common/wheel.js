@@ -169,7 +169,7 @@ Wheel.prototype.addForce = function(force) {
 Wheel.prototype.move = function() {
   this._internalMove(this.calcForce());
   this.frameNum++;
-  console.log(this.frameNum);
+  //console.log(this.frameNum);
 }
 
 //float 
@@ -211,8 +211,8 @@ Wheel.prototype._internalMove = function(a) { //float
 
 
   this.ang.add( this.v *GLOBAL.dx );
-  console.log("速度: " + this.v);
-  console.log("角度: "+this.ang.get());
+  //console.log("速度: " + this.v);
+  //console.log("角度: "+this.ang.get());
 }
 
 Wheel.prototype.getForces = function(){
