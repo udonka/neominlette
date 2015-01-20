@@ -23,7 +23,7 @@ function sio(server){
 		socket.on('swipe', function(data){
       var force = data.swipeData.f;
       wheel.addForce(force)
-      console.log("力受信: " + force);
+//      console.log("力受信: " + force);
 
       sio.sockets.emit('move', { f : force, r : wheel.getAngle().get(), v : wheel.getVelocity() });
 			// 受信したものを配信

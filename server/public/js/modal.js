@@ -39,8 +39,8 @@ function centeringModalSyncer(){
 	var h = $(window).height();
 
 	//コンテンツ(#modal-content)の幅、高さを取得
-	var cw = $("#modal-content").outerWidth({margin:true});
-	var ch = $("#modal-content").outerHeight({margin:true});
+	var cw = $("#modal-content").outerWidth();
+	var ch = $("#modal-content").outerHeight();
 	console.log('w: '+w+' h: '+h+' cw: '+cw+' ch: '+ch);
 	console.log(cw);
 	console.log(ch);
