@@ -219,7 +219,7 @@ Wind2.prototype.getCurrentLabel = function (){
   });
 
 
-  console.log(nearest.label.getLabel());
+//  console.log(nearest.label.getLabel());
 
   //そいつの右だったらそいつ
   //そいつの左だったらそいつの前

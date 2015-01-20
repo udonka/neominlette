@@ -52,7 +52,7 @@ router.get('/:name/:group/:id', function(req, res){
     }
     console.log('roulette');
     console.log(roulette);
-    res.render('roulette');
+    res.render('roulette', {labels: roulette.labels});
   });
 });
 
