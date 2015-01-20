@@ -63,3 +63,11 @@ margin-right: -15px;
 .navbar-header {
 float: left;
 }
+
+/* miyashita init */
+.m-content {
+  margin-top: 80px;
+}
+.m-form {
+  margin: 5px;
+}
