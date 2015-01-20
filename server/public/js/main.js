@@ -8,10 +8,9 @@ if(typeof window === "undefined"){
 }
 
 var labels = labels ||  [
-      "後藤",
-      "宮下",
-      "石井",
-      "tinko",
+      "ごにょ",
+      "うっきー",
+      "うどんか",
       /*
       */
   ];
