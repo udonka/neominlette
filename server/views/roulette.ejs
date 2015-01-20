@@ -3,6 +3,7 @@
 	<% include head %>
 
 <body id="body" onmousedown="return false;">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
@@ -38,6 +39,20 @@
         </svg>
 
 
+           <!-- ここからモーダルウィンドウ -->
+<div id="modal-content">
+  <div id="qrcode"></div>
+   <!-- モーダルウィンドウのコンテンツ開始 -->
+   <!--
+   <p>モーダルウィンドウのコンテンツをHTMLで自由に編集することができます。画像や、動画埋め込みなど、お好きなものを入れて下さい。</p>
+   <p>「閉じる」か「背景」をクリックするとモーダルウィンドウを終了します。</p>
+   -->
+   <p><a id="modal-close" class="button-link">閉じる</a></p>
+   <!-- モーダルウィンドウのコンテンツ終了 -->
+</div>
+
+
+
     </div>
 
     <p></p>
@@ -52,18 +67,25 @@
         <button type="button" class="btn btn-default">編集</button>
       </div>
     </div>
+
+
+<p><a id="modal-open" class="button-link">クリックするとモーダルウィンドウを開きます。</a></p>
+<!-- ここまでモーダルウィンドウ -->
+
 </div>
 
 
-<div id="qrcode"></div>
 
 <script defer="defer" charset="UTF-8" type="text/javascript" src="/js/main.js"> </script>
 <script charset="UTF-8" type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
 <script src="/components/jquery-qrcode/jquery.qrcode.min.js"></script>
+
 </body>
 <script>
 $('#qrcode').qrcode(location.href);
 </script>
+<script src="/js/modal.js"></script>
+<link rel="stylesheet" href="/css/m-style.css"/>
 </body>
 </html>
 
