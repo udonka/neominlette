@@ -80,7 +80,10 @@ router.get('/', function(req, res){
     labels: [
       'Udonka',
       'Hayate',
-      'Uki'
+      'Uki',
+      'Udonka2',
+      'Hayate2',
+      'Uki2'
     ],
     QRURL: fullUrl });
 });

@@ -62,7 +62,8 @@ Angle.prototype.getAdd = function(ang) {
   else if(isNumber(ang)){
     return new Angle(this.get() + ang);
   }
-  return this;
+
+  throw Error("ang should be Angle or number");
 };
 
 //オーバーロードできた

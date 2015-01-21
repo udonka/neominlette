@@ -124,7 +124,7 @@
 
   //requestAnimationFrameにより呼ばれる
   Roulette.prototype.render = function() {
-    this.group.transform("translate("+this.x+","+this.y+") rotate("+this.angle/Math.PI*180+")");
+    this.group.transform("translate("+this.x+","+this.y+") rotate("+ this.angle/Math.PI*180+")");
 
     var stateText = ("angle is " + this.angle.toFixed(2));
 

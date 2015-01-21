@@ -4,16 +4,14 @@ if(typeof window === "undefined"){
 }
 
 
+/*
 
 function Wind(wheel) {
   this.wheel = wheel;
   this.myAng = new Angle(-Math.PI/2);
 
 
-  /*
-  this.diff  =  Angle.createDiffAngle(0);
-  this.bending = window.BendingState.NOBEND;
-  */
+  // this.diff  =  Angle.createDiffAngle(0); this.bending = window.BendingState.NOBEND; 
 }
 
 Wind.prototype.move = function() {
@@ -32,9 +30,7 @@ Wind.prototype.move = function() {
     var k = Global.bane;
     if(this.bending == window.BendingState.RIGHTBEND && this.diff != null){
       this.wheel.addForce(- k * Math.abs(this.diff.get()));
-/*      if(abs(wheel.v) < PI/6){
-        wheel.addForce(-3*PI);
-      }*/
+//      if(abs(wheel.v) < PI/6){ wheel.addForce(-3*PI); }
     }
     
     if(this.bending == window.BendingState.LEFTBEND && this.diff != null){
@@ -185,11 +181,12 @@ Wind.prototype.draw = function() {
       break;
     }
 }
+*/
 
 
 function Wind2(wheel){
   this.wheel = wheel;
-  this.windAngle = new Angle(Math.PI /2);
+  this.windAngle = new Angle(-Math.PI /2);
 
 }
 
@@ -204,7 +201,7 @@ Wind2.prototype.getCurrentLabel = function (){
   var self = this;
 
   _(labelStoppers).each(function(label, index){
-    var labelAngle = label.getAngle().getAdd(wheelAngle);
+    var labelAngle = wheelAngle.getAdd(-label.getAngle().get());
 
     var diffAngle = self.windAngle.calcDiff(labelAngle);
 
@@ -219,12 +216,22 @@ Wind2.prototype.getCurrentLabel = function (){
   });
 
 
+
 //  console.log(nearest.label.getLabel());
 
+  var selected = null;
   //そいつの右だったらそいつ
+  if(nearest.diff > 0)
+  {
+    selected = nearest.label.prev;
+  }
   //そいつの左だったらそいつの前
+  else{
+    selected = nearest.label;
+  }
   
-  return nearest.label.getLabel();
+  return selected.getLabel();
+
 
 }
 
