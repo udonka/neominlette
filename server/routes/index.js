@@ -76,9 +76,9 @@ router.get('/:name', loginCheck,function(req, res) {
 router.get('/', function(req, res){
   res.render('branding' ,
     {labels: [
-      'うどんか',
-      'ごにょ',
-      'うっきー'
+      'Udonka',
+      'Hayate',
+      'Ukiy'
       ]});
 });
 
