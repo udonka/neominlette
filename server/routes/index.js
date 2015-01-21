@@ -74,12 +74,15 @@ router.get('/:name', loginCheck,function(req, res) {
 });
 
 router.get('/', function(req, res){
-  res.render('branding' ,
-    {labels: [
+  var fullUrl= req.protocol + '://' + req.get('host') + req.originalUrl;
+
+  res.render('branding' , {
+    labels: [
       'Udonka',
       'Hayate',
-      'Ukiy'
-      ]});
+      'Uki'
+    ],
+    QRURL: fullUrl });
 });
 
 
