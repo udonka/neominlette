@@ -73,12 +73,13 @@ router.get('/:name', loginCheck,function(req, res) {
   });
 });
 
-router.get('/', loginCheck, function(req, res){
-  res.redirect('/login');
-});
-router.use('/', function(req, res){
-  console.log('/ use');
-  res.send('use');
+router.get('/', function(req, res){
+  res.render('branding' ,
+    {labels: [
+      'うどんか',
+      'ごにょ',
+      'うっきー'
+      ]});
 });
 
 
