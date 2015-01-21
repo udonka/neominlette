@@ -50,6 +50,10 @@
 		event.stopPropagation();
 		event.preventDefault();
 
+    if(this.arrow ){
+      this.arrow.remove();
+
+    }
 		this.arrow =  this.snap.line(this.touchStartX,this.touchStartY,this.touchStartX,this.touchStartY)
 			.attr({
 				stroke:Snap.rgb(255,0,0),
@@ -108,8 +112,6 @@
 			},1000,null,function(){
 				//arrowをはずす
 				larrow.remove();
-				//ガベージこれくしょｎ
-				larrow = null;
 			});
 		})(this.arrow);
 
