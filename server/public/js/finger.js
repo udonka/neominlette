@@ -145,12 +145,12 @@
 			return 0;	
 		}
 
-		var v = dtheta.get();
+		var v = 100*dtheta.get() / (timeDiff || 1);
 		var f = v ;
 
 		console.log("vel = " + v) ;
 
-		return f;
+		return f ;
 	};
 
 	global.RouletteFinger = Finger;
