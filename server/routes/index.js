@@ -81,9 +81,6 @@ router.get('/', function(req, res){
       'Udonka',
       'Hayate',
       'Uki',
-      'Udonka2',
-      'Hayate2',
-      'Uki2'
     ],
     QRURL: fullUrl });
 });
