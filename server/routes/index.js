@@ -17,6 +17,7 @@ var loginCheck = function(req, res, next){
 
 
 router.get('/:name/:group/:id', function(req, res){
+  var fullUrl= req.protocol + '://' + req.get('host') + req.originalUrl;
   Roulette.findById(req.params.id, function(err, roulette){
     if(err){
       console.log(err);
@@ -24,7 +25,11 @@ router.get('/:name/:group/:id', function(req, res){
     }
     console.log('roulette');
     console.log(roulette);
-    res.render('roulette', {labels: roulette.labels});
+    res.render('roulette', {
+      user: req.user.name,
+      labels: roulette.labels,
+      QRURL: fullUrl
+    });
   });
 });
 

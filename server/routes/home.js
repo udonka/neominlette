@@ -17,7 +17,9 @@ var loginCheck = function(req, res, next){
 
 /* GET home page. */
 router.get('/', loginCheck,function(req, res){
+  console.log(req.user.name);
   res.render('user',{
+    user: req.user.name,
     name: req.user.name,
     rouletteGroup: req.user.rouletteGroup
   });
@@ -25,7 +27,9 @@ router.get('/', loginCheck,function(req, res){
 
 router.get('/userinfo', loginCheck, function(req, res){
   res.render('userinfo', 
-    {userName: req.user.name,
+    {
+      user : req.user.name,
+      userName: req.user.name,
      userEmail: req.user.email,
      id: req.user._id
     });
