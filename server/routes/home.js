@@ -36,7 +36,10 @@ router.get('/userinfo', loginCheck, function(req, res){
 });
 
 router.get('/create', loginCheck, function(req, res){
-  res.render('createRoulette');
+  res.render('createRoulette', 
+    {
+      user: req.user.name
+    });
 })
 
 module.exports = router;
