@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    bcrypt   = require('bcrypt-nodejs');
 var url = 'mongodb://localhost/minlette';
 var db = mongoose.createConnection(url, function(err, res){
   if(err){
@@ -10,8 +11,10 @@ var db = mongoose.createConnection(url, function(err, res){
 
 var UserSchema = new mongoose.Schema({
   name: {type: String, unique: true},
-  email: {type: String, unique: true},
-  password: String,
+  local: {
+    email: String,
+    password: String
+  },
   rouletteGroup: [{ name: String, rouletteId: mongoose.Schema.Types.ObjectId}]
 });
 

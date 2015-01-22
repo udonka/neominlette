@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users.js').User;
+var helper = require('../helper/encrypt');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -14,13 +15,22 @@ router.get('/', function(req, res) {
 });
 
 router.post('/:id', function(req, res) {
-  console.log(req.body);
   var conditions = { _id: req.params.id}
-    , update = {$set: req.body};
+  var update;
+  if(!req.body.email && !req.body.password)
+    res.redirect('back');
+
+  if(req.body.email)
+    update = {$set : {"local.email": req.body.email}};
+
+  if(req.body.password)
+    update = {$set: {"local.password": helper.generateHash(req.body.password)}};
+
   User.update(conditions, update, function(err, num){
     if(err){
       console.log(err);
     }
+    console.log(num);
     req.session.destroy();
     res.redirect('/login');
   });
