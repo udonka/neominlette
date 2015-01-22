@@ -1,7 +1,7 @@
 //あんまり独立性高くない良くないクラス
 (function(global){
 
-	var Finger = function(snap, snapdom, centerx, centery, sio, room){
+	var Finger = function(snap, snapdom, centerx, centery, radius, sio, room){
 		var self = this;
 
 		self.socket = sio;
@@ -12,6 +12,7 @@
 
 		self.centerX=centerx;
 		self.centerY=centery;
+		self.radius=radius;
 		self.touchStartX=0;
 		self.touchStartY=0;
 		self.touchStartTime=0;
@@ -78,19 +79,36 @@
 		this.touchEndTime = parseInt((new Date).getTime());
 
 
-    //力を送信
-		var f = this.calcSpeed(
+    //力を計算
+		var force_vec = this.calcSpeed(
 				this.centerX, this.centerY, //しっかり中心を決める必要がある
 				this.touchStartX, this.touchStartY,
 				this.touchEndX, this.touchEndY,
 				this.touchStartTime, this.touchEndTime
-			)
+			);
+
+
+    //２つのベクトルを角座標に変換
+    //
+    var startAngle = force_vec.startVec.getTheta();//ベクトルの向き
+    var endAngle = force_vec.endVec.getTheta();//ベクトルの向き
+    var startR  = force_vec.startVec.getLength() / this.radius;
+    var endR    = force_vec.endVec.getLength() / this.radius;
+
 
     var swipeData = {
-      "f": f,
+      "f": force_vec.f,
+      timeDiff: force_vec.timeDiff,
+      startAngle: startAngle,
+      endAngle: endAngle,
+      startR: startR,
+      endR: endR,
+
       //スタート角度とストップ角度、かかった時間を送ればよかろう
 
     }
+    console.log("send swipe" );
+    console.log( swipeData);
 
     this.sendForce(swipeData);
 
@@ -128,11 +146,13 @@
 	}
 
 	Finger.prototype.sendForce = function(swipeData){
-		this.socket.emit('swipe',{swipeData:swipeData, who:0, room: this.room},function(data){
-			//who:自分が誰なのか
-
-		});
+		this.socket.emit('swipe',
+        {swipeData:swipeData,
+         who:0, //いるのか
+         room: this.room},
+         function(data){});
 	}
+
 	//最終的に速度を計算する
 	Finger.prototype.calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
 		// TODO
@@ -152,7 +172,7 @@
 
 		console.log("vel = " + v) ;
 
-		return f ;
+		return {f:f,timeDiff:timeDiff, startVec:vec1, endVec:vec2} ;
 	};
 
 	global.RouletteFinger = Finger;

@@ -2,6 +2,7 @@ var socketio = require('socket.io');
 var Wheel = require('./common/wheel').Wheel;
 
 var wheel = new Wheel(0,0,["aiueo", "kaki", "kukeko", ]);
+//! ラベルの設定はいつかやらなきゃな
 var wheels = {};
 //var wheel = {roomid:new Wheel(0,0), roomid2: wheel2, roomid3:wheel3};
 
@@ -23,7 +24,7 @@ function sio(server){
         console.log(data);
         socket.join(data.room);
         wheels[data.room+''] = wheels[data.room+''] || new Wheel(0, 0,["", "", ""]);
-        socket.emit('move', { f : 0, r : wheels[data.room+''].getAngle().get(), v : wheels[data.room+''].getVelocity() });
+        socket.emit('mymove', { f : 0, r : wheels[data.room+''].getAngle().get(), v : wheels[data.room+''].getVelocity() });
 
       });
 		
@@ -39,13 +40,9 @@ function sio(server){
 //      console.log("力受信: " + force);
 
       socket.join(data.room);
-      socket.broadcast.to(data.room).emit('move', { f : force, r : wheels[data.room+''].getAngle().get(), v : wheels[data.room+''].getVelocity() });
-      socket.emit('move', { f : force, r : wheels[data.room+''].getAngle().get(), v : wheels[data.room+''].getVelocity() });
-//      sio.sockets.emit('move', { f : force, r : wheel.getAngle().get(), v : wheel.getVelocity() });
-			// 受信したものを配信
-			//socket.broadcast.emit('move', { f : data.f });
-			//sio.sockets.emit('move', { f : data.f, r : wheel.getAngle().get() });
-		  // sio.sockets.in('room1').emit('msg','Hello!!'); //roomを指定する場合
+      socket.broadcast.to(data.room).emit('globalmove', { f : force, r : wheels[data.room+''].getAngle().get(), v : wheels[data.room+''].getVelocity() ,swipeData:data.swipeData});
+      socket.emit('mymove', { f : force, r : wheels[data.room+''].getAngle().get(), v : wheels[data.room+''].getVelocity() ,swipeData:data.swipeData});
+
 		});
 
 		// 切断
