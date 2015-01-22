@@ -72,46 +72,22 @@
 
 	}
 
-	Finger.prototype.pointerup = function(){
-
-		this.touchEndX = event.offsetX;
-		this.touchEndY = event.offsetY;
-		this.touchEndTime = parseInt((new Date).getTime());
+  Finger.prototype.pointerup = function(){
+    this.touchEndX = event.offsetX;
+    this.touchEndY = event.offsetY;
+    this.touchEndTime = parseInt((new Date).getTime());
 
 
     //力を計算
-		var force_vec = this.calcSpeed(
-				this.centerX, this.centerY, //しっかり中心を決める必要がある
-				this.touchStartX, this.touchStartY,
-				this.touchEndX, this.touchEndY,
-				this.touchStartTime, this.touchEndTime
-			);
-
-
-    //２つのベクトルを角座標に変換
-    //
-    var startAngle = force_vec.startVec.getTheta();//ベクトルの向き
-    var endAngle = force_vec.endVec.getTheta();//ベクトルの向き
-    var startR  = force_vec.startVec.getLength() / this.radius;
-    var endR    = force_vec.endVec.getLength() / this.radius;
-
-
-    var swipeData = {
-      "f": force_vec.f,
-      timeDiff: force_vec.timeDiff,
-      startAngle: startAngle,
-      endAngle: endAngle,
-      startR: startR,
-      endR: endR,
-
-      //スタート角度とストップ角度、かかった時間を送ればよかろう
-
-    }
-    console.log("send swipe" );
-    console.log( swipeData);
+    var swipeData = this.calcSwipe(
+        this.centerX, this.centerY, //しっかり中心を決める必要がある
+        this.touchStartX, this.touchStartY,
+        this.touchEndX, this.touchEndY,
+        this.touchStartTime, this.touchEndTime,
+        this.radius
+    );
 
     this.sendForce(swipeData);
-
 
 		//s. タッチ場所を描画
 		console.log("pointer up position : " + this.touchEndX + " "+ this.touchEndY);
@@ -153,8 +129,9 @@
          function(data){});
 	}
 
+  //
 	//最終的に速度を計算する
-	Finger.prototype.calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
+	Finger.prototype.calcSwipe = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY, radius) {
 		// TODO
 		var vec1 = new Vec2(startX - centerX, startY - centerY);
 		var vec2 = new Vec2(endX - centerX, endY - centerY);
@@ -163,16 +140,28 @@
 		var theta2 = Angle.createAbsAngle(vec2.getTheta());
 		var dtheta = theta2.calcDiff(theta1);
 
-		if(timeDiff == 0){
-			return 0;	
-		}
+    if(timeDiff == 0){
+      return 0;	
+    }
 
-		var v = 100*dtheta.get() / (timeDiff || 1);
-		var f = v ;
+    var v = dtheta.get() / (timeDiff || 1);
+    var f = v * 100;
 
-		console.log("vel = " + v) ;
+    console.log("vel = " + v) ;
 
-		return {f:f,timeDiff:timeDiff, startVec:vec1, endVec:vec2} ;
+    var swipeData = {
+      f: f,
+      timeDiff: timeDiff,
+
+      startVec:vec1,
+      startAngle: vec1.getTheta(),
+      startR: vec2.getLength()/radius,
+
+      endVec:vec2,
+      endAngle: vec2.getTheta(),
+      endR: vec2.getLength()/radius,
+    }
+    return swipeData;
 	};
 
 	global.RouletteFinger = Finger;

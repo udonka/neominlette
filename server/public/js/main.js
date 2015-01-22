@@ -4,16 +4,13 @@
 if(typeof window === "undefined"){
   var Wheel = require("./common/wheel");
   var Wind = require("./common/wind").Wind;
-  
 }
 
 var labels = labels ||  [
-      "ごにょ",
-      "うっきー",
-      "うどんか",
-      /*
-      */
-  ];
+  "ごにょ",
+  "うっきー",
+  "うどんか",
+];
 
 
 $(function(){
@@ -42,7 +39,6 @@ $(function(){
   });
 
 
-
 socket.on("globalmove", function(data){
 
   moveRoulette(data);
@@ -58,22 +54,21 @@ socket.on("globalmove", function(data){
 
   console.log("line ("+x1+" , "+y1+") -> ( "+x2+", "+ y2 +") ");
 
-  arrow =  snap.line(x1,y1,x2,y2)
+  //スワイプあとを描画
+  var arrow =  snap.line(x1,y1,x2,y2)
     .attr({
       stroke:Snap.rgb(0,0,255),
       "stroke-opacity":0.5,
       strokeWidth:15
     });
 
-  //function にarrowをわたしている クロージャ
-    arrow.animate({
-      stroke:Snap.rgb(255,255,255), 
-      "stroke-opacity":0
-    },1000,null,function(){
-      //arrowをはずす
-      arrow.remove();
-    });
-  //スワイプあとを描画
+  arrow.animate({
+    stroke:Snap.rgb(255,255,255), 
+    "stroke-opacity":0
+  },1000,null,function(){
+    //arrowをはずす
+    arrow.remove();
+  });
 });
 
 socket.on("mymove", function(data){
