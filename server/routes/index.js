@@ -26,7 +26,7 @@ router.get('/:name/:group/:id', function(req, res){
     console.log('roulette');
     console.log(roulette);
     res.render('roulette', {
-      user: req.user.name,
+//      user: req.user.name,
       labels: roulette.labels,
       QRURL: fullUrl
     });
