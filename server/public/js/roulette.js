@@ -119,6 +119,12 @@
     paper.append(centerObj);
 
 
+    //透明な窓
+    var eventRect = paper.rect(0, 0, self.width, self.height).attr({
+      opacity:0
+    });
+
+
     this.render();
   }
 
