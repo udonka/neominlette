@@ -4,16 +4,13 @@
 if(typeof window === "undefined"){
   var Wheel = require("./common/wheel");
   var Wind = require("./common/wind").Wind;
-  
 }
 
 var labels = labels ||  [
-      "ごにょ",
-      "うっきー",
-      "うどんか",
-      /*
-      */
-  ];
+  "ごにょ",
+  "うっきー",
+  "うどんか",
+];
 
 
 $(function(){
@@ -42,7 +39,44 @@ $(function(){
   });
 
 
-socket.on("move", function(data){
+socket.on("globalmove", function(data){
+
+  moveRoulette(data);
+  var swipe = data.swipeData;
+  console.log(swipe);
+
+  var cx = roulette.x;
+  var cy = roulette.y;
+  var x1 = cx+ swipe.startR * Math.cos(swipe.startAngle) * roulette.radius;
+  var y1 = cy+ swipe.startR * Math.sin(swipe.startAngle) * roulette.radius;
+  var x2 = cx+ swipe.endR * Math.cos(swipe.endAngle) * roulette.radius;
+  var y2 = cy+ swipe.endR * Math.sin(swipe.endAngle) * roulette.radius;
+
+  console.log("line ("+x1+" , "+y1+") -> ( "+x2+", "+ y2 +") ");
+
+  //スワイプあとを描画
+  var arrow =  snap.line(x1,y1,x2,y2)
+    .attr({
+      stroke:Snap.rgb(0,0,255),
+      "stroke-opacity":0.5,
+      strokeWidth:15
+    });
+
+  arrow.animate({
+    stroke:Snap.rgb(255,255,255), 
+    "stroke-opacity":0
+  },1000,null,function(){
+    //arrowをはずす
+    arrow.remove();
+  });
+});
+
+socket.on("mymove", function(data){
+  moveRoulette(data);
+});
+
+var moveRoulette  = function(data){
+
     wheel.setAngle(data.r);
     wheel.setVelocity(data.v);
     wheel.addForce(data.f);
@@ -52,9 +86,7 @@ socket.on("move", function(data){
     roulette.setText(wind.getCurrentLabel());
     console.log("label" + wind.getCurrentLabel());
     roulette.render();
-//    console.log("位置: " + data.r);
-  //  console.log("力: " + data.f);
-});
+}
 
 
 	var container = $("#rouletteContainer");
@@ -78,6 +110,6 @@ socket.on("move", function(data){
 	var angle = 0;
 
 
-	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, socket, room);
+	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, roulette.radius, socket, room);
 
 });

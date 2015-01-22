@@ -1,7 +1,7 @@
 //あんまり独立性高くない良くないクラス
 (function(global){
 
-	var Finger = function(snap, snapdom, centerx, centery, sio, room){
+	var Finger = function(snap, snapdom, centerx, centery, radius, sio, room){
 		var self = this;
 
 		self.socket = sio;
@@ -12,6 +12,7 @@
 
 		self.centerX=centerx;
 		self.centerY=centery;
+		self.radius=radius;
 		self.touchStartX=0;
 		self.touchStartY=0;
 		self.touchStartTime=0;
@@ -71,29 +72,22 @@
 
 	}
 
-	Finger.prototype.pointerup = function(){
+  Finger.prototype.pointerup = function(){
+    this.touchEndX = event.offsetX;
+    this.touchEndY = event.offsetY;
+    this.touchEndTime = parseInt((new Date).getTime());
 
-		this.touchEndX = event.offsetX;
-		this.touchEndY = event.offsetY;
-		this.touchEndTime = parseInt((new Date).getTime());
 
-
-    //力を送信
-		var f = this.calcSpeed(
-				this.centerX, this.centerY, //しっかり中心を決める必要がある
-				this.touchStartX, this.touchStartY,
-				this.touchEndX, this.touchEndY,
-				this.touchStartTime, this.touchEndTime
-			)
-
-    var swipeData = {
-      "f": f,
-      //スタート角度とストップ角度、かかった時間を送ればよかろう
-
-    }
+    //力を計算
+    var swipeData = this.calcSwipe(
+        this.centerX, this.centerY, //しっかり中心を決める必要がある
+        this.touchStartX, this.touchStartY,
+        this.touchEndX, this.touchEndY,
+        this.touchStartTime, this.touchEndTime,
+        this.radius
+    );
 
     this.sendForce(swipeData);
-
 
 		//s. タッチ場所を描画
 		console.log("pointer up position : " + this.touchEndX + " "+ this.touchEndY);
@@ -128,13 +122,16 @@
 	}
 
 	Finger.prototype.sendForce = function(swipeData){
-		this.socket.emit('swipe',{swipeData:swipeData, who:0, room: this.room},function(data){
-			//who:自分が誰なのか
-
-		});
+		this.socket.emit('swipe',
+        {swipeData:swipeData,
+         who:0, //いるのか
+         room: this.room},
+         function(data){});
 	}
+
+  //
 	//最終的に速度を計算する
-	Finger.prototype.calcSpeed = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY) {
+	Finger.prototype.calcSwipe = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY, radius) {
 		// TODO
 		var vec1 = new Vec2(startX - centerX, startY - centerY);
 		var vec2 = new Vec2(endX - centerX, endY - centerY);
@@ -143,16 +140,28 @@
 		var theta2 = Angle.createAbsAngle(vec2.getTheta());
 		var dtheta = theta2.calcDiff(theta1);
 
-		if(timeDiff == 0){
-			return 0;	
-		}
+    if(timeDiff == 0){
+      return 0;	
+    }
 
-		var v = 100*dtheta.get() / (timeDiff || 1);
-		var f = v ;
+    var v = dtheta.get() / (timeDiff || 1);
+    var f = v * 100;
 
-		console.log("vel = " + v) ;
+    console.log("vel = " + v) ;
 
-		return f ;
+    var swipeData = {
+      f: f,
+      timeDiff: timeDiff,
+
+      startVec:vec1,
+      startAngle: vec1.getTheta(),
+      startR: vec2.getLength()/radius,
+
+      endVec:vec2,
+      endAngle: vec2.getTheta(),
+      endR: vec2.getLength()/radius,
+    }
+    return swipeData;
 	};
 
 	global.RouletteFinger = Finger;
