@@ -1,3 +1,8 @@
 .DS_Store
 .idea/
 *.iml
+*.swp
+server/node_modules
+server/npm-debug.log
+server/public/components
+server/bower_components/

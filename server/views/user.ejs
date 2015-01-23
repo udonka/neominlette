@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<% include head %>
+<body>
+<% include top %>
+<div id="wrapper" class="container"> 
+  <div class="m-content">
+    <h2><%= locals.user %></h2>
+    <div>
+      <form action="/home/create" method="GET">
+        <div class="form-group">
+        <button type="submit" class="btn btn-default" >ルーレットを作る</button>
+      </form>
+    </div>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ルーレット名</th>
+        </tr>
+      </thead>
+      <% var count = 1; %>
+      <% rouletteGroup.forEach(function(roulette){ %>
+        <tr>
+          <th><span class="h4"><%= count %></span></th>
+          <th><a class="h4" href="/<%= name %>/<%= roulette.name%>/<%= roulette.rouletteId %>"><%= roulette.name %></a></th>
+        </tr>
+      <% count++ %>
+      <% }); %>
+    </table>
+  </div>
+</div>
+
+<script>
+</script>
+
+</body>
+</html>

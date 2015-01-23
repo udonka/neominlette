@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<% include head %>
+<body>
+<% include top %>
+<div>
+  <h2><%= user %></h2>
+  <div>
+    <form action="/<%= user %>/one/roulette" method="GET">
+      <button type="submit">private roulette</button>
+    </form>
+  </div>
+  <div>
+    <% roulettes.forEach(function(roulette){ %>
+      <form action="/<%= roulette.author %>/<%= roulette.group %>/<%= roulette.name %>" method="GET">
+        <h4><%= roulette.name %></h4>
+        <button type="submit">START!</button>
+      </form>
+    <% }); %>
+  </div>
+</div>
+
+<script>
+</script>
+
+</body>
+</html>
