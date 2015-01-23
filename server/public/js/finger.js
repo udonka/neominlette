@@ -144,8 +144,9 @@
       return 0;	
     }
 
+    var dx = 30 / 1000;
     var v = dtheta.get() / (timeDiff || 1);
-    var f = v * 100;
+    var f = v / dx;
 
     console.log("vel = " + v) ;
 
