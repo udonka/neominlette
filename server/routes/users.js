@@ -38,7 +38,14 @@ router.post('/:id', function(req, res) {
 
 
 router.post('/', function(req, res){
-  var newUser = new User(req.body);
+  var data = {
+    name: req.body.name,
+    local: {
+      email: req.body.email,
+      password: req.body.passwort
+    }
+  };
+  var newUser = new User(data);
   console.log(req.body);
   newUser.save(function(err){
     if(err){
