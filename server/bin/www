@@ -3,10 +3,14 @@ var debug = require('debug')('minlette');
 var app = require('../app');
 var sio = require('../models/sio');
 
+
 app.set('port', process.env.PORT || 80);
 
+//server is a HTTP server.
+//app is configured by ../app.js
 var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
+//give http server to socket.io server.
 sio(server);

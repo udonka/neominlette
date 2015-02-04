@@ -1,7 +1,6 @@
 var socketio = require('socket.io');
 var Wheel = require('./common/wheel').Wheel;
 
-var wheel = new Wheel(0,0,["aiueo", "kaki", "kukeko", ]);
 //! ラベルの設定はいつかやらなきゃな
 
 var wheels = {};//連想配列のキーを部屋名にして、ホイールのモデルを保存する
@@ -13,6 +12,7 @@ function sio(server){
 
   //あるユーザーが、サーバーに対してコネクションを申し込んできた。 
   //ここでは、そのユーザー(socket)とのやりとりを定義するのみ。こう言われたらこう返すと
+  //sio.sockets はデフォルトのNamespace /らしい！
   sio.sockets.on('connection', function(socket){
     //socket オブジェクトは、サーバーとそのユーザーとのコネクションを表す。
 
@@ -21,7 +21,10 @@ function sio(server){
     socket.on('hello', function(data){
       //クライアントが希望してきた部屋に配属する。
       //以後、socketはこの部屋に限られる。
-      console.log("hello, "+ socket.id.slice(0,4)+". your room is "+data.room+", OK?");
+      console.log("hello, <"+ socket.id.slice(0,4)+">. your room is ["+data.room+"], OK?");
+
+
+      //joinすることにより、to('room')でこの部屋のを受け取れるようになる
       socket.join(data.room);
       var wheel = wheels[ data.room+''] = 
         wheels[ data.room+''] || new Wheel(0, 0,["", "", ""]);
@@ -36,7 +39,31 @@ function sio(server){
 
     // スワイプを受信
     socket.on('swipe', function(data){
-      console.log("hi, <"+socket.id.slice(0,4)+">. good swipe! (force="+data.swipeData.f.toFixed(4)+") in room "+data.room);
+
+      
+      //joinすることにより、to('room')でこの部屋のを受け取れるようになる
+      //helloでやってるけど一応やっとけ
+      socket.join(data.room);
+
+      console.log("");
+      console.log("hi, user <"+socket.id.slice(0,4)+"> in room [" + data.room.slice(0,4) + "]. good swipe! (force="+data.swipeData.f.toFixed(3)+")");
+
+      var room_members = sio.sockets.adapter.rooms[data.room];
+
+      //部屋が存在しなければundefined
+      if(room_members){
+        console.log("your room mate [" + data.room + "] is");
+        var i = 0;
+        for(socketid in sio.sockets.connected){
+          if(room_members[socketid]){
+
+            console.log("\t" + i++ + ": <" + socketid.slice(0,4)+">");
+          }
+
+        }
+      }
+
+
       //モデルを取得
       var wheel = wheels[data.room+''] = 
         wheels[data.room+''] || new Wheel(0, 0,["", "", ""]); 
@@ -56,7 +83,6 @@ function sio(server){
       });
 
       //他の奴らに返す
-      socket.join(data.room);
       socket.broadcast.to(data.room).emit('globalmove', { 
         f : force,
         r : wheel.getAngle().get(),
@@ -66,10 +92,14 @@ function sio(server){
     });
 
     // 切断
-    socket.on('disconnect', function(){});
+    socket.on('disconnect', function(){
+      console.log("bye bye, <"+socket.id.slice(0,4)+">");
+
+    });
 
   });
 }
+
 
 
 module.exports = sio;
