@@ -19,13 +19,16 @@ $(function(){
 
   /* 通信系処理* */
 
-	var roomname = window.location.host;
-      var room = window.location.href;
+	var serverurl = window.location.host;
+      var room = roulette_id;
 
-	var socket = {};
-	var socket = io.connect(
-		roomname,//これが部屋名
-		{transports : ["websocket", "polling"]});
+  //io: socket.jsで定義される
+	var socket = io(
+    //serverurl:つなぐ先. "/roulettesocket" とかつければ、
+    //そういうnamespaceになる.
+		serverurl);
+    //いらんじゃね ,{transports : ["websocket", "polling"]});
+
   socket.emit('hello', {room: room},function(data){});
 
   var wheel = new Wheel(0,0,labels);
@@ -71,6 +74,8 @@ socket.on("globalmove", function(data){
   });
 });
 
+
+//自分のぐらい自分で回せばいいかも？
 socket.on("mymove", function(data){
   moveRoulette(data);
 });
@@ -84,8 +89,9 @@ var moveRoulette  = function(data){
     //Viewは角度だけ知ってればよし
     roulette.setAngle(data.r);
     roulette.setText(wind.getCurrentLabel());
-    console.log("label" + wind.getCurrentLabel());
+
     roulette.render();
+
 }
 
 
