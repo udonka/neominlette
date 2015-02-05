@@ -20,6 +20,8 @@
 		self.touchEndY=0; 
 		self.touchEndTime=0;
 		self.arrow=null;
+		self.arrowPoints=[];
+		self.moveCount=0;
 
 		snapdom.addEventListener("pointerdown", function(event){
 			self.pointerdown();
@@ -51,24 +53,35 @@
 		event.stopPropagation();
 		event.preventDefault();
 
-    if(this.arrow ){
+    if(this.arrow){
       this.arrow.remove();
-
     }
-		this.arrow =  this.snap.line(this.touchStartX,this.touchStartY,this.touchStartX,this.touchStartY)
-			.attr({
-				stroke:Snap.rgb(255,0,0),
-				"stroke-opacity":0.5,
-				strokeWidth:15
-			});
+	//	this.arrow =  this.snap.line(this.touchStartX,this.touchStartY,this.touchStartX,this.touchStartY)
+	//		.attr({
+	//			stroke:Snap.rgb(255,0,0),
+	//			"stroke-opacity":0.5,
+	//			strokeWidth:15
+	//		});
+		this.arrowPoints = [];
+		this.moveCount = 0;
+		this.arrowPoints.push([this.touchStartX,this.touchStartY]);
+		console.log(this.arrowPoints);
+		this.arrow = this.snap.drawMyArrow(this.snap,this.arrowPoints,Snap.rgb(0,0,255));
 	}
 
 	Finger.prototype.pointermove = function(){
-		if(this.arrow)
-			this.arrow.attr({
-				x2:event.offsetX,
-				y2:event.offsetY
-			});
+		this.moveCount++;
+		if(this.arrow){
+			//this.arrow.attr({
+			//	x2:event.offsetX,
+			//	y2:event.offsetY
+			//});
+			console.log("pointermove");
+			this.arrowPoints.push([event.offsetX,event.offsetY]);
+			console.log(this.arrowPoints);
+			this.arrow = this.snap.redrawMyArrow(this.snap,this.arrow,this.arrowPoints,Snap.rgb(0,0,255));
+		}
+
 
 	}
 
@@ -76,8 +89,9 @@
     this.touchEndX = event.offsetX;
     this.touchEndY = event.offsetY;
     this.touchEndTime = parseInt((new Date).getTime());
-
-
+		
+		this.arrowPoints.push([event.offsetX,event.offsetY]);
+		console.log(this.arrowPoints);
     //力を計算
     var swipeData = this.calcSwipe(
         this.centerX, this.centerY, //しっかり中心を決める必要がある
@@ -92,17 +106,18 @@
 		//s. タッチ場所を描画
 		console.log("pointer up position : " + this.touchEndX + " "+ this.touchEndY);
 
-		this.arrow.attr({
-			x2:this.touchEndX,
-			y2:this.touchEndY
-		});
+		//this.arrow.attr({
+		//	x2:this.touchEndX,
+		//	y2:this.touchEndY
+		//});
+		this.arrow = this.snap.redrawMyArrow(this.snap,this.arrow,this.arrowPoints,Snap.rgb(0,0,255));
 
 
 		//function にarrowをわたしている クロージャ
 		(function(larrow){
 			larrow.animate({
-				stroke:Snap.rgb(255,255,255), 
-				"stroke-opacity":0
+				//stroke:Snap.rgb(255,255,255), 
+				opacity:0
 			},1000,null,function(){
 				//arrowをはずす
 				larrow.remove();
@@ -122,11 +137,12 @@
 	}
 
 	Finger.prototype.sendForce = function(swipeData){
-		this.socket.emit('swipe',
-        {swipeData:swipeData,
-         who:0, //いるのか
-         room: this.room},
-         function(data){});
+		this.socket.emit('swipe',{
+				swipeData:swipeData,
+        who:0, //いるのか
+        room: this.room,
+				arrowPoints: this.arrowPoints
+			},function(data){});
 	}
 
   //
