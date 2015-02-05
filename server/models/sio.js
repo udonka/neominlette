@@ -99,6 +99,7 @@ function sio(server){
 
 
       showRoomMembers(data.room);
+      socket.emitRoomMembers(data.room);
       console.log(socket.room);
       console.log(socket.rooms);
 
