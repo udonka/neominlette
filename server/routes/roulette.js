@@ -14,6 +14,7 @@ var loginCheck = function(req, res, next){
 router.get('/', loginCheck,function(req, res) {
   res.render('roulette');
 });
+
 router.post('/', loginCheck, function(req, res){
   var newRoulette = new Roulette(req.body);
   newRoulette.save(function(e){

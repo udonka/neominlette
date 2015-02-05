@@ -17,26 +17,41 @@ var loginCheck = function(req, res, next){
 
 /* GET home page. */
 router.get('/', loginCheck,function(req, res){
-  console.log(req.user.name);
-  res.render('user',{
-    user: req.user.name,
-    name: req.user.name,
-    rouletteGroup: req.user.rouletteGroup
-  });
+  var send = {};
+  if(req.user.name){
+    send.user = req.user.name;
+    send.name = req.user.name;
+  }
+  if(req.user.facebook.name){
+    console.log('facebook');
+    console.log(Object.keys(req.user.facebook).length);
+    send.user = req.user.facebook.name;
+    send.name = req.user.facebook.name;
+  }
+  send.rouletteGroup = req.user.rouletteGroup;
+  console.log(send);
+  res.render('user', send);
 });
 
 router.get('/userinfo', loginCheck, function(req, res){
-  res.render('userinfo', 
-    {
-      user : req.user.name,
-      userName: req.user.name,
-     userEmail: req.user.email,
-     id: req.user._id
-    });
+  res.render('userinfo',
+             {
+               user : req.user.name,
+               userName: req.user.name,
+               userEmail: req.user.email,
+               id: req.user._id
+             });
 });
 
 router.get('/create', loginCheck, function(req, res){
-  res.render('createRoulette', 
+  var send = {};
+  if(req.user.name){
+    send.user = req.user.name;
+  }
+  if(req.user.facebook.name){
+    send.user = req.user.facebook.name;
+  }
+  res.render('createRoulette',
     {
       user: req.user.name
     });
