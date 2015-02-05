@@ -87,7 +87,7 @@
         this.radius
     );
 
-    this.sendForce(swipeData);
+    this.socket.emitForce(swipeData);
 
 		//s. タッチ場所を描画
 		console.log("pointer up position : " + this.touchEndX + " "+ this.touchEndY);
@@ -121,13 +121,6 @@
 		event.preventDefault();
 	}
 
-	Finger.prototype.sendForce = function(swipeData){
-		this.socket.emit('swipe',
-        {swipeData:swipeData,
-         who:0, //いるのか
-         room: this.room},
-         function(data){});
-	}
 
   //
 	//最終的に速度を計算する
@@ -156,7 +149,7 @@
 
       startVec:vec1,
       startAngle: vec1.getTheta(),
-      startR: vec2.getLength()/radius,
+      startR: vec1.getLength()/radius,
 
       endVec:vec2,
       endAngle: vec2.getTheta(),
