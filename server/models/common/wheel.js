@@ -13,7 +13,7 @@ if(isServer()){
 GLOBAL = {};
 GLOBAL.frameRate = 1000/30;
 GLOBAL.dx = 1/GLOBAL.frameRate;
-GLOBAL.gensui = 0.95;
+GLOBAL.gensui = 0.98;
 GLOBAL.stop = Math.PI/50;
 
 //function Wheel(theta, v, num){
@@ -189,17 +189,20 @@ Wheel.prototype.isMoving = function() {
 }
 
 //void 
-Wheel.prototype._internalMove = function(a) { //float
+Wheel.prototype._internalMove = function(f) { //float
   //??????s
+
 
   //GLOBAL.dx = 1 / GLOBAL.frameRate;
 
   //if(Math.abs(this.v) > GLOBAL.vlimit){
   //  this.v= (this.v > 0) ? GLOBAL.vlimit : -GLOBAL.vlimit;
   //}
+  var m = 10;
 
+  var a = f / m;
 
-  this.v += a *GLOBAL.dx;
+  this.v += a * GLOBAL.dx ;
   
   
   if (Math.abs(this.v) <= GLOBAL.stop){

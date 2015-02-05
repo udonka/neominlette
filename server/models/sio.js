@@ -53,7 +53,8 @@ function sio(server){
         f : force,
         r : wheel.getAngle().get(),
         v : wheel.getVelocity(),
-        swipeData:data.swipeData
+        swipeData:data.swipeData,
+				arrowPoints:data.arrowPoints
       });
     });
 

@@ -7,7 +7,7 @@ if(typeof window === "undefined"){
 }
 
 var labels = labels ||  [
-  "ごにょ",
+  "ごと",
   "うっきー",
   "うどんか",
 ];
@@ -55,16 +55,17 @@ socket.on("globalmove", function(data){
   console.log("line ("+x1+" , "+y1+") -> ( "+x2+", "+ y2 +") ");
 
   //スワイプあとを描画
-  var arrow =  snap.line(x1,y1,x2,y2)
-    .attr({
-      stroke:Snap.rgb(0,0,255),
-      "stroke-opacity":0.5,
-      strokeWidth:15
-    });
+	var arrow = snap.drawGlobalArrow(snap,data.arrowPoints,Snap.rgb(255,0,0));
+  //var arrow =  snap.line(x1,y1,x2,y2)
+  //  .attr({
+  //    stroke:Snap.rgb(0,0,255),
+  //    "stroke-opacity":0.5,
+  //    strokeWidth:15
+  //  });
 
   arrow.animate({
-    stroke:Snap.rgb(255,255,255), 
-    "stroke-opacity":0
+    //stroke:Snap.rgb(255,255,255), 
+    opacity:0
   },1000,null,function(){
     //arrowをはずす
     arrow.remove();
