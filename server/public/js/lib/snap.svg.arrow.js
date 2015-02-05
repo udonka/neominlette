@@ -14,13 +14,11 @@ Snap.plugin(function (Snap, Element, Paper, global, Fragment) {
 		return arrow;
 	}
 
-	Paper.prototype.redrawMyArrow = function(snap,arrow,arrowPoints,color){
-		var marker = arrowMarker(48,48,0,24,color,0.5,snap);
+	Paper.prototype.redrawMyArrow = function(arrow,arrowPoints){
 		var pathStr = array2path(arrowPoints);
 		if(arrowPoints.length>2){
 			arrow.attr({
-				path:pathStr,
-				markerEnd:marker
+				path:pathStr
 			});
 		}else{
 			arrow.attr({
@@ -30,6 +28,16 @@ Snap.plugin(function (Snap, Element, Paper, global, Fragment) {
 		
 		return arrow;
 	}
+
+	Paper.prototype.putArrowhead = function(snap,arrow,color){
+		var marker = arrowMarker(48,48,0,24,color,0.5,snap);
+		arrow.attr({
+			markerEnd:marker
+		});
+		
+		return arrow;
+	}
+		
 
 	// 制御点の配列を受け取りcatmull-romスプライン曲線を描画する関数
 	Paper.prototype.drawGlobalArrow = function(snap,arrowPoints,color) {

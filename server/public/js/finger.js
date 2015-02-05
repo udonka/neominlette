@@ -79,7 +79,7 @@
 			console.log("pointermove");
 			this.arrowPoints.push([event.offsetX,event.offsetY]);
 			console.log(this.arrowPoints);
-			this.arrow = this.snap.redrawMyArrow(this.snap,this.arrow,this.arrowPoints,Snap.rgb(0,0,255));
+			this.arrow = this.snap.redrawMyArrow(this.arrow,this.arrowPoints);
 		}
 
 
@@ -110,8 +110,8 @@
 		//	x2:this.touchEndX,
 		//	y2:this.touchEndY
 		//});
-		this.arrow = this.snap.redrawMyArrow(this.snap,this.arrow,this.arrowPoints,Snap.rgb(0,0,255));
-
+		this.arrow = this.snap.redrawMyArrow(this.arrow,this.arrowPoints);
+		this.arrow = this.snap.putArrowhead(this.snap,this.arrow,Snap.rgb(0,0,255));
 
 		//function にarrowをわたしている クロージャ
 		(function(larrow){
