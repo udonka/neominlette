@@ -21,10 +21,10 @@ router.post('/:id', function(req, res) {
     res.redirect('back');
 
   if(req.body.email)
-    update = {$set : {"local.email": req.body.email}};
+    update = {$set : {"userinfo.local.email": req.body.email}};
 
   if(req.body.password)
-    update = {$set: {"local.password": helper.generateHash(req.body.password)}};
+    update = {$set: {"user.info.local.password": helper.generateHash(req.body.password)}};
 
   User.update(conditions, update, function(err, num){
     if(err){
@@ -39,10 +39,10 @@ router.post('/:id', function(req, res) {
 
 router.post('/', function(req, res){
   var data = {
-    name: req.body.name,
     local: {
       email: req.body.email,
-      password: req.body.passwort
+      password: req.body.passwort,
+      name: req.body.name
     }
   };
   var newUser = new User(data);
