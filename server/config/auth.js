@@ -7,13 +7,13 @@ module.exports = {
     'facebookAuth' : {
         'clientID'      : '836371623071912', // your App ID
         'clientSecret'  : '0908394977ebcd8f478c562c99be62c8', // your App Secret
-        'callbackURL'   : 'http://localhost:'+port+'/facebook/callback'
+        'callbackURL'   : 'http://minlette-ubuntu.cloudapp.net/facebook/callback'
     },
 
     'twitterAuth' : {
         'consumerKey'       : 'IFHcdoMwqc5wcN06JnEec4nXL',
         'consumerSecret'    : 'mdr1cQ7ijtRp4fPun3JYUjIL4Qhg2GIEcRkLfQeLmGu79OQNvg',
-        'callbackURL'       : 'http://localhost:'+port+'/twitter/callback'
+        'callbackURL'       : 'http://minlette-ubuntu.cloudapp/twitter/callback'
     },
 
     'googleAuth' : {
