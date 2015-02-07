@@ -5,8 +5,11 @@
 
 <% include top %>
 
-<div id="wrapper" class="container"> 
+<div id="wrapper" class="container">
   <div class="m-content">
+    <% if(message.length > 0) { %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% } %>
     <form action="/login" method="POST" class="m-form" >
       <div class="form-group">
         <label for="inputEmail">Email</label>
