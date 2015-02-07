@@ -105,7 +105,37 @@ var labels = labels ||  [
   socket.on("members", function(data){
     //!!!!!!!!!!!!!!!!!
 
+    var $logging_users_div = $("#logging-users");
+
+
+    $logging_users_div.empty() ;
+
+    function id2hue(idstr){
+
+      var sum = 0;
+      for(i = 0; i < idstr.length; i++){
+
+        sum += idstr.charCodeAt(i);
+      }
+
+      var hue = sum % 24;
+
+      return hue /24  * 360;
+    }
+
+    for(id in data.members){
+      var listr = 
+        "<li id='"+ id +
+        "' class='logging-user' style='background:hsl("+
+        data.members[id].hue +
+        ",50%,50%)'>h:"+ data.members[id].hue +"<br>"+data.members[id].mp +"</li>";
+      $logging_users_div.append(listr);
+
+    }
+
+
     var str = "";
+
     for( i in data.members)
     {
       str += data.members[i] + "\n";

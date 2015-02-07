@@ -45,24 +45,50 @@ function sio(server){
       }
     }
 
+
+
+    function id2hue(idstr){
+
+      var sum = 0;
+      for(i = 0; i < idstr.length; i++){
+
+        sum += idstr.charCodeAt(i);
+      }
+
+      var hue = sum % 24;
+
+      return hue /24  * 360;
+    }
+
     //member に変化がおこったときにルームメンバーに送る
     socket.emitRoomMembers = function(room){
+
       
-      console.log(room);
       var members = getRoomMembers(room);
-      var members_array = [];
+      var members_array = {};
+
       for(i in members){
-        members_array.push(members[i].id );
+        members_array[members[i].client.id] = {
+          hue : id2hue(members[i].client.id),
+          mp : 30
+        }
       }
 
       //socket.broadcast.to(room).emit('members', {members: members_array});
       sio.in(room).emit('members', {members: members_array});
+
     }
 
     //クライアントから、初めの挨拶が送られてきたら
     //はじめの初期化
     //全然最初に呼ばれるとは限らないクライアントは自信がなくなったらhelloするべき
     socket.on('hello', function(data){
+      
+      console.log("------------------------");
+      console.log("socket id " + socket.id);
+      console.log("client id " + socket.client.id);
+      console.log("------------------------");
+
       //クライアントが希望してきた部屋に配属する。
       //以後、socketはこの部屋に限られる。
       console.log("hello, <"+ socket.id.slice(0,4)+">. your room is ["+data.room+"], OK?");
