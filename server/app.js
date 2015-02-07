@@ -13,6 +13,7 @@ var signup = require('./routes/signup');
 var logout = require('./routes/logout');
 var roulette = require('./routes/roulette');
 var home = require('./routes/home');
+var facebook = require('./routes/facebook');
 
 var app = express();
 //add
@@ -58,6 +59,7 @@ app.get('/logout', logout);
 app.use('/roulette', roulette);
 app.use('/users', users);
 app.use('/home', home);
+app.use('/facebook', facebook);
 app.use('/', routes);
 
 // catch 404 and forward to error handler
