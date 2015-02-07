@@ -18,29 +18,32 @@ var loginCheck = function(req, res, next){
 /* GET home page. */
 router.get('/', loginCheck,function(req, res){
   var send = {};
-  console.log('user', req.user);
-  if(req.user.userinfo.local.name){
+  if(req.user.auth_type == 'local'){
     send.user = req.user.userinfo.local.name;
     send.name = req.user.userinfo.local.name;
   }
-  if(req.user.userinfo.facebook.name){
-    console.log('facebook');
+  if(req.user.auth_type == 'facebook'){
     send.user = req.user.userinfo.facebook.name;
     send.name = req.user.userinfo.facebook.name;
   }
   send.rouletteGroup = req.user.rouletteGroup;
-  console.log(send);
   res.render('user', send);
 });
 
 router.get('/userinfo', loginCheck, function(req, res){
-  res.render('userinfo',
-             {
-               user : req.user.userinfo.local.name,
-               userName: req.user.userinfo.local.name,
-               userEmail: req.user.userinfo.local.email,
-               id: req.user._id
-             });
+  if(req.user.auth_type == 'local'){
+    console.log('local', req.user.userinfo.local);
+    res.render('userinfo', {name: req.user.userinfo.local.name, id: req.user._id});
+    return;
+  }
+  if(req.user.auth_type == 'facebook'){
+    console.log('facebook', req.user.userinfo.facebook);
+    res.render('userinfo_facebook', {user: req.user, name: req.user.userinfo.facebook.name});
+    return;
+  }else{
+    console.log('auth', req.user.auth_type);
+    res.render('userinfo');
+  }
 });
 
 router.get('/create', loginCheck, function(req, res){

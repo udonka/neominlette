@@ -11,7 +11,6 @@ var db = mongoose.createConnection(url, function(err, res){
 
 var UserSchema = new mongoose.Schema({
   userinfo: {
-    auth_type: String,
     local: {
       id           : String,
       email        : String,
@@ -44,5 +43,15 @@ var UserSchema = new mongoose.Schema({
     }
   ]
 });
+
+UserSchema.virtual('auth_type')
+  .get(function(){
+    if(this.userinfo.local.id){
+      return 'local';
+    }else if(this.userinfo.facebook.id){
+      return 'facebook';
+    }
+    return null;
+  });
 
 module.exports.User = db.model('User', UserSchema);

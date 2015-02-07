@@ -24,7 +24,7 @@ router.post('/:id', function(req, res) {
     update = {$set : {"userinfo.local.email": req.body.email}};
 
   if(req.body.password)
-    update = {$set: {"user.info.local.password": helper.generateHash(req.body.password)}};
+    update = {$set: {"userinfo.local.password": helper.generateHash(req.body.password)}};
 
   User.update(conditions, update, function(err, num){
     if(err){
@@ -35,28 +35,5 @@ router.post('/:id', function(req, res) {
     res.redirect('/login');
   });
 });
-
-
-router.post('/', function(req, res){
-  var data = {
-    local: {
-      email: req.body.email,
-      password: req.body.passwort,
-      name: req.body.name
-    }
-  };
-  var newUser = new User(data);
-  console.log(req.body);
-  newUser.save(function(err){
-    if(err){
-      console.log(err);
-      res.redirect('back');
-    }else{
-      res.redirect('/login');
-    }
-  });
-});
-
-
 
 module.exports = router;
