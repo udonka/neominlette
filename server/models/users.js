@@ -37,7 +37,12 @@ var UserSchema = new mongoose.Schema({
       name         : String
     },
   },
-  rouletteGroup: [{ name: String, rouletteId: mongoose.Schema.Types.ObjectId}]
+  rouletteGroup: [
+    {
+      name: String,
+      rouletteId: mongoose.Schema.Types.ObjectId
+    }
+  ]
 });
 
 module.exports.User = db.model('User', UserSchema);
