@@ -41,7 +41,6 @@ router.get('/userinfo', loginCheck, function(req, res){
     res.render('userinfo_facebook', {user: req.user, name: req.user.userinfo.facebook.name});
     return;
   }else{
-    console.log('auth', req.user.auth_type);
     res.render('userinfo');
   }
 });
