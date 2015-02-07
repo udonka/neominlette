@@ -108,7 +108,7 @@ var labels = labels ||  [
     var $logging_users_div = $("#logging-users");
 
 
-    $logging_users_div.empty() ;
+    $logging_users_div.empty();
 
 
     for(id in data.members){
@@ -149,6 +149,22 @@ var labels = labels ||  [
     $('#memo').html(str);
 
   });
+
+  socket.on("timer", function(data){
+    $("#timer").text(data.count);
+
+    if(data.count == 0){
+      wheel.movable = false;
+    }
+    else{
+      wheel.movable = true;
+    }
+
+  });
+
+  global.addmp = function(){
+    socket.emit('addmp',{count:5, room:room});
+  }
 
 
 	var container = $("#rouletteContainer");

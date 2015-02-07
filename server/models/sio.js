@@ -86,17 +86,22 @@ function sio(server){
     socket.on('hello', function(data){
 
 
+      socket.mp = socket.mp || 0;
 
       //クライアントが希望してきた部屋に配属する。
+      //この部屋は、URLを読んだHTTPServer側がクライアントに割り振ったもの。
       //以後、socketはこの部屋に限られる。
-      socket.mp = Math.floor(Math.random() * 10);
-
       console.log("hello, <"+ socket.id.slice(0,4)+">. your room is [" + data.room+"], OK?");
       console.log("Here it is your MP! <<" + socket.mp + ">>");
 
 
       //joinすることにより、to('room')でこの部屋のを受け取れるようになる
+      //こんにちは～
       socket.join(data.room);
+
+      //つまらないものですがポイントどうぞ～
+      addmp(data.room, 5);
+
       var wheel = wheels[ data.room+''] = 
         wheels[ data.room+''] || new Wheel(0, 0,["", "", ""]);
 
@@ -110,6 +115,7 @@ function sio(server){
       });
 
       socket.emitRoomMembers(data.room);
+      
     });
 
     // スワイプを受信
@@ -173,6 +179,39 @@ function sio(server){
 
     });
 
+    function addmp(room, mp){
+      //share mp to room members
+      //
+      //mp should be number;
+      
+      var members_socket = getRoomMembers(room);
+      for(i in members_socket){
+        members_socket[i].mp += mp;
+      }
+    }
+
+    socket.on('addmp', function(data){
+      console.log("ADDMP!! " + data.room);
+      addmp(data.room, 5);
+
+      wheels[data.room].setMovable(true);
+
+      var count = 20;
+      var timer = setInterval(function(){
+        console.log("count :" + count);
+        if(count <= 0){
+          wheels[data.room].setMovable(false);
+          clearInterval(timer);
+        }
+
+        sio.in(data.room).emit('timer', {count: count});
+
+        count--;
+
+      }, 1000);
+
+      socket.emitRoomMembers(data.room);
+    });
 
 
     // 切断

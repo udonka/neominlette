@@ -79,8 +79,8 @@ float: left;
 
 .logging-users {
   position:absolute;
-    top: 80px;
-    left:30px;
+    top: 100px;
+    left:20px;
   display:block;
   margin:0;
   padding:0;
@@ -116,4 +116,19 @@ float: left;
   height:40px;
   line-height:40px;
 }
+
+.timer{
+  position:absolute;
+    top:60px;
+    left:20px;
+
+
+  width:40px;
+  height:40px;
+
+  background:white;
+
+  font-size:30px;
+}
+
 
