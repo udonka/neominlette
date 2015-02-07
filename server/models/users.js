@@ -26,8 +26,8 @@ var UserSchema = new mongoose.Schema({
     twitter          : {
       id           : String,
       token        : String,
-      displayName  : String,
-      username     : String
+      email        : String,
+      name         : String
     },
     google           : {
       id           : String,
@@ -50,6 +50,8 @@ UserSchema.virtual('auth_type')
       return 'local';
     }else if(this.userinfo.facebook.id){
       return 'facebook';
+    }else if(this.userinfo.twitter.id){
+      return 'twitter';
     }
     return null;
   });

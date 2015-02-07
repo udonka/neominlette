@@ -26,11 +26,16 @@ router.get('/', loginCheck,function(req, res){
     send.user = req.user.userinfo.facebook.name;
     send.name = req.user.userinfo.facebook.name;
   }
+  if(req.user.auth_type == 'twitter'){
+    send.user = req.user.userinfo.twitter.name;
+    send.name = req.user.userinfo.twitter.name;
+  }
   send.rouletteGroup = req.user.rouletteGroup;
   res.render('user', send);
 });
 
 router.get('/userinfo', loginCheck, function(req, res){
+  console.log('auth_type', req.user.auth_type);
   if(req.user.auth_type == 'local'){
     console.log('local', req.user.userinfo.local);
     res.render('userinfo', {name: req.user.userinfo.local.name, id: req.user._id});
@@ -40,9 +45,13 @@ router.get('/userinfo', loginCheck, function(req, res){
     console.log('facebook', req.user.userinfo.facebook);
     res.render('userinfo_facebook', {user: req.user, name: req.user.userinfo.facebook.name});
     return;
-  }else{
-    res.render('userinfo');
   }
+  if(req.user.auth_type == 'twitter'){
+    console.log('twitter', req.user.userinfo.twitter);
+    res.render('userinfo_twitter', {user: req.user, name: req.user.userinfo.twitter.name});
+    return;
+  }
+  res.render('userinfo');
 });
 
 router.get('/create', loginCheck, function(req, res){
