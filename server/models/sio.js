@@ -19,15 +19,15 @@ function sio(server){
     var getRoomMembers = function(room){
       var room_members = sio.sockets.adapter.rooms[room];
 
-      var members_array = []
+      var member_sockets = [];
       //部屋が存在しなければundefined
       if(room_members){
         for(socketid in room_members){
-          members_array.push(sio.sockets.connected[socketid])
+          member_sockets.push(sio.sockets.connected[socketid])
         }
       }
 
-      return members_array;
+      return member_sockets;
     }
 
     //部屋のメンバーを見せる
@@ -64,13 +64,14 @@ function sio(server){
     socket.emitRoomMembers = function(room){
 
       
-      var members = getRoomMembers(room);
+      var member_sockets = getRoomMembers(room);
       var members_array = {};
 
-      for(i in members){
-        members_array[members[i].client.id] = {
-          hue : id2hue(members[i].client.id),
-          mp : 30
+      for(i in member_sockets){
+        var member_socket = member_sockets[i];
+        members_array[member_socket.client.id] = {
+          hue : id2hue(member_socket.client.id),
+          mp : member_socket.mp
         }
       }
 
@@ -83,18 +84,17 @@ function sio(server){
     //はじめの初期化
     //全然最初に呼ばれるとは限らないクライアントは自信がなくなったらhelloするべき
     socket.on('hello', function(data){
-      
-      console.log("------------------------");
-      console.log("socket id " + socket.id);
-      console.log("client id " + socket.client.id);
-      console.log("------------------------");
+
+
 
       //クライアントが希望してきた部屋に配属する。
       //以後、socketはこの部屋に限られる。
-      console.log("hello, <"+ socket.id.slice(0,4)+">. your room is ["+data.room+"], OK?");
+      socket.mp = Math.floor(Math.random() * 10);
+
+      console.log("hello, <"+ socket.id.slice(0,4)+">. your room is [" + data.room+"], OK?");
+      console.log("Here it is your MP! <<" + socket.mp + ">>");
 
 
-      console.log(wheels);
       //joinすることにより、to('room')でこの部屋のを受け取れるようになる
       socket.join(data.room);
       var wheel = wheels[ data.room+''] = 
@@ -114,6 +114,15 @@ function sio(server){
 
     // スワイプを受信
     socket.on('swipe', function(data){
+
+      //mpがないと何も出来ない
+      if(socket.mp <= 0){
+        return;
+      }
+      else{
+        socket.mp --;
+        socket.emitRoomMembers(data.room);
+      }
 
       
       //joinすることにより、to('room')でこの部屋のを受け取れるようになる

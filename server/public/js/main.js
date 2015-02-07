@@ -110,39 +110,43 @@ var labels = labels ||  [
 
     $logging_users_div.empty() ;
 
-    function id2hue(idstr){
-
-      var sum = 0;
-      for(i = 0; i < idstr.length; i++){
-
-        sum += idstr.charCodeAt(i);
-      }
-
-      var hue = sum % 24;
-
-      return hue /24  * 360;
-    }
 
     for(id in data.members){
+
+      if(socket.io.engine.id === id){
+        console .log("yes");
+
+        console.log(socket.io.engine.id);
+        console.log(id);
+      }
+      else{
+        console.log("no");
+        console.log(socket.io.engine.id);
+        console.log(id);
+      }
+
       var listr = 
-        "<li id='"+ id +
-        "' class='logging-user' style='background:hsl("+
+        "<div id='"+ id + "' " +
+        "class='logging-user " + (socket.io.engine.id === id ? "me" : "") + "' "+
+        "style='background:hsl("+
         data.members[id].hue +
-        ",50%,50%)'>h:"+ data.members[id].hue +"<br>"+data.members[id].mp +"</li>";
+        ",50%,50%)'>"+data.members[id].mp +"</div>";
       $logging_users_div.append(listr);
 
     }
 
+    console .log(socket);
 
-    var str = "";
+    var str = " I'm " + socket.io.engine.id + "<br>";
 
-    for( i in data.members)
+    str += "members: <br>" ;
+    for( id in data.members)
     {
-      str += data.members[i] + "\n";
+      str += id + "<br>";
     }
 
 
-    $('#memo').text("members: \n" + str);
+    $('#memo').html(str);
 
   });
 
