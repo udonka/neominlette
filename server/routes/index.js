@@ -21,6 +21,8 @@ router.get('/:name/:group/:id', function(req, res){
   Roulette.findById(req.params.id, function(err, roulette){
     if(err){
       console.log(err);
+      //404
+      res.status(404).send('NotFound');
       return ;
     }
 		console.log('roulette');
@@ -41,6 +43,7 @@ router.get('/:name/:group/:id', function(req, res){
 			console.log('user: '+user);
 			console.log('group: '+user['rouletteGroup'][0]['name']);
 			res.render('roulette', {
+          roulette_id: req.params.id,
 					group: user['rouletteGroup'][0]['name'],
 					labels: roulette.labels,
 					QRURL: fullUrl
@@ -54,6 +57,7 @@ router.get('/', function(req, res){
   var fullUrl= req.protocol + '://' + req.get('host') + req.originalUrl;
 
   res.render('branding' , {
+    roulette_id: "home",
     labels: [
       'Udonka',
       'Hayate',

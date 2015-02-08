@@ -10,6 +10,15 @@
   <div id="wrapper" class="container"> 
     <h1 style="margin-top:70px"><%- group %></h1>
     <div id="rouletteContainer">
+      <div id="timer" class="timer">
+       timer 
+      </div>
+      <div id="logging-users" class="logging-users">
+        <!--
+        <li id="pegl" class="logging-user">pegl</li>
+        <li id="3bsi" class="logging-user">3bsi</li>
+        -->
+      </div>
       <!-- 描画用フィールド -->
       <svg id="rouletteArea" 
       xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +31,7 @@
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">シェア</button>
       </div>
       <div class="btn-group" role="group">
-        <a href="javascript:alert('実装中です')" class="btn btn-default btn-lg text-center">MP</a>
+        <a href="javascript:addmp()" class="btn btn-default btn-lg text-center">MP</a>
       </div>
       <div class="btn-group" role="group">
         <a href="javascript:alert('実装中です')" class="btn btn-default btn-lg text-center">編集</a>
@@ -64,10 +73,12 @@
 </script>
 <script>
   <% if(labels){ %>
+    var roulette_id = "<%= roulette_id %>";
     var labels = <%- JSON.stringify(labels) %>;
     <% } %>
   </script>
   <script src="/js/modal.js"></script>
+
   <script charset="UTF-8" type="text/javascript" src="/js/main.js"> </script>
 </body>
 </html>
