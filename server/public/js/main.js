@@ -130,7 +130,9 @@ var labels = labels ||  [
         "class='logging-user " + (socket.io.engine.id === id ? "me" : "") + "' "+
         "style='background:hsl("+
         data.members[id].hue +
-        ",50%,50%)'>"+data.members[id].mp +"</div>";
+        ",50%,50%)'>"+
+        //data.members[id].mp +
+        "</div>";
       $logging_users_div.append(listr);
 
     }
