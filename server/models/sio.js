@@ -154,6 +154,7 @@ function sio(server){
 
       //モデルに対して力を行使
       wheel.addForce(force);
+      //wheel.move();
 
       //送ってきたやつに返す
       
@@ -161,6 +162,8 @@ function sio(server){
       var r = wheel.getAngle().get();
       var v = wheel.getVelocity() ;
       var swipeData = data.swipeData; 
+
+      console.log("("+f+", "+r+", "+v+")");
 
       socket.emit('mymove', { 
         f : f,
