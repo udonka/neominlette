@@ -23,13 +23,30 @@ router.get('/:name/:group/:id', function(req, res){
       console.log(err);
       return ;
     }
-    console.log('roulette');
-    console.log(roulette);
-    res.render('roulette', {
-//      user: req.user.name,
-      labels: roulette.labels,
-      QRURL: fullUrl
-    });
+		console.log('roulette');
+		console.log(roulette);
+		User.findOne({
+			$and:[
+						{'name':req.params.name},
+						{'rouletteGroup':{
+															 $elemMatch:{'name':req.params.group}
+														 }
+						}
+					]
+				}, function(err,user){
+			if(err){
+				console.log(err);
+				return ;
+			}
+			console.log('user: '+user);
+			console.log('group: '+user['rouletteGroup'][0]['name']);
+			res.render('roulette', {
+					group: user['rouletteGroup'][0]['name'],
+					labels: roulette.labels,
+					QRURL: fullUrl
+			});
+		});
+
   });
 });
 
