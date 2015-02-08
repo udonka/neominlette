@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<% include head %>
+<link rel="stylesheet" href="/bootstrapValidator/dist/css/bootstrapValidator.min.css">
+<script src="/bootstrapValidator/dist/js/bootstrapValidator.min.js"></script>
+<body>
+<% include top %>
+<div id="wrapper" class="container">
+  <div class="m-content">
+    <div class="well">
+      <h3 class="text-primary"><span class="fa fa-twitter"> Twitter </span></h3>
+      <p>
+        <strong>id</strong>: <%= user.userinfo.twitter.id %><br>
+        <strong>name</strong>: <%= user.userinfo.twitter.name %><br>
+        <strong>email</strong>: <%= user.userinfo.twitter.email %>
+      </p>
+    </div>
+  </div>
+
+  </div>
+</body>
+<script>
+/*
+$(document).ready(function() {
+    $('#identicalForm').formValidation({
+      framework: 'bootstrap',
+      icon: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        confirmPassword: {
+          validators: {
+            identical: {
+              field: 'password',
+              message: 'The password and its confirm are not the same'
+            }
+          }
+        }
+      }
+    });
+});
+*/
+</script>
+</html>
