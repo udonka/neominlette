@@ -21,10 +21,10 @@
         </tr>
       </thead>
       <% var count = 1; %>
-      <% rouletteGroup.forEach(function(roulette){ %>
+      <% rouletteGroups.forEach(function(rouletteGroup){ %>
         <tr>
           <th><span class="h4"><%= count %></span></th>
-          <th><a class="h4" href="/<%= name %>/<%= roulette.name%>/<%= roulette.rouletteId %>"><%= roulette.name %></a></th>
+          <th><a class="h4" href="/roulette/<%= rouletteGroup.roulettes[0] %>"><%= rouletteGroup.name %></a></th>
         </tr>
       <% count++ %>
       <% }); %>
