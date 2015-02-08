@@ -9,7 +9,7 @@ var db = mongoose.createConnection(url, function(err, res){
 });
 
 var RouletteSchema = new mongoose.Schema({
-  name: {type: String, unique: true},
+  name: String,
   labels: [String]
 });
 

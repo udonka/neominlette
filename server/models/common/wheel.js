@@ -22,6 +22,7 @@ var Wheel = function(theta, v, labels){
   this.forces = 0;
   this.ang = new Angle(theta);
   this.v = v;
+  this.movable = true;
 
   this.frameNum = 0;//for debugging
 
@@ -49,6 +50,13 @@ Wheel.prototype.startLoop = function (){
   }
 }
 
+Wheel.prototype.setMovable = function (flag){
+  this.movable = flag;
+}
+
+Wheel.prototype.getMovable = function (flag){
+  return this.movable;
+}
 
 Wheel.prototype.timerWorking = function (){
   return !(typeof this.timer === 'undefined' || this.timer === null);
@@ -161,6 +169,10 @@ Wheel.prototype.getVel = function() {
 
 //void 
 Wheel.prototype.addForce = function(force) {
+  if(!this.getMovable()){
+    console.log("cannot move!");
+    return;
+  }
   this.forces += force * 1000;
   this.startLoop();//動いてる時は何もしないよ
 }

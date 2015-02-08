@@ -1,68 +1,160 @@
 var socketio = require('socket.io');
-var Wheel = require('./common/wheel').Wheel;
-
-var wheel = new Wheel(0,0,["aiueo", "kaki", "kukeko", ]);
-//! ラベルの設定はいつかやらなきゃな
-var wheels = {};
+//var Wheel = require('./common/wheel').Wheel;
+var Room = require('./room').Room;
+var CountDownTimer = require('./room').CountDownTimer;
 
 
-function sio(server){
-  sio = socketio.listen(server);
-  sio.set('transports', [ 'websocket','polling' ]);// いらないっぽい
+//連想配列のキーを部屋名にして、ホイールのモデルを保存する
+var rooms = {};
 
-  // 接続
+function sio(HTTPserver){
+  sio = socketio.listen(HTTPserver);
+  //sio: Socket.io server.
+
+  //あるユーザーが、サーバーに対してコネクションを申し込んできた。 
+  //ここでは、そのユーザー(socket)とのやりとりを定義するのみ。こう言われたらこう返すと
+  //sio.sockets はデフォルトのNamespace /らしい！
   sio.sockets.on('connection', function(socket){
+    //socket オブジェクトは、サーバーとそのユーザーとのコネクションを表す。つまり、サーバーからしたらユーザーそのもの
 
+    //クライアントから、初めの挨拶が送られてきたら
     //はじめの初期化
-    socket.on('hello', function(data){
-      console.log(data);
-      socket.join(data.room);
-      var wheel = wheels[ data.room+''] = 
-        wheels[ data.room+''] || new Wheel(0, 0,["", "", ""]);
+    //全然最初に呼ばれるとは限らない
+    //クライアントは自信がなくなったらhelloするべき
 
+    socket.on('hello', function(data){
+
+      socket.mp = socket.mp || 0;
+
+      //クライアントが希望してきた部屋に配属する。
+      //この部屋は、URLを読んだHTTPServer側がクライアントに割り振ったもの。
+      //以後、socketはこの部屋に限られる。
+      console.log("hello, <"+ socket.id.slice(0,4)+">. your room is [" + data.room+"], OK?");
+      console.log("Here it is your MP! <<" + socket.mp + ">>");
+
+//joinすることにより、to('room')でこの部屋のを受け取れるようになる
+      //こんにちは～
+      //!!!!!!!!roomにいれたい
+      socket.join(data.room);
+
+
+
+      socket.room = rooms[ data.room+''] = 
+        rooms[ data.room+''] || new Room(data.room, sio); //sio is for broadcast comm
+       
+
+      //つまらないものですがポイントどうぞ～
+      socket.room.addMp(5); //ここでは送らない
+
+      socket.room.emitMembers(); //はじめて送信
+
+      socket.room.showMembers();
+
+      //現在の状態を渡す
       socket.emit('mymove', { 
         f : 0, 
-        v : wheel.getVelocity(),
-        r : wheel.getAngle().get(), 
+        v : socket.room.wheel.getVelocity(),
+        r : socket.room.wheel.getAngle().get(), 
       });
+
+      socket.room.emitMembers(data.room);
+      
     });
 
     // スワイプを受信
     socket.on('swipe', function(data){
+
+      /*
+      //mpがないと何も出来ない
+      if(socket.mp <= 0){
+        return;
+      }
+      else{
+        socket.mp --;
+        socket.emitMembers(data.room);
+      }
+      */
+
+      //joinすることにより、to('room')でこの部屋のを受け取れるようになる
+      //helloでやってるけど一応やっとけ
+
+      socket.join(data.room);
+
+      socket.room = rooms[ data.room+''] = 
+        rooms[ data.room+''] || new Room(data.room, sio); //sio is for broadcast comm
+       
+
+      console.log("");
+      console.log( "hi, user <"+ socket.id.slice(0,4)+"> in room [" + socket.room.id
+         + "]. good swipe! (force="+data.swipeData.f.toFixed(3)+")");
+
+
+      socket.room.showMembers();
+      socket.room.emitMembers();
+
+
       //モデルを取得
-      var wheel = wheels[data.room+''] = 
-        wheels[data.room+''] || new Wheel(0, 0,["", "", ""]); 
+
+
 
       //送られてきた力
       var force = data.swipeData.f;
 
       //モデルに対して力を行使
-      wheel.addForce(force);
+      socket.room.wheel.addForce(force);
+      //wheel.move();
 
       //送ってきたやつに返す
+      
+      var f = force;
+      var r = socket.room.wheel.getAngle().get();
+      var v = socket.room.wheel.getVelocity() ;
+      var swipeData = data.swipeData; 
+
+      console.log("("+ f +", "+ r +", "+ v +")");
+
       socket.emit('mymove', { 
-        f : force,
-        r : wheel.getAngle().get(),
-        v : wheel.getVelocity() ,
-        swipeData:data.swipeData //知ってるわって感じだけど。いらないかしら。
+        f : f,
+        r : r,
+        v : v,
+        //swipeData:swipeData 自分にはswipeDataは送らない。どうせ描画は済んでるし無駄だから
       });
 
       //他の奴らに返す
-      socket.join(data.room);
       socket.broadcast.to(data.room).emit('globalmove', { 
-        f : force,
-        r : wheel.getAngle().get(),
-        v : wheel.getVelocity(),
-        swipeData:data.swipeData
+        f : f,
+        r : r,
+        v : v,
+        swipeData:swipeData 
       });
     });
 
+
+
+    socket.on('addmp', function(data){
+
+      console.log("ADD MP to everyone in room [" + socket.room.id + "]");
+
+      socket.room.addMp(5);
+
+      socket.room.wheel.setMovable(true);
+
+      socket.room.startCountDown(15);
+
+      socket.room.emitMembers();
+    });
+
+
     // 切断
-    socket.on('disconnect', function(){});
+    socket.on('disconnect', function(){
+      console.log("bye bye, <"+socket.id.slice(0,4)+">");
+      //この時点でroomは抜けているが、socket.roomに最後のご挨拶。ぬけまーす
+
+      socket.room.emitMembers();
+
+    });
 
   });
 }
 
-
 module.exports = sio;
-

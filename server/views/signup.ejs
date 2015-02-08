@@ -4,9 +4,13 @@
 <body>
 <% include top %>
 
-  <div id="wrapper" class="container"> 
+  <div id="wrapper" class="container">
   <div class="m-content">
     <h2>新規登録</h2>
+    <!-- show error message -->
+    <% if(message.length > 0 ) { %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% } %>
     <form action="/signup" method="POST" class="m-form" >
       <div class="form-group">
         <label for="inputEmail">Name</label>

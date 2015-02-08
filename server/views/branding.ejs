@@ -6,10 +6,19 @@
 
 <% include top %>
 
+<!--
+<div id="memo" style="position:absolute; left:0; bottom:0; width:300px; height:300px;background:#aaa;"> </div>
+-->
 
 <div id="wrapper" class="container"> 
   <div id="rouletteContainer">
     <p class="text-center h1">選択を、みんなで、カラフルに</p>
+    <div id="logging-users" class="logging-users">
+      <!--
+      <li id="pegl" class="logging-user">pegl</li>
+      <li id="3bsi" class="logging-user">3bsi</li>
+      -->
+    </div>
       <!-- 描画用フィールド -->
       <svg id="rouletteArea" 
           xmlns="http://www.w3.org/2000/svg"
@@ -57,9 +66,11 @@
 
 <script>
 <% if(labels){ %>
+  var roulette_id = "<%= roulette_id %>";
   var labels = <%- JSON.stringify(labels) %>;
 <% } %>
 </script>
 <script charset="UTF-8" type="text/javascript" src="/js/main.js"> </script>
 </body>
 </html>
+

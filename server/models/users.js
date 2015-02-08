@@ -10,12 +10,52 @@ var db = mongoose.createConnection(url, function(err, res){
 });
 
 var UserSchema = new mongoose.Schema({
-  name: {type: String, unique: true},
-  local: {
-    email: String,
-    password: String
+  userinfo: {
+    local: {
+      id           : String,
+      email        : String,
+      password     : String,
+      name         : String
+    },
+    facebook         : {
+      id           : String,
+      token        : String,
+      email        : String,
+      name         : String
+    },
+    twitter          : {
+      id           : String,
+      token        : String,
+      email        : String,
+      name         : String
+    },
+    google           : {
+      id           : String,
+      token        : String,
+      email        : String,
+      name         : String
+    },
   },
-  rouletteGroup: [{ name: String, rouletteId: mongoose.Schema.Types.ObjectId}]
+  rouletteGroups: [
+    {
+      name: String,
+			roulettes: [
+				mongoose.Schema.Types.ObjectId
+      ]
+		}
+  ]
 });
+
+UserSchema.virtual('auth_type')
+  .get(function(){
+    if(this.userinfo.local.id){
+      return 'local';
+    }else if(this.userinfo.facebook.id){
+      return 'facebook';
+    }else if(this.userinfo.twitter.id){
+      return 'twitter';
+    }
+    return null;
+  });
 
 module.exports.User = db.model('User', UserSchema);

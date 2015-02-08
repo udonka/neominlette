@@ -14,6 +14,7 @@ var loginCheck = function(req, res, next){
 router.get('/', loginCheck,function(req, res) {
   res.render('roulette');
 });
+
 router.post('/', loginCheck, function(req, res){
   var newRoulette = new Roulette(req.body);
   newRoulette.save(function(e){
@@ -22,8 +23,12 @@ router.post('/', loginCheck, function(req, res){
       res.redirect('/home');
     }else{
       console.log(newRoulette);
+			var group = {
+				name:newRoulette.name,
+				roulettes:[newRoulette._id]
+			}
       User.update({_id: req.user._id}, 
-        {$push:{rouletteGroup: {name: newRoulette.name, rouletteId: newRoulette._id}}},
+        {$push:{rouletteGroups: group}},
         function(err, number, raw){
         });
       res.redirect('/home');
