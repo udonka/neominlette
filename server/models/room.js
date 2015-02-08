@@ -29,21 +29,25 @@ CountDownTimer.prototype.start = function(count){
   }
 
   this_cdt.timer = setInterval(function(){
-    console.log("[timer "+this_cdt.timer+"] count :" + count);
+    console.log("[timer "+this_cdt.timer +"] count :" + this_cdt.count);
 
-    if(count <= 0){
+
+    if(this_cdt.count <= 0){
       this_cdt.finish_func();
       clearInterval(this_cdt.timer);
       this_cdt.timer = 0;
     }
 
-    this_cdt.count_func(count);
+    this_cdt.count_func(this_cdt.count);
 
-    count--;
+    this_cdt.count--;
 
   }, 1000);
 }
 
+CountDownTimer.prototype.working = function(){ 
+  return (!this.timer) ? false:true;
+}
 
 CountDownTimer.prototype.stop = function(){ }
 

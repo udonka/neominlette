@@ -2,10 +2,36 @@ var socketio = require('socket.io');
 var Wheel = require('./common/wheel').Wheel;
 
 var Room = require('./room').Room;
+var CountDownTimer = require('./room').CountDownTimer;
 
-//! ラベルの設定はいつかやらなきゃな
 
-var wheels = {};//連想配列のキーを部屋名にして、ホイールのモデルを保存する
+
+Wheel.prototype.startCountDown = function(room, count){
+  var this_wheel = this;
+  //if started, doesn't restart
+  
+  if(!this_wheel.countDownTimer)
+  {
+    this_wheel.countDownTimer = new CountDownTimer(
+      0,
+      function(count){
+        sio.in(room).emit('timer', {count: count});
+      },
+      function(){
+        this_wheel.setMovable(false);
+      }
+    );
+  }
+
+  if(this_wheel.countDownTimer.working()){
+    return ;
+  }
+
+  this_wheel.countDownTimer.start(count);
+}
+
+//連想配列のキーを部屋名にして、ホイールのモデルを保存する
+var wheels = {};
 
 
 function sio(server){
@@ -165,7 +191,7 @@ function sio(server){
       var v = wheel.getVelocity() ;
       var swipeData = data.swipeData; 
 
-      console.log("("+f+", "+r+", "+v+")");
+      console.log("("+ f +", "+ r +", "+ v +")");
 
       socket.emit('mymove', { 
         f : f,
@@ -184,6 +210,7 @@ function sio(server){
 
     });
 
+
     function addmp(room, mp){
       //share mp to room members
       //
@@ -201,31 +228,8 @@ function sio(server){
 
       wheels[data.room].setMovable(true);
 
+      wheels[data.room].startCountDown(data.room, 20);
 
-      //wheels[data.room].room.startCountDown();
-
-      new CountDownTimer(20,
-      function(){
-        sio.in(data.room).emit('timer', {count: count});
-      },
-      function(){
-        wheels[data.room].setMovable(false);
-      })
-      .start();
-
-      var count = 20;
-      var timer = setInterval(function(){
-        console.log("count :" + count);
-        if(count <= 0){
-          wheels[data.room].setMovable(false);
-          clearInterval(timer);
-        }
-
-        sio.in(data.room).emit('timer', {count: count});
-
-        count--;
-
-      }, 1000);
 
       socket.emitRoomMembers(data.room);
     });
@@ -253,8 +257,6 @@ function sio(server){
 
   });
 }
-
-
 
 module.exports = sio;
 
