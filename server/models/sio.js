@@ -1,21 +1,27 @@
 var socketio = require('socket.io');
 var Wheel = require('./common/wheel').Wheel;
-
 var Room = require('./room').Room;
 var CountDownTimer = require('./room').CountDownTimer;
 
 
-
 Wheel.prototype.startCountDown = function(room, count){
-  var this_wheel = this;
-  //if started, doesn't restart
-  
+  var this_wheel = this;  //if started, doesn't restart
+
+  console.log("goodbye");
   if(!this_wheel.countDownTimer)
   {
+    this_wheel.stopTime = 0;
     this_wheel.countDownTimer = new CountDownTimer(
       0,
       function(count){
-        sio.in(room).emit('timer', {count: count});
+        if(count <= this_wheel.stopTime){
+          console.log("STOP TIME!!!!");
+          this_wheel.setMovable(false);
+          sio.in(room).emit('timer', {count: count , stop:true});
+
+          return ;
+        }
+        sio.in(room).emit('timer', {count: count ,stop:false});
       },
       function(){
         this_wheel.setMovable(false);
@@ -26,6 +32,11 @@ Wheel.prototype.startCountDown = function(room, count){
   if(this_wheel.countDownTimer.working()){
     return ;
   }
+  console.log("hello");
+
+  this_wheel.stopTime = Math.floor(Math.random() * 10);
+  console.log("stopTime " +  this_wheel.stopTime );
+
 
   this_wheel.countDownTimer.start(count);
 }
@@ -228,8 +239,7 @@ function sio(server){
 
       wheels[data.room].setMovable(true);
 
-      wheels[data.room].startCountDown(data.room, 20);
-
+      wheels[data.room].startCountDown(data.room, 15);
 
       socket.emitRoomMembers(data.room);
     });

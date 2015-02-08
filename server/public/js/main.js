@@ -153,11 +153,13 @@ var labels = labels ||  [
   socket.on("timer", function(data){
     $("#timer").text(data.count);
 
-    if(data.count == 0){
-      wheel.movable = false;
+    if(data.count == 0 || data.stop){
+      wheel.setMovable(false);
+      $('body').css('background', 'red');
     }
     else{
-      wheel.movable = true;
+      $('body').css('background', 'white');
+      wheel.setMovable(true);
     }
 
   });

@@ -170,6 +170,7 @@ Wheel.prototype.getVel = function() {
 //void 
 Wheel.prototype.addForce = function(force) {
   if(!this.getMovable()){
+    console.log("cannot move!");
     return;
   }
   this.forces += force * 1000;
