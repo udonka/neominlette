@@ -30,7 +30,7 @@ router.get('/', loginCheck,function(req, res){
     send.user = req.user.userinfo.twitter.name;
     send.name = req.user.userinfo.twitter.name;
   }
-  send.rouletteGroup = req.user.rouletteGroup;
+  send.rouletteGroups = req.user.rouletteGroups;
   res.render('user', send);
 });
 

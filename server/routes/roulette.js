@@ -23,8 +23,12 @@ router.post('/', loginCheck, function(req, res){
       res.redirect('/home');
     }else{
       console.log(newRoulette);
+			var group = {
+				name:newRoulette.name,
+				roulettes:[newRoulette._id]
+			}
       User.update({_id: req.user._id}, 
-        {$push:{rouletteGroup: {name: newRoulette.name, rouletteId: newRoulette._id}}},
+        {$push:{rouletteGroups: group}},
         function(err, number, raw){
         });
       res.redirect('/home');

@@ -36,11 +36,13 @@ var UserSchema = new mongoose.Schema({
       name         : String
     },
   },
-  rouletteGroup: [
+  rouletteGroups: [
     {
       name: String,
-      rouletteId: mongoose.Schema.Types.ObjectId
-    }
+			roulettes: [
+				mongoose.Schema.Types.ObjectId
+      ]
+		}
   ]
 });
 
