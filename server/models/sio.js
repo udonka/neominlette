@@ -1,6 +1,8 @@
 var socketio = require('socket.io');
 var Wheel = require('./common/wheel').Wheel;
 
+var Room = require('./room').Room;
+
 //! ラベルの設定はいつかやらなきゃな
 
 var wheels = {};//連想配列のキーを部屋名にして、ホイールのモデルを保存する
@@ -198,6 +200,18 @@ function sio(server){
       addmp(data.room, 5);
 
       wheels[data.room].setMovable(true);
+
+
+      //wheels[data.room].room.startCountDown();
+
+      new CountDownTimer(20,
+      function(){
+        sio.in(data.room).emit('timer', {count: count});
+      },
+      function(){
+        wheels[data.room].setMovable(false);
+      })
+      .start();
 
       var count = 20;
       var timer = setInterval(function(){
