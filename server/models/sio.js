@@ -160,6 +160,7 @@ function sio(server){
     // スワイプを受信
     socket.on('swipe', function(data){
 
+      /*
       //mpがないと何も出来ない
       if(socket.mp <= 0){
         return;
@@ -168,6 +169,7 @@ function sio(server){
         socket.mp --;
         socket.emitRoomMembers(data.room);
       }
+      */
 
       
       //joinすることにより、to('room')でこの部屋のを受け取れるようになる
@@ -218,7 +220,6 @@ function sio(server){
         v : v,
         swipeData:swipeData 
       });
-
     });
 
 

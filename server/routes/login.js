@@ -9,14 +9,14 @@ var Roulette = rouletteModel.Roulette;
 
 var isAuthenticated = function(req, res, next){
     if(req.isAuthenticated()){
-	res.redirect('/home');
+      res.redirect('/home');
     }
     return next();
 }
 
 
 router.get('/', isAuthenticated, function(req, res){
-  res.render('login');
+  res.render('login', {message: req.flash('loginMessage')});
 });
 
 router.post('/', passport.authenticate('local-login',{

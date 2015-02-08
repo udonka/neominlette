@@ -5,8 +5,11 @@
 
 <% include top %>
 
-<div id="wrapper" class="container"> 
+<div id="wrapper" class="container">
   <div class="m-content">
+    <% if(message.length > 0) { %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% } %>
     <form action="/login" method="POST" class="m-form" >
       <div class="form-group">
         <label for="inputEmail">Email</label>
@@ -29,6 +32,12 @@
   <form action="/facebook" method="GET" class="m-form">
     <div class="form-group">
       <button type="submint" class="btn btn-default" id="toAdd" >Facebook Login</button>
+    </div>
+  </form>
+
+  <form action="/twitter" method="GET" class="m-form">
+    <div class="form-group">
+      <button type="submint" class="btn btn-default" id="toAdd" >Twitter Login</button>
     </div>
   </form>
 </div>
