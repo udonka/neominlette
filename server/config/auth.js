@@ -13,7 +13,7 @@ module.exports = {
     'twitterAuth' : {
         'consumerKey'       : 'IFHcdoMwqc5wcN06JnEec4nXL',
         'consumerSecret'    : 'mdr1cQ7ijtRp4fPun3JYUjIL4Qhg2GIEcRkLfQeLmGu79OQNvg',
-        'callbackURL'       : 'http://minlette-ubuntu.cloudapp/twitter/callback'
+        'callbackURL'       : 'http://minlette-ubuntu.cloudapp.net/twitter/callback'
     },
 
     'googleAuth' : {
