@@ -14,42 +14,76 @@ GLOBAL = {};
 GLOBAL.frameRate = 1000/30;
 GLOBAL.dx = 1/GLOBAL.frameRate;
 GLOBAL.gensui = 0.98;
+GLOBAL.m = 10;
 GLOBAL.stop = Math.PI/50;
 
-//function Wheel(theta, v, num){
 var Wheel = function(theta, v, labels){
-
-  this.forces = 0;
+  //theta : number ( 0 - 2PI)
+  //v : number (tipically 0) 
+  //labels: array of string
+  
+  ///////////fundamental data///////////
+  //位置（角度）
   this.ang = new Angle(theta);
+
+  //速度(角速度)
   this.v = v;
+
+  //質量
+  this.m = GLOBAL.m;
+
+  //ラベル文字列からLabelStopperをつくる
+  this.setLabelStoppers(labels);
+
+  ///////////sub data///////////
   this.movable = true;
 
   this.frameNum = 0;//for debugging
 
-  this.setLabelStoppers(labels);
 
-  console.log("Wheelのインスタンスが作成");
+  console.log("Wheelのインスタンスが作成されました");
 }
 
+
+////////////////loop controle/////////////////
 //looper はmoveの後に実行される
 Wheel.prototype.onloop = function (looper){
+  //looper: function
   this.looper = looper;
 }
-
 
 Wheel.prototype.startLoop = function (){
   var self = this;
 
-  if(!this.timerWorking())
+  if(!this.loopWorking())
   {
     this.timer = setInterval(function(){
-      self.move();
+      //ココが意外と中心部
+      //毎フレームmove を実行する。
+      //looperがあればそれも実行する
+
+      self.move(0);
       if(self.looper) self.looper();
 
     },GLOBAL.frameRate);
   }
 }
 
+
+Wheel.prototype.loopWorking = function (){
+  return !(typeof this.timer === 'undefined' || this.timer === null);
+}
+
+
+Wheel.prototype.stopLoop = function (){
+  if(this.loopWorking()){
+    clearInterval(this.timer);
+    this.timer = null;//loopWorkingがfalseになるようにアピール
+  }
+}
+
+
+////////////////Movable getter/setter /////////////////
 Wheel.prototype.setMovable = function (flag){
   this.movable = flag;
 }
@@ -58,26 +92,11 @@ Wheel.prototype.getMovable = function (flag){
   return this.movable;
 }
 
-Wheel.prototype.timerWorking = function (){
-  return !(typeof this.timer === 'undefined' || this.timer === null);
-}
 
-
-Wheel.prototype.stopLoop = function (){
-  if(this.timerWorking()){
-    clearInterval(this.timer);
-    this.timer = null;
-  }
-}
-
-
-Wheel.prototype.setView = function (pos, r){
-  this.pos = pos;
-  this.r = r;
-}
-
-
+////////////////////Lable Stopper////////////////////////
 Wheel.prototype.setLabelStoppers = function (labels ){
+  //labels: string array
+  //
  
   var self = this;
 
@@ -85,7 +104,7 @@ Wheel.prototype.setLabelStoppers = function (labels ){
   self.labelStoppers = _(labels).map(function(labelStr, index,labels){
     //LabelStopperオブジェクトを生成する
     var labelStopper = new LabelStopper(
-            new Angle(index * 2*Math.PI/labels.length), 
+            new Angle(index * 2 * Math.PI/labels.length), 
             labelStr, labelStr + "message");
 
     return labelStopper;
@@ -94,8 +113,7 @@ Wheel.prototype.setLabelStoppers = function (labels ){
   console.log(self.labelStoppers);
 
   //前後とのリンクを貼る
-  self.labelStoppers.map(function(labelStopper,index){
-
+  _(self.labelStoppers).each(function(labelStopper,index){
     labelStopper.next = self.labelStoppers[(index + 1) % self.labelStoppers.length];
     labelStopper.prev = self.labelStoppers[(index - 1) < 0 ? self.labelStoppers.length-1 : (index -1)];
   });
@@ -105,93 +123,34 @@ Wheel.prototype.getLabelStoppers = function (){
   return this.labelStoppers;
 }
 
-//Wheel.prototype.setStoppers = function(num) {
-//  this.stoppers = [];//配列のコンストラクタ???
-//  var unit = 2 * PI / num;
-//  for (var i = 0; i < num; i++) {
-//    stoppers.push(
-//      new LabelStopper(
-//        new AbsAngle(unit * i /*i*0.13*/), 
-//        ""+(i+1),
-//        texts[i%texts.length]
-//      )
-//    );//the angle is from Wheel
-//  }
-//}
-
-//Wheel.prototype.getStoppersNum = function() {
-//  return stoppers.length;//JSこれでいいのか??? -> OK
-//}
-
-  //not yet
-
-//LabelStopper[] 
-//Wheel.prototype.getStoppers = function() {
-//  return stoppers;//better to copy
-//}
-
-//AbsAngle[] 
-//Wheel.prototype.getStoppersAbs = function() {
-//  var res = [];
-//  for (var i = 0; i < getStoppersNum(); i++) {
-//    res.push(stoppers[i].getAngle().getAdd(ang));
-//  }
-//  return res;
-//}
-
-//List<LabelStopper>
-//Wheel.prototype.getPrevStopper = function(ls){//ls : label stopper
-//
-//  var stoppersList = wheel.getStoppers();
-//
-//  var index = stoppersList.indexOf(ls);
-//  var prevIndex;
-//
-//  if(index == 0){
-//    prevIndex = stoppersList.length -1;
-//  }
-//  else{
-//    prevIndex = index -1;
-//  }
-//  
-//  return stoppersList[prevIndex];
-//}
-
-//AbsAngle 
-Wheel.prototype.getAngle = function() {
-  return this.ang;
-}
-
-//AbsAngle 
-Wheel.prototype.getVel = function() {
-  return this.v;
-}
 
 //void 
 Wheel.prototype.addForce = function(force) {
+  //動くの禁止のときは、なにもしません
+  //クライアントに同期してあげないとな。。
   if(!this.getMovable()){
     console.log("cannot move!");
     return;
   }
-  this.forces += force * 1000;
+
+  console.log("force " + force);
+
+  //一フレーム増えてしまうが、いいのか。。
+  this.move(force * 1000);//1000 適当な数字。理論的な裏付けがほしいところ
+
+
   this.startLoop();//動いてる時は何もしないよ
 }
 
 //void 
-Wheel.prototype.move = function() {
-  this._internalMove(this.calcForce());
+Wheel.prototype.move = function(force) {
+  force = force || 0;
+  //forceに加工したいときはここを使う
+  this._internalMove(force);
+
   this.frameNum++;
+
   //console.log(this.frameNum);
-}
-
-//float 
-Wheel.prototype.calcForce = function() {
-  var a = 0;
-
-
-  a += this.forces; // mass is 1 F = 1a
-  this.forces = 0;
-  return a;
 }
 
 //boolean 
@@ -200,43 +159,54 @@ Wheel.prototype.isMoving = function() {
   return res;
 }
 
+
+
 //void 
 Wheel.prototype._internalMove = function(f) { //float
-  //??????s
 
 
   //GLOBAL.dx = 1 / GLOBAL.frameRate;
 
   //if(Math.abs(this.v) > GLOBAL.vlimit){
+  //
   //  this.v= (this.v > 0) ? GLOBAL.vlimit : -GLOBAL.vlimit;
   //}
-  var m = 10;
 
-  var a = f / m;
+  if(isNaN(f)) console.log("f is NaN");
+
+  var a = f / this.m;
+
+  if(isNaN(a)) console.log("a is NaN");
 
   this.v += a * GLOBAL.dx ;
   
-  
-  if (Math.abs(this.v) <= GLOBAL.stop){
+  if (!this.isMoving()){
     this.v = 0;
     this.stopLoop();
   }
 
-  this.v *= GLOBAL.gensui;
+  this.v *= GLOBAL.gensui; //ホントは摩擦力で実現したいが、なんか振動する
+
+
+  if(isNaN(this.v)) console.log("v is NaN");
 
 
   this.ang.add( this.v *GLOBAL.dx );
-  //console.log("速度: " + this.v);
-  //console.log("角度: "+this.ang.get());
+
+  var ang = this.getAngle();
+  //console.log("r:%d v:%d f:%d", this.getAngle(), this.getVelocity(),f);
 }
 
-Wheel.prototype.getForces = function(){
-  return this.forces;
+///////////////////// setter / getters /////////////////
+//AbsAngle 
+Wheel.prototype.getAngle = function() {
+  return this.ang;
 }
 
 Wheel.prototype.setAngle = function(theta){
   this.ang.set(theta);
 }
+
 
 Wheel.prototype.setVelocity = function(v){
   this.v = v;
@@ -246,163 +216,6 @@ Wheel.prototype.getVelocity = function(){
   return this.v;
 }
 
-  //void 
-//Wheel.prototype.dragStart = function() {
-//  this.dragged = true;
-//  this.v = 0;
-//}
-
-//void 
-//Wheel.prototype.drag = function(diff,ms) {
-//  if (!this.dragged) {
-//    return ;
-//  }
-//
-//  if (ms == 0) {
-//    return ;
-//  }
-//  
-//  var s = ms/1000.0;
-//  var v = diff.get() / s;
-//    
-////    ang.add( v *dx );
-////    v = diff.get();  
-//  console.log("drag" + this.v);
-//}
-
-  //void 
-
-//Wheel.prototype.dragEnd = function(diff, ms) {
-//  this.dragged = false;
-//
-//  if (ms == 0) {
-//    return ;
-//  }
-//  
-//  var s = ms/1000.0;
-//  var v = diff.get() / s;
-//
-//  
-//  var a = v / s;//mass is 1
-//
-// 
-//  this.addForce(a);
-//}
-//
-
-
-  //void 
-  /*
-  cacheImage:function(){
-    this.drawWheel();
-    im = createImage(r*2,r*2,RGB);
-    im.loadPixels();
-    loadPixels();
-    
-    int xbase = + width/2 - r;
-    int ybase = + height/2 - r;
-    for(int i = 0; i < im.height; i++){
-      for(int j = 0; j < im.width; j++){
-        im.pixels[i * im.width + j] = pixels[(i+ybase) * width + (j+xbase) ];
-      }
-    }
-      
-    im.updatePixels();
-    
-    background(bgColor);
-
-  }
-  */
-  
-  //void 
-
-  //draw:function() {
-    //TODO
-
-    /*
-    println("X= " + ang.get() + ",\tV= "+v);
-    
-    pushMatrix();
-      translate(width /2, height /2 + height /12);
-      rotate(ang.get());
-  
-      if(im != null){
-        
-        drawWheelByCache();
-      }
-      else{
-        drawWheel();
-      }
-    popMatrix();
-    */
-  //}
-
-  
-  //private void 
-  /*
-  drawWheelByCache:function(){
-    image(im,-im.width/2,-im.height/2);
-  },
-  */
-  
-  //private void 
-  /*
-  drawWheel:function(){
-    pushMatrix();
-    translate(width/2, height/2);
-//    rotate(ang.get());
-
-    noStroke();
-    fill(wheelColor);
-
-    ellipse(0, 0, r, r);
-    
-
-    //settings of texts
-    textAlign(CENTER);
-    textSize(40);
-    
-    //draw pie and text
-    for (int i = 0; i < stoppers.length; i++) {
-      AbsAngle current = stoppers[i].getAngle();
-      AbsAngle next = stoppers[i+1 < stoppers.length ? i+1 : 0].getAngle();
-      DiffAngle diff = next.calcDiff(current);
-      
-      pushMatrix();
-        rotate(current.get());
-        fill((int)(255.0/stoppers.length * i), 200, 200);
-  
-        arc(0, 0, r*0.9, r*0.9, 0, next.calcDiff(current).get());
-  
-        rotate(diff.get()/2);
-
-
-        translate(150,0);
- 
-        rotate(PI/2);
-   
-        fill(0,0,255);
-        text("" + stoppers[i].getLabel(), 0,0);
-      popMatrix();
-      
-    }
-
-    //draw line between label
-    for (LabelStopper stopper : stoppers) {
-      pushMatrix();
-      rotate(stopper.getAngle().get());
-      stroke(0, 0, 255);
-      strokeWeight(4);
-      line(0, 0, r*0.9, 0);
-      popMatrix();
-    }
-    ellipse(0, 0, r/10, r/10);
-
-
-    popMatrix();
-  }
-  
-  */
   
 this['Wheel'] = Wheel;
 

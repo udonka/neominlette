@@ -84,6 +84,7 @@ var labels = labels ||  [
 
       wheel.setAngle(data.r);
       wheel.setVelocity(data.v);
+
       wheel.addForce(data.f);
 
       //Viewは角度だけ知ってればよし

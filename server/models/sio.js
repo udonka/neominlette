@@ -148,7 +148,8 @@ function sio(HTTPserver){
       console.log("bye bye, <"+socket.id.slice(0,4)+">");
       //この時点でroomは抜けているが、socket.roomに最後のご挨拶。ぬけまーす
 
-      socket.room.emitMembers();
+      if(socket.room)
+        socket.room.emitMembers();
     });
   });
 }
