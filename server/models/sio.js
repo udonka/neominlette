@@ -1,7 +1,5 @@
 var socketio = require('socket.io');
-//var Wheel = require('./common/wheel').Wheel;
 var Room = require('./room').Room;
-var CountDownTimer = require('./room').CountDownTimer;
 
 
 //連想配列のキーを部屋名にして、ホイールのモデルを保存する
@@ -151,10 +149,9 @@ function sio(HTTPserver){
       //この時点でroomは抜けているが、socket.roomに最後のご挨拶。ぬけまーす
 
       socket.room.emitMembers();
-
     });
-
   });
 }
 
 module.exports = sio;
+
