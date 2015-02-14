@@ -93,10 +93,10 @@ var labels = labels ||  [
     wheel.startLoop();
 
     //Viewは角度だけ知ってればよし
-    //roulette.setAngle(data.r);
-    //roulette.setText(wind.getCurrentLabel());
+    roulette.setAngle(data.r);
+    roulette.setText(wind.getCurrentLabel());
 
-    //roulette.render();
+    roulette.render();
   }
 
   socket.on("globalmove", function(data){
