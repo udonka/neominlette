@@ -40,6 +40,7 @@ var labels = labels ||  [
   var labelStoppers = wheel.getLabelStoppers();
 
   wheel.onloop(function(){
+    //modelの変更をviewに適用
     roulette.setAngle(wheel.getAngle().get());
     roulette.setText(wind.getCurrentLabel());
     roulette.render();
@@ -82,15 +83,20 @@ var labels = labels ||  [
 
   var moveRoulette  = function(data){
 
-      wheel.setAngle(data.r);
-      wheel.setVelocity(data.v);
-      wheel.addForce(data.f);
+    //自分的には、どんな力がかかったかなんてあまり重要じゃない。
+    //状態(r,v)さえ教えてくれればおけー
 
-      //Viewは角度だけ知ってればよし
-      roulette.setAngle(data.r);
-      roulette.setText(wind.getCurrentLabel());
+    wheel.setAngle(data.r);
+    wheel.setVelocity(data.v);
 
-      roulette.render();
+    //もしルーレットが休んでいたら、復活させる
+    wheel.startLoop();
+
+    //Viewは角度だけ知ってればよし
+    roulette.setAngle(data.r);
+    roulette.setText(wind.getCurrentLabel());
+
+    roulette.render();
   }
 
   socket.on("globalmove", function(data){
@@ -155,11 +161,13 @@ var labels = labels ||  [
   socket.on("timer", function(data){
     $("#timer").text(data.count);
 
-    if(data.count == 0){
-      wheel.movable = false;
+    if(data.count == 0 || data.stop){
+      wheel.setMovable(false);
+      $('body').css('background', 'red');
     }
     else{
-      wheel.movable = true;
+      $('body').css('background', 'white');
+      wheel.setMovable(true);
     }
 
   });

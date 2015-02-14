@@ -44,6 +44,7 @@ Angle.createDiffAngle = function(theta){
 Angle.prototype.add = function(ang) {
   if(ang instanceof Angle)
   {
+
     this.set(
       this.get() 
       + ang.get());
@@ -69,26 +70,31 @@ Angle.prototype.getAdd = function(ang) {
 //オーバーロードできた
 Angle.prototype.set = function(th){ // min <= th < max
   if(th instanceof Angle){
-    this.set(ang.get());
+    this._set(ang.get());
   }
   else if(isNumber(th)){
-    if(th >= this.max){
-      this.set(this.min + (th-this.max));
-      return ;
-    }
-
-    if(th < this.min){
-      this.set(this.max + (th-this.min));
-      return ;
-    }
-
-    this.theta = th;
+    this._set(th);
   }
   else
   {
     console.log("数値か角度以外だめです")
   }
+
 } 
+
+Angle.prototype._set = function(th){ // min <= th < max
+  if(th >= this.max){
+    this.set(this.min + (th-this.max));
+    return ;
+  }
+
+  if(th < this.min){
+    this.set(this.max + (th-this.min));
+    return ;
+  }
+
+  this.theta = th;
+}
 
 Angle.prototype.get = function(){ // min <= th < max
   return this.theta;
