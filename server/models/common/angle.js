@@ -80,7 +80,6 @@ Angle.prototype.set = function(th){ // min <= th < max
     console.log("数値か角度以外だめです")
   }
 
-  console.log("ang set :"+ this.theta);
 } 
 
 Angle.prototype._set = function(th){ // min <= th < max

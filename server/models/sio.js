@@ -100,7 +100,6 @@ function sio(HTTPserver){
 
       //モデルに対して力を行使
       socket.room.wheel.addForce(force);
-      //wheel.move();
 
       //送ってきたやつに返す
       
