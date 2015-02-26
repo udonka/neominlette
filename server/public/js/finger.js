@@ -90,7 +90,6 @@
     this.socket.emitForce(swipeData);
 
 		//s. タッチ場所を描画
-		console.log("pointer up position : " + this.touchEndX + " "+ this.touchEndY);
 
 		this.arrow.attr({
 			x2:this.touchEndX,
@@ -141,7 +140,6 @@
     var v = dtheta.get() / (timeDiff || 1);
     var f = v / dx;
 
-    console.log("vel = " + v) ;
 
     var swipeData = {
       f: f,
