@@ -17,10 +17,10 @@ GLOBAL.gensui = 0.98;
 GLOBAL.m = 10;
 GLOBAL.stop = Math.PI/50;
 
-var Wheel = function(theta, v, labels){
+var Wheel = function(theta, v, labelStoppers){
   //theta : number ( 0 - 2PI)
   //v : number (tipically 0) 
-  //labels: array of string
+  //labels: labelStoppersLing (array of linked labelStoppers)
   
   ///////////fundamental data///////////
   //位置（角度）
@@ -32,8 +32,7 @@ var Wheel = function(theta, v, labels){
   //質量
   this.m = GLOBAL.m;
 
-  //ラベル文字列からLabelStopperをつくる
-  this.setLabelStoppers(labels);
+  this.setLabelStoppers(labelStoppers);
 
   ///////////sub data///////////
   this.movable = true;
@@ -94,29 +93,9 @@ Wheel.prototype.getMovable = function (flag){
 
 
 ////////////////////Lable Stopper////////////////////////
-Wheel.prototype.setLabelStoppers = function (labels ){
-  //labels: string array
-  //
- 
-  var self = this;
 
-  //ラベルの文字列から、ストッパーの列に変換する
-  self.labelStoppers = _(labels).map(function(labelStr, index,labels){
-    //LabelStopperオブジェクトを生成する
-    var labelStopper = new LabelStopper(
-            new Angle(index * 2 * Math.PI/labels.length), 
-            labelStr, labelStr + "message");
-
-    return labelStopper;
-  });
-
-  console.log(self.labelStoppers);
-
-  //前後とのリンクを貼る
-  _(self.labelStoppers).each(function(labelStopper,index){
-    labelStopper.next = self.labelStoppers[(index + 1) % self.labelStoppers.length];
-    labelStopper.prev = self.labelStoppers[(index - 1) < 0 ? self.labelStoppers.length-1 : (index -1)];
-  });
+Wheel.prototype.setLabelStoppers = function (labelStoppers){
+  this.labelStoppers = labelStoppers;
 }
 
 Wheel.prototype.getLabelStoppers = function (){

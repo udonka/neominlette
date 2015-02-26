@@ -6,7 +6,6 @@
 
   <% include top %>
 
-
   <div id="wrapper" class="container"> 
 		<h1 style="margin-top: 50px;text-align: center;"><%= groupname %>/<%= roulettename %></h1>
     <div id="rouletteContainer">
@@ -65,20 +64,78 @@
 </div>
 
 
+<!-- fundamental -->
+  <script charset="UTF-8" type="text/javascript" src="/js/lib/jquery-2.1.1.min.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/components/underscore/underscore.js"></script>
 
-<script src="/components/jquery-qrcode/jquery.qrcode.min.js"></script>
+<!-- 自作数値計算ライブラリ -->
+  <script charset="UTF-8" type="text/javascript" src="/js/common/vector.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/js/common/angle.js"></script>
+
+<!-- SVG -->
+  <script charset="UTF-8" type="text/javascript" src="/js/lib/Snap.svg-0.3.0/dist/snap.svg.udonka.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/js/lib/snap.svg.pie.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/js/lib/snap.svg.arrow.js"></script>
+
+
+<!-- roulette View -->
+  <script charset="UTF-8" type="text/javascript" src="/js/common/labelstopper.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/js/roulette.js"></script>
 
 <script>
-  $('#qrcode').qrcode(location.href);
+<% if(labels){ %>
+  var roulette_id = "<%= roulette_id %>";
+  var labels = <%- JSON.stringify(labels) %>;
+<% } %>
+
+  var labelStoppers = generateLabelStoppersLing(labels);
+
+	var container = $("#rouletteContainer");
+	var width = container.width();
+	var height = $("html").height() - 200;
+	var length = Math.min(width,height);
+	var snap = Snap("#rouletteArea");
+
+	snap.dom = document.getElementById("rouletteArea");
+	snap.attr({"style": "width:"+length+"px; height:"+length+"px;"});
+
+
+	var roulette = new Roulette(snap,length,labelStoppers);
 </script>
-<script>
-  <% if(labels){ %>
-    var roulette_id = "<%= roulette_id %>";
-    var labels = <%- JSON.stringify(labels) %>;
-    <% } %>
-  </script>
 
-  <script charset="UTF-8" type="text/javascript" src="/js/main.js"> </script>
+<!--　通信用 -->
+  <script charset="UTF-8" type="text/javascript" src="/js/lib/socket.io.js"></script>
+  
+<!-- 入力系 -->
+  <script charset="UTF-8" type="text/javascript" src="/js/lib/hand.minified-1.2.1.js"></script>
+
+<!-- ルーレット用-->
+  <script charset="UTF-8" type="text/javascript" src="/js/common/wind.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/js/common/wheel.js"></script>
+  <script charset="UTF-8" type="text/javascript" src="/js/finger.js"></script>
+
+
+<script charset="UTF-8" type="text/javascript" src="/js/main.js"> </script>
+
+<script charset="UTF-8" type="text/javascript" src="/js/lib/lazyload.js"> </script>
+
+<!--bootstrap-->
+  <script charset="UTF-8" type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+    $("img.lazy").lazyload();
+});
+
+$("#QRcontainer").html(
+    '<img class="img-responsive" style="margin: 0 auto;" src="http://www.it-top.biz/qr/qrapi/?d=<%- QRURL %>&s=8&q=4">'
+);
+</script>
+
+
+
+
 </body>
 </html>
 
