@@ -7,7 +7,7 @@ var User = model.User;
 
 var isAuthenticated = function(req, res, next){
     if(req.isAuthenticated()){
-  res.redirect('/home');
+      res.redirect('/home');
     }
     return next();
 }
@@ -15,8 +15,8 @@ var isAuthenticated = function(req, res, next){
 router.get('/', passport.authenticate('facebook', {scope: 'email'}));
 
 router.get('/callback', 
-                  passport.authenticate('facebook', {
-                    successRedirect : '/home',
-                    failureRedirect : '/login'
-                  }));
+  passport.authenticate('facebook', {
+    successRedirect : '/home',
+    failureRedirect : '/login'
+  }));
 module.exports = router;

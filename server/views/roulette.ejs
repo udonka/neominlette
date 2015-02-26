@@ -8,23 +8,44 @@
 
 
   <div id="wrapper" class="container"> 
-		<h1 style="margin-top: 50px;text-align: center;"><%= groupname %>/<%= roulettename %></h1>
+    <!-- !!!!!!!!!無理矢理過ぎる実装 -->
+    <h1 id="roulette-title">
+<%
+  var rou_complete_name = "";
+  if(groupname === roulettename){
+    rou_complete_name = groupname;
+  }
+  else{
+    rou_complete_name = groupname + "/" + roulettename;
+  }
+%>
+      <%= "@" + user_name + "/" + rou_complete_name %>
+    </h1>
     <div id="rouletteContainer">
-      <div id="timer" class="timer">
-       timer 
-      </div>
-      <div id="logging-users" class="logging-users">
-        <!--
-        <li id="pegl" class="logging-user">pegl</li>
-        <li id="3bsi" class="logging-user">3bsi</li>
-        -->
+      <div id="logging-users">
+        <div id="other-users" class="logging-users">
+          <div class="logging-users-inner">
+            <!-- JAVASCRIPT
+            <div id="3bsi" class="logging-user">3bsi</div>
+            -->
+          </div>
+          <div id="my-user">
+            <!-- JAVASCRIPT
+            <div class="logging-user">
+            </div>
+            -->
+          </div>
+        </div>
       </div>
       <!-- 描画用フィールド -->
       <svg id="rouletteArea" 
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink">
-    </svg>
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+      </svg>
 
+      <div id="timer" class="timer">
+       timer 
+      </div>
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
       <div class="btn-group" role="group">
         <!-- Button trigger modal -->
@@ -37,8 +58,6 @@
         <a href="javascript:alert('実装中です')" class="btn btn-default btn-lg text-center">編集</a>
       </div>
     </div>
-
-
 
 
     <!-- Modal -->

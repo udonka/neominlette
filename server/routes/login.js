@@ -8,10 +8,10 @@ var rouletteModel = require('../models/roulettes.js');
 var Roulette = rouletteModel.Roulette;
 
 var isAuthenticated = function(req, res, next){
-    if(req.isAuthenticated()){
-      res.redirect('/home');
-    }
-    return next();
+  if(req.isAuthenticated()){
+    res.redirect('/home');
+  }
+  return next();
 }
 
 

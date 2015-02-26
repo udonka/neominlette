@@ -109,37 +109,42 @@ var labels = labels ||  [
   });
 
   socket.on("members", function(data){
-    //!!!!!!!!!!!!!!!!!
 
-    var $logging_users_div = $("#logging-users");
+    var $logging_users_div = $("#other-users>.logging-users-inner");
+    var $my_user_div = $("#my-user");
 
 
     $logging_users_div.empty();
+    $my_user_div.empty();
+
+
 
 
     for(id in data.members){
 
       if(socket.io.engine.id === id){
-        console .log("yes");
+        var listr = 
+          "<div id='"+ id + "' " +
+          "class='logging-user " + (socket.io.engine.id === id ? "me" : "") + "' "+
+          "style='background-color:hsl("+
+          data.members[id].hue +
+          ",50%,50%)'>"+
+          //data.members[id].mp +
+          "</div>";
 
-        console.log(socket.io.engine.id);
-        console.log(id);
+        $my_user_div.append(listr);
       }
       else{
-        console.log("no");
-        console.log(socket.io.engine.id);
-        console.log(id);
+        var listr =
+          "<div id='"+ id + "' " +
+          "class='logging-user " + (socket.io.engine.id === id ? "me" : "") + "' "+
+          "style='background-color:hsl("+
+          data.members[id].hue +
+          ",50%,50%)'>"+
+          //data.members[id].mp +
+          "</div>";
+        $logging_users_div.append(listr);
       }
-
-      var listr = 
-        "<div id='"+ id + "' " +
-        "class='logging-user " + (socket.io.engine.id === id ? "me" : "") + "' "+
-        "style='background:hsl("+
-        data.members[id].hue +
-        ",50%,50%)'>"+
-        //data.members[id].mp +
-        "</div>";
-      $logging_users_div.append(listr);
 
     }
 
@@ -179,7 +184,7 @@ var labels = labels ||  [
 
 	var container = $("#rouletteContainer");
 	var width = container.width();
-	var height = $("html").height() - 200;
+	var height = $("html").height() - 300;
 	var length = Math.min(width,height);
 	var snap = Snap("#rouletteArea");
 	snap.dom = document.getElementById("rouletteArea");

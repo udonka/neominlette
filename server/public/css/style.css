@@ -4,23 +4,31 @@ html{
 }
 
 body {
-
 	margin: 0px;
 	padding: 0px;
-	background: red;
 
 	height:100%;
 }
 
+/*!!!!!!!!!無理矢理過ぎる実装 */
+#roulette-title{
+  position:absolute;
+    top:-72px;
+    left:100px;
+  margin:0;
+  padding:20px;
+
+
+  text-align: center;
+  font-size: 13px; /* ふつうで */
+}
 
 #wrapper{
 	position:relative;
-    height:100%;
 
 }
 
 #wrapper #rouletteContainer{
-	margin-top:100px;
 }
 
 
@@ -77,30 +85,52 @@ float: left;
  * */
 
 
-.logging-users {
-  position:absolute;
-    top: 100px;
-    left:20px;
-  display:block;
-  margin:0;
-  padding:0;
-  overflow:hidden;
-  background:#eee;
+#logging-users {
+  position:relative;
 
 }
 
+#other-users {
+
+  box-sizing:content-box;
+  display:block;
+  border-bottom:solid 5px #ccc;
+  margin:0;
+    margin-left:-10px;
+  padding:0;
+
+  height:40px;
+
+  overflow:hidden; 
+
+
+
+}
+
+ul.logging-users-inner {
+  display:block;
+    margin:0;
+    padding:0;
+
+  width:99999px;
+
+  overflow:hidden;/* clearfix */
+
+  
+}
+
 .logging-user {
+  float: left;
   box-sizing: content-box;
   display:block;
   overflow:hidden;
 
-  width:30px;
-  height:30px;
-  background:hsl(100,50%,50%);
+  width:40px;
+  height:40px;
+  background-image:url(/images/usericon.png) ;
 
-  margin:5px;
-  border:solid 10px white;
-  padding:3px;
+  background-color:hsl(100,50%,50%);
+  background-size: cover;
 
 
   color: white;
@@ -110,25 +140,26 @@ float: left;
 
 }
 
-.logging-user.me {
-  border:solid 5px white;
-  width:40px;
-  height:40px;
-  line-height:40px;
+#my-user .logging-user{
+  position:absolute;
+    right:0px;
+    bottom:5px; /*=border*/
+
+  width:55px;
+  height:55px;
 }
 
+
 .timer{
-  position:absolute;
-    top:60px;
-    left:20px;
+  margin-top:-60px;
+  height:60px;
 
 
-  width:40px;
-  height:40px;
 
   background:white;
 
   font-size:30px;
+  text-align:right;
 }
 
 

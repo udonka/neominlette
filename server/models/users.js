@@ -11,7 +11,7 @@ var db = mongoose.createConnection(url, function(err, res){
 
 var UserSchema = new mongoose.Schema({
   userinfo: {
-    local: {
+    local            : {
       id           : String,
       email        : String,
       password     : String,
@@ -46,16 +46,49 @@ var UserSchema = new mongoose.Schema({
   ]
 });
 
-UserSchema.virtual('auth_type')
-  .get(function(){
-    if(this.userinfo.local.id){
-      return 'local';
-    }else if(this.userinfo.facebook.id){
-      return 'facebook';
-    }else if(this.userinfo.twitter.id){
-      return 'twitter';
-    }
+UserSchema.virtual('auth_type').get(function(){
+  if(this.userinfo.local.id){
+    return 'local';
+  }
+  else if(this.userinfo.facebook.id){
+    return 'facebook';
+  }
+  else if(this.userinfo.twitter.id){
+    return 'twitter';
+  }
+  else{
     return null;
-  });
+  }
+});
+
+UserSchema.virtual('id').get(function(){
+  if(this.userinfo.local.id){
+    return this.userinfo.local.id;
+  }
+  else if(this.userinfo.facebook.id){
+    return this.userinfo.facebook.id;
+  }
+  else if(this.userinfo.twitter.id){
+    return this.userinfo.twitter.id;
+  }
+  else{
+    return null;
+  }
+});
+
+UserSchema.virtual('name').get(function(){
+  if(this.userinfo.local.id){
+    return this.userinfo.local.name;
+  }
+  else if(this.userinfo.facebook.id){
+    return this.userinfo.facebook.name;
+  }
+  else if(this.userinfo.twitter.id){
+    return this.userinfo.twitter.name;
+  }
+  else{
+    return null;
+  }
+});
 
 module.exports.User = db.model('User', UserSchema);
