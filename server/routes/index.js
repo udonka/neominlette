@@ -21,8 +21,8 @@ router.get('/', function(req, res){
   var fullUrl= req.protocol + '://' + req.get('host') + req.originalUrl;
 
   res.render('branding' , {
-    user_name: req.user.name,
-    user_id: req.user.id,
+    user_name: req.user && req.user.name,
+    user_id: req.user &&req.user.id,
     roulette_id: "home",
     labels: [ //実はうわべだけ
       'Udonka',

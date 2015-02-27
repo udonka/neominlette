@@ -160,16 +160,6 @@ if(typeof window === "undefined"){
   }
 
 
-	var container = $("#rouletteContainer");
-	var width = container.width();
-	var height = $("html").height() - 300;
-	var length = Math.min(width,height);
-	var snap = Snap("#rouletteArea");
-	snap.dom = document.getElementById("rouletteArea");
-	snap.attr({"style": "width:"+length+"px; height:"+length+"px;"});
-
-
-	var roulette = new Roulette(snap,length,labelStoppers);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
   

@@ -8,7 +8,6 @@
 
 <div id="wrapper" class="container"> 
   <div id="rouletteContainer">
-    <p class="text-center h1">選択を、みんなで、カラフルに</p>
     <div id="logging-users">
       <div id="other-users" class="logging-users">
         <div class="logging-users-inner">
@@ -24,6 +23,7 @@
         </div>
       </div>
     </div>
+    <p class="text-center h1">選択を、みんなで、カラフルに</p>
     <!-- 描画用フィールド -->
     <svg id="rouletteArea" 
         xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@
 
 	var container = $("#rouletteContainer");
 	var width = container.width();
-	var height = $("html").height() - 200;
+	var height = $("html").height() - 300;
 	var length = Math.min(width,height);
 	var snap = Snap("#rouletteArea");
 

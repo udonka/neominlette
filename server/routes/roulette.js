@@ -46,8 +46,8 @@ router.get('/:id', function(req, res){
 			console.log('roulettegroupname:'+user[0].rouletteGroups[0].name);
 	    res.render('roulette', {
         user: req.user,
-        user_name: req.user.name,
-        user_id: req.user.id,
+        user_name: req.user && req.user.name,
+        user_id: req.user && req.user.id,
         roulette_id: req.params.id,
 				groupname: user[0].rouletteGroups[0].name,
 				roulettename: roulette.name,
