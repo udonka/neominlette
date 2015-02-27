@@ -31,7 +31,7 @@ function sio(HTTPserver){
       console.log("hello, <"+ socket.id.slice(0,4)+">. your room is [" + data.room+"], OK?");
       console.log("Here it is your MP! <<" + socket.mp + ">>");
 
-//joinすることにより、to('room')でこの部屋のを受け取れるようになる
+      //joinすることにより、to('room')でこの部屋のを受け取れるようになる
       //こんにちは～
       //!!!!!!!!roomにいれたい
       socket.join(data.room);
@@ -41,9 +41,6 @@ function sio(HTTPserver){
       socket.room = rooms[ data.room+''] = 
         rooms[ data.room+''] || new Room(data.room, sio); //sio is for broadcast comm
        
-
-      //つまらないものですがポイントどうぞ～
-      socket.room.addMp(5); //ここでは送らない
 
       socket.room.emitMembers(); //はじめて送信
 
@@ -63,16 +60,6 @@ function sio(HTTPserver){
     // スワイプを受信
     socket.on('swipe', function(data){
 
-      /*
-      //mpがないと何も出来ない
-      if(socket.mp <= 0){
-        return;
-      }
-      else{
-        socket.mp --;
-        socket.emitMembers(data.room);
-      }
-      */
 
       //joinすることにより、to('room')でこの部屋のを受け取れるようになる
       //helloでやってるけど一応やっとけ
@@ -134,7 +121,7 @@ function sio(HTTPserver){
 
       console.log("ADD MP to everyone in room [" + socket.room.id + "]");
 
-      socket.room.addMp(5);
+      socket.room.addMpToEveryone(5);
 
       socket.room.wheel.setMovable(true);
 

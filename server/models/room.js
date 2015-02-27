@@ -99,7 +99,7 @@ Room.prototype.emitMembers = function(){
 
 }
 
-Room.prototype.addMp= function(mp){
+Room.prototype.addMpToEveryone= function(mp){
       //share mp to room members
       //
       //mp should be number;
