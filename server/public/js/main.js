@@ -6,11 +6,6 @@ if(typeof window === "undefined"){
   var Wind = require("./common/wind").Wind;
 }
 
-var labels = labels ||  [
-  "ごにょ",
-  "うっきー",
-  "うどんか",
-];
 
 
 (function(global){
@@ -35,9 +30,8 @@ var labels = labels ||  [
   }
 
 
-  var wheel = new Wheel(0,0,labels);
+  var wheel = new Wheel(0,0,global.labelStoppers);
   var wind = new Wind(wheel);
-  var labelStoppers = wheel.getLabelStoppers();
 
   wheel.onloop(function(){
     //modelの変更をviewに適用
@@ -49,7 +43,6 @@ var labels = labels ||  [
   var drawTrace = function(data){
     var swipe = data.swipeData;
 
-    console.log(swipe);
 
     var cx = roulette.x;
     var cy = roulette.y;
@@ -58,7 +51,6 @@ var labels = labels ||  [
     var x2 = cx+ swipe.endR   * Math.cos(swipe.endAngle)   * roulette.radius;
     var y2 = cy+ swipe.endR   * Math.sin(swipe.endAngle)   * roulette.radius;
 
-    console.log("line ("+x1+" , "+y1+") -> ( "+x2+", "+ y2 +") ");
 
     //スワイプあとを描画
     var arrow =  snap.line(x1,y1,x2,y2)
@@ -122,7 +114,6 @@ var labels = labels ||  [
 
 
     for(id in data.members){
-
       if(socket.io.engine.id === id){
         //!!!!myhueはほぼ変わらないわけなのでどこかにキャッシュしたい
         var myhue = socket.myhue = data.members[id].hue;
@@ -147,9 +138,7 @@ var labels = labels ||  [
           "</div>";
         $logging_users_div.append(listr);
       }
-
     }
-
   });
 
   socket.on("timer", function(data){
@@ -183,13 +172,7 @@ var labels = labels ||  [
 	var roulette = new Roulette(snap,length,labelStoppers);
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
 
-
-
-
-	var w = 5;
-	var h = 50;
-
-	var angle = 0;
+  
 
 
 	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, roulette.radius, socket, room);

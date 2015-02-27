@@ -130,6 +130,7 @@
 
   //requestAnimationFrameにより呼ばれる
   Roulette.prototype.render = function() {
+    //ここでDOMの書き換えがおこっちゃってる
     this.group.transform("translate("+this.x+","+this.y+") rotate("+ this.angle/Math.PI*180+")");
 
     var stateText = ("angle is " + this.angle.toFixed(2));
@@ -143,7 +144,6 @@
           "rotate("+ this.fure * 180/10 +")"
           );
 
-    //this.text = null; //1回表示したら消すようにしてみる
   }
 
   Roulette.prototype.setAngle = function(angle_rad) {
