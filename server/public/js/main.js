@@ -63,7 +63,7 @@ var labels = labels ||  [
     //スワイプあとを描画
     var arrow =  snap.line(x1,y1,x2,y2)
       .attr({
-        stroke:Snap.rgb(0,0,255),
+        stroke:Snap.hsl(data.hue,0.5,0.5),
         "stroke-opacity":0.5,
         strokeWidth:15
       });
@@ -92,11 +92,12 @@ var labels = labels ||  [
     //もしルーレットが休んでいたら、復活させる
     wheel.startLoop();
 
-    //Viewは角度だけ知ってればよし
-    roulette.setAngle(data.r);
+    //いつもやってるけど、この臨時フレームでも描画するよ
+    roulette.setAngle(data.r); //Viewは角度だけ知ってればよし
     roulette.setText(wind.getCurrentLabel());
 
     roulette.render();
+    
   }
 
   socket.on("globalmove", function(data){
@@ -123,12 +124,13 @@ var labels = labels ||  [
     for(id in data.members){
 
       if(socket.io.engine.id === id){
+        //!!!!myhueはほぼ変わらないわけなのでどこかにキャッシュしたい
+        var myhue = socket.myhue = data.members[id].hue;
         var listr = 
           "<div id='"+ id + "' " +
           "class='logging-user " + (socket.io.engine.id === id ? "me" : "") + "' "+
           "style='background-color:hsl("+
-          data.members[id].hue +
-          ",50%,50%)'>"+
+           + myhue +  ",50%,50%)'>"+
           //data.members[id].mp +
           "</div>";
 
@@ -147,19 +149,6 @@ var labels = labels ||  [
       }
 
     }
-
-    console .log(socket);
-
-    var str = " I'm " + socket.io.engine.id + "<br>";
-
-    str += "members: <br>" ;
-    for( id in data.members)
-    {
-      str += id + "<br>";
-    }
-
-
-    $('#memo').html(str);
 
   });
 

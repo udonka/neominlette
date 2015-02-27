@@ -55,9 +55,12 @@
       this.arrow.remove();
 
     }
+
+    var myhue = this.socket.myhue || 0;
+    myhue /= 360;
 		this.arrow =  this.snap.line(this.touchStartX,this.touchStartY,this.touchStartX,this.touchStartY)
 			.attr({
-				stroke:Snap.rgb(255,0,0),
+				stroke:Snap.hsl(myhue ,0.5,0.5), //!!!!!!!!!!!!!!!自分の色にしたい！！！！
 				"stroke-opacity":0.5,
 				strokeWidth:15
 			});
