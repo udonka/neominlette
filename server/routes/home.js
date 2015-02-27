@@ -17,54 +17,55 @@ var loginCheck = function(req, res, next){
 
 /* GET home page. */
 router.get('/', loginCheck,function(req, res){
-  var send = {};
-  if(req.user.auth_type == 'local'){
-    send.user = req.user.userinfo.local.name;
-    send.name = req.user.userinfo.local.name;
-  }
-  if(req.user.auth_type == 'facebook'){
-    send.user = req.user.userinfo.facebook.name;
-    send.name = req.user.userinfo.facebook.name;
-  }
-  if(req.user.auth_type == 'twitter'){
-    send.user = req.user.userinfo.twitter.name;
-    send.name = req.user.userinfo.twitter.name;
-  }
-  send.rouletteGroups = req.user.rouletteGroups;
+  //!!!!!!!!これいちいち書くのめんどくさいなあ
+  var send = {
+    user_id: req.user.id,
+    user_name: req.user.name,
+    rouletteGroups: req.user.rouletteGroups,
+  };
+
   res.render('user', send);
+
 });
 
+
 router.get('/userinfo', loginCheck, function(req, res){
-  console.log('auth_type', req.user.auth_type);
+  var viewtemp = "";
+
+  //認証方法によって描画テンプレートを場合分け
   if(req.user.auth_type == 'local'){
-    console.log('local', req.user.userinfo.local);
-    res.render('userinfo', {name: req.user.userinfo.local.name, id: req.user._id});
-    return;
+    viewtemp = 'userinfo';
   }
-  if(req.user.auth_type == 'facebook'){
-    console.log('facebook', req.user.userinfo.facebook);
-    res.render('userinfo_facebook', {user: req.user, name: req.user.userinfo.facebook.name});
-    return;
+  else if(req.user.auth_type == 'facebook'){
+    viewtemp = 'userinfo_facebook';
   }
-  if(req.user.auth_type == 'twitter'){
-    console.log('twitter', req.user.userinfo.twitter);
-    res.render('userinfo_twitter', {user: req.user, name: req.user.userinfo.twitter.name});
-    return;
+  else if(req.user.auth_type == 'twitter'){
+    viewtemp = 'userinfo_twitter';
   }
-  res.render('userinfo');
+  else{
+    //!!!!!nullだったらやだなあ
+    res.render('userinfo', {
+      user: "userがありません",
+      user_name: "userがありません",
+      user_id: "userがありません", 
+    });
+    return ;
+  }
+
+  res.render(viewtemp, {
+    user: req.user,
+    user_name: req.user.name,
+    user_id: req.user.id, // いみないかなあ
+  });
+  return ;
+
 });
 
 router.get('/create', loginCheck, function(req, res){
-  var send = {};
-  if(req.user.userinfo.local.name){
-    send.user = req.user.userinfo.local.name;
-  }
-  if(req.user.userinfo.facebook.name){
-    send.user = req.user.userinfo.facebook.name;
-  }
   res.render('createRoulette',
     {
-      user: req.user.userinfo.local.name
+      user: req.user,
+      user_name: req.user.name,
     });
 })
 

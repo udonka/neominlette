@@ -125,4 +125,5 @@ function id2hue(idstr){
 }
 
 this['Room'] = Room;
+this['id2hue'] = id2hue;
 

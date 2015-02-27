@@ -1,5 +1,6 @@
 var socketio = require('socket.io');
 var Room = require('./room').Room;
+var id2hue = require('./room').id2hue;
 
 
 //連想配列のキーを部屋名にして、ホイールのモデルを保存する
@@ -122,7 +123,8 @@ function sio(HTTPserver){
         f : f,
         r : r,
         v : v,
-        swipeData:swipeData 
+        swipeData:swipeData,
+        hue: id2hue(socket.client.id) / 360 //ユーザーの色
       });
     });
 
