@@ -129,7 +129,18 @@ function sio(HTTPserver){
     });
 
 
+    socket.on('addmp', function(data){
+      console.log("addmp pushed");
 
+      socket.broadcast.to(data.room).emit('ack-addmp',{
+        ok:"ok"
+      }
+      );
+
+
+    });
+
+    /*
     socket.on('addmp', function(data){
 
       console.log("ADD MP to everyone in room [" + socket.room.id + "]");
@@ -142,6 +153,7 @@ function sio(HTTPserver){
 
       socket.room.emitMembers();
     });
+    */
 
 
     // 切断

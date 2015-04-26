@@ -10,7 +10,6 @@ if(typeof window === "undefined"){
 
 (function(global){
 
-  
   /* 通信系処理* */
   var serverurl = window.location.host;
   var room = roulette_id;
@@ -43,14 +42,12 @@ if(typeof window === "undefined"){
   var drawTrace = function(data){
     var swipe = data.swipeData;
 
-
     var cx = roulette.x;
     var cy = roulette.y;
     var x1 = cx+ swipe.startR * Math.cos(swipe.startAngle) * roulette.radius;
     var y1 = cy+ swipe.startR * Math.sin(swipe.startAngle) * roulette.radius;
     var x2 = cx+ swipe.endR   * Math.cos(swipe.endAngle)   * roulette.radius;
     var y2 = cy+ swipe.endR   * Math.sin(swipe.endAngle)   * roulette.radius;
-
 
     //スワイプあとを描画
     var arrow =  snap.line(x1,y1,x2,y2)
@@ -141,6 +138,7 @@ if(typeof window === "undefined"){
     }
   });
 
+  /*
   socket.on("timer", function(data){
     $("#timer").text(data.count);
 
@@ -155,9 +153,19 @@ if(typeof window === "undefined"){
 
   });
 
+  */
+
+
   global.addmp = function(){
     socket.emit('addmp',{count:5, room:room});
+
+    console.log('addmp');
   }
+
+  socket.on("ack-addmp", function(data){
+    console.log("add mp accepted"+data.ok);
+    
+  });
 
 
 	//var rouletteView = new RouletteView(roulette, s, Math.min(width,height) / 2 * 0.8, width/2,height/2);
