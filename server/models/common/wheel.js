@@ -91,6 +91,10 @@ Wheel.prototype.getMovable = function (flag){
   return this.movable;
 }
 
+Wheel.prototype.toggleMovable= function (flag){
+  this.movable = !this.movable;
+  return this.movable;
+}
 
 ////////////////////Lable Stopper////////////////////////
 

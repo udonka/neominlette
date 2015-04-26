@@ -138,6 +138,7 @@ if(typeof window === "undefined"){
     }
   });
 
+
   /*
   socket.on("timer", function(data){
     $("#timer").text(data.count);
@@ -150,9 +151,7 @@ if(typeof window === "undefined"){
       $('body').css('background', 'white');
       wheel.setMovable(true);
     }
-
   });
-
   */
 
 
@@ -163,8 +162,11 @@ if(typeof window === "undefined"){
   }
 
   socket.on("ack-addmp", function(data){
-    console.log("add mp accepted"+data.ok);
+
+    wheel.setMovable(data.isMovable)
+
     
+    $('body').css('background',data.isMovable ? 'white':'red');
   });
 
 

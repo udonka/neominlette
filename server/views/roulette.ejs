@@ -1,12 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-<% include head %>
-
-<body id="body" onmousedown="return false;">
-
-  <% include top %>
-
-  <div id="wrapper" class="container"> 
+<!DOCTYPE HTML> <html> <% include head %> <body id="body" onmousedown="return false;"> <% include top %> <div id="wrapper" class="container"> 
     <!-- !!!!!!!!!無理矢理過ぎる実装 -->
     <h1 id="roulette-title">
 <%
@@ -49,14 +41,20 @@
     <div id="bottom-buttons" class="btn-group btn-group-justified" role="group" aria-label="...">
       <div class="btn-group" role="group">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">シェア</button>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">share</button>
       </div>
+
+<% if(locals.user_name) { %>
+
       <div class="btn-group" role="group">
-        <a href="javascript:addmp()" class="btn btn-default btn-lg text-center">スタート</a>
+        <a href="javascript:addmp()" class="btn btn-default btn-lg text-center">switch movable</a>
       </div>
+<% } %>
+      <!--
       <div class="btn-group" role="group">
-        <a href="javascript:alert('実装中です')" class="btn btn-default btn-lg text-center">編集</a>
+        <a href="javascript:alert('実装中です')" class="btn btn-default btn-lg text-center">edit</a>
       </div>
+      -->
     </div>
 
 
@@ -66,12 +64,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">ルーレットをシェア</h4>
+            <h4 class="modal-title" id="myModalLabel">share the roulette</h4>
           </div>
           <div class="modal-body">
             <p class="text-center"> <%- QRURL %> </p>
 
-            <img class="img-responsive" style="margin: 0 auto;" src="http://www.it-top.biz/qr/qrapi/?d=<%- QRURL %>&s=8&q=4">
+            <img class="img-responsive" style="margin: 0 auto;" src="http://chart.apis.google.com/chart?cht=qr&chs=500x500&chl=<%- QRURL %>">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -146,20 +144,6 @@
 
 <!--bootstrap-->
 <script charset="UTF-8" type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-
-<script type="text/javascript">
-$(function(){
-    $("img.lazy").lazyload();
-});
-
-$("#QRcontainer").html(
-    '<img class="img-responsive" style="margin: 0 auto;" src="http://www.it-top.biz/qr/qrapi/?d=<%- QRURL %>&s=8&q=4">'
-);
-</script>
-
-
-
 
 </body>
 </html>

@@ -54,11 +54,10 @@
         <h4 class="modal-title" id="myModalLabel">share this roulette</h4>
       </div>
       <div class="modal-body">
-      <p class="text-center"> <%- QRURL %> </p>
+        <p class="text-center"> <%- QRURL %> </p>
 
-      <div id="QRcontainer">
-        <!--<img class="lazy img-responsive" style="margin: 0 auto;" data-original="http://www.it-top.biz/qr/qrapi/?d=<%- QRURL %>&s=8&q=4">-->
-      </div>
+        <img class="img-responsive" style="margin: 0 auto;" src="http://chart.apis.google.com/chart?cht=qr&chs=500x500&chl=<%- QRURL %>">
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -131,16 +130,6 @@
 <!--bootstrap-->
   <script charset="UTF-8" type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-
-<script type="text/javascript">
-$(function(){
-    $("img.lazy").lazyload();
-});
-
-$("#QRcontainer").html(
-    '<img class="img-responsive" style="margin: 0 auto;" src="http://www.it-top.biz/qr/qrapi/?d=<%- QRURL %>&s=8&q=4">'
-);
-</script>
 
 </body>
 </html>

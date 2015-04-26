@@ -132,10 +132,16 @@ function sio(HTTPserver){
     socket.on('addmp', function(data){
       console.log("addmp pushed");
 
-      socket.broadcast.to(data.room).emit('ack-addmp',{
-        ok:"ok"
-      }
-      );
+      var isMovable = socket.room.wheel.toggleMovable();
+
+
+      var ret = {
+        isMovable :isMovable
+      };
+
+      socket.emit('ack-addmp',ret);
+
+      socket.broadcast.to(data.room).emit('ack-addmp',ret);
 
 
     });
