@@ -63,16 +63,26 @@ function sio(HTTPserver){
     // スワイプを受信
     socket.on('swipe', function(data){
 
-      /*
-      //mpがないと何も出来ない
-      if(socket.mp <= 0){
-        return;
+      //モデルに対して力を行使
+
+
+
+      //if model is not movable
+      if(!socket.room.wheel.getMovable()){
+        
+        //bad name!!!
+
+        var ret = {
+          isMovable :false
+        };
+
+        socket.emit("ack-addmp", {isMovable:false});
+
+        socket.broadcast.to(data.room).emit('ack-addmp',ret);
+
+        return ;
       }
-      else{
-        socket.mp --;
-        socket.emitMembers(data.room);
-      }
-      */
+
 
       //joinすることにより、to('room')でこの部屋のを受け取れるようになる
       //helloでやってるけど一応やっとけ
@@ -99,7 +109,7 @@ function sio(HTTPserver){
       //送られてきた力
       var force = data.swipeData.f;
 
-      //モデルに対して力を行使
+
       socket.room.wheel.addForce(force);
 
       //送ってきたやつに返す

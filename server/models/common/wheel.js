@@ -111,6 +111,7 @@ Wheel.prototype.getLabelStoppers = function (){
 Wheel.prototype.addForce = function(force) {
   //動くの禁止のときは、なにもしません
   //クライアントに同期してあげないとな。。
+  
   if(!this.getMovable()){
     console.log("cannot move!");
     return;
