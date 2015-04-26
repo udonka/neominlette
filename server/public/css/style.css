@@ -8,6 +8,7 @@ body {
 	padding: 0px;
 
 	height:100%;
+  background:transparent;
 }
 
 /*!!!!!!!!!無理矢理過ぎる実装 */
@@ -163,3 +164,9 @@ ul.logging-users-inner {
 }
 
 
+
+
+#branding-text
+{
+  margin-top:-50px;
+}

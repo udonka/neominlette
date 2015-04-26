@@ -45,7 +45,7 @@
       <div id="timer" class="timer">
        timer 
       </div>
-    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+    <div id="bottom-buttons" class="btn-group btn-group-justified" role="group" aria-label="...">
       <div class="btn-group" role="group">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">シェア</button>
@@ -111,7 +111,12 @@
 
 	var container = $("#rouletteContainer");
 	var width = container.width();
-	var height = $("html").height() - 300;
+
+  var height = $(window).height() 
+  - $("#navbar").outerHeight(true);
+  - $("#logging-users").outerHeight(true) 
+  - $("#bottom-buttons").outerHeight(true);
+
 	var length = Math.min(width,height);
 	var snap = Snap("#rouletteArea");
 
