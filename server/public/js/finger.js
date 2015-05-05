@@ -1,11 +1,14 @@
 //あんまり独立性高くない良くないクラス
 (function(global){
 
-	var Finger = function(snap, snapdom, centerx, centery, radius, sio, room){
+	var Finger = function(snap, snapdom, centerx, centery, radius, sio, room, wheel){
 		var self = this;
 
 		self.socket = sio;
 		self.room = room;
+		self.wheel=wheel; 
+    console.log("wheel is " + wheel);
+    console.log( self.wheel);
 
 		self.snap = snap;
 		self.snapdom = snapdom;
@@ -44,6 +47,16 @@
 	}
 
 	Finger.prototype.pointerdown = function(){
+
+    //if not movable, no meaning!
+    if(!this.wheel.getMovable()){
+      if(this.arrow ){
+        this.arrow.remove();
+      }
+
+      return;
+    }
+
 		this.touchStartX = event.offsetX;
 		this.touchStartY = event.offsetY;
 		this.touchStartTime =  parseInt((new Date).getTime());
@@ -58,24 +71,45 @@
 
     var myhue = this.socket.myhue || 0;
     myhue /= 360;
-		this.arrow =  this.snap.line(this.touchStartX,this.touchStartY,this.touchStartX,this.touchStartY)
-			.attr({
-				stroke:Snap.hsl(myhue ,0.5,0.5), //!!!!!!!!!!!!!!!自分の色にしたい！！！！
-				"stroke-opacity":0.5,
-				strokeWidth:15
-			});
-	}
+    this.arrow =  this.snap.line(this.touchStartX,this.touchStartY,this.touchStartX,this.touchStartY)
+      .attr({
+        stroke:Snap.hsl(myhue ,0.5,0.5), //!!!!!!!!!!!!!!!自分の色にしたい！！！！
+        "stroke-opacity":0.5,
+        strokeWidth:15
+      });
+  }
 
-	Finger.prototype.pointermove = function(){
-		if(this.arrow)
-			this.arrow.attr({
-				x2:event.offsetX,
-				y2:event.offsetY
-			});
+  Finger.prototype.pointermove = function(){
+    
 
-	}
+    //if not movable, no meaning!
+    if(!this.wheel.getMovable()){
+      if(this.arrow ){
+        this.arrow.remove();
+      }
+
+      return;
+    }
+
+    if(this.arrow)
+      this.arrow.attr({
+        x2:event.offsetX,
+        y2:event.offsetY
+      });
+
+  }
 
   Finger.prototype.pointerup = function(){
+
+    //if not movable, no meaning!
+    if(!this.wheel.getMovable()){
+      if(this.arrow ){
+        this.arrow.remove();
+      }
+
+      return;
+    }
+
     this.touchEndX = event.offsetX;
     this.touchEndY = event.offsetY;
     this.touchEndTime = parseInt((new Date).getTime());
@@ -92,39 +126,33 @@
 
     this.socket.emitForce(swipeData);
 
-		//s. タッチ場所を描画
 
-		this.arrow.attr({
-			x2:this.touchEndX,
-			y2:this.touchEndY
-		});
+    //s. タッチ場所を描画
+    this.arrow.attr({
+      x2:this.touchEndX,
+      y2:this.touchEndY
+    });
 
+    //function にarrowをわたしている クロージャ
+    (function(larrow){
+      larrow.animate({
+        stroke:Snap.rgb(255,255,255), 
+        "stroke-opacity":0
+      },1000,null,function(){
+        //arrowをはずす
+        larrow.remove();
+      });
+    })(this.arrow);
 
-		//function にarrowをわたしている クロージャ
-		(function(larrow){
-			larrow.animate({
-				stroke:Snap.rgb(255,255,255), 
-				"stroke-opacity":0
-			},1000,null,function(){
-				//arrowをはずす
-				larrow.remove();
-			});
-		})(this.arrow);
+    //ガベージこれくしょｎ
+    //moveしても動かないようにする	
+    this.arrow = null;
 
-		//ガベージこれくしょｎ
-		//moveしても動かないようにする	
-		this.arrow = null;
-
-
-		//アニメーションで消さなきゃ
-		//arrow = null; //お前にもうようはねえ
-
-		event.stopPropagation();
-		event.preventDefault();
-	}
+    event.stopPropagation();
+    event.preventDefault();
+  }
 
 
-  //
 	//最終的に速度を計算する
 	Finger.prototype.calcSwipe = function(centerX, centerY, startX, startY, endX, endY, timeStampX, timeStampY, radius) {
 		// TODO
@@ -142,7 +170,6 @@
     var dx = 30 / 1000;
     var v = dtheta.get() / (timeDiff || 1);
     var f = v / dx;
-
 
     var swipeData = {
       f: f,
@@ -162,3 +189,6 @@
 	global.RouletteFinger = Finger;
 
 }(window));
+
+
+

@@ -5,9 +5,11 @@ var Roulette = model.Roulette;
 var User = require('../models/users.js').User;
 
 var loginCheck = function(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
+  if(req.isAuthenticated()){
+      return next();
+  }
+
+  res.redirect('/');
 }
 
 /* GET home page. */

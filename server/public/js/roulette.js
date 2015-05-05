@@ -18,12 +18,28 @@
       r1_12 : self.radius*1/12,
       r1_24 : self.radius*1/24,
     };
+
     sizes.fontsize = sizes.r1_12;
 
     self.sizes = sizes;
 
     self.x = self.width/2;
     self.y = self.height/2;
+
+    self.lockRect = paper.rect(
+        sizes.r1_12,
+        sizes.r1_12, 
+        self.width - sizes.r1_6, 
+        self.height - sizes.r1_6,
+        sizes.r1_12,
+        sizes.r1_12)
+      .attr({
+          fill : Snap.hsb(0, 0,0.5), 
+          strokeWidth: 0,
+          opacity: 0
+    });
+
+
     self.group = paper.group();
     self.labelStoppers = labelStoppers;
 
@@ -156,6 +172,23 @@
 
   Roulette.prototype.setText = function(text) {
     this.text = text;
+  };
+
+  Roulette.prototype.setLocked = function(locked) {
+    if(locked){
+      this.lockRect.attr(
+        {
+          opacity:1
+        }
+      );
+    }
+    else{
+      this.lockRect.attr(
+        {
+          opacity:0
+        }
+      );
+    }
   };
 
   global.Roulette = Roulette;

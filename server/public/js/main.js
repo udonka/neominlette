@@ -86,7 +86,6 @@ if(typeof window === "undefined"){
     roulette.setText(wind.getCurrentLabel());
 
     roulette.render();
-    
   }
 
   socket.on("globalmove", function(data){
@@ -165,8 +164,8 @@ if(typeof window === "undefined"){
 
     wheel.setMovable(data.isMovable)
 
+    roulette.setLocked(!data.isMovable);
     
-    $('body').css('background',data.isMovable ? 'white':'red');
   });
 
 
@@ -175,6 +174,7 @@ if(typeof window === "undefined"){
   
 
 
-	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, roulette.radius, socket, room);
+	var finger = new RouletteFinger(snap, snap.dom, roulette.x, roulette.y, roulette.radius, socket, room, wheel
+      );
 
 })(window);
