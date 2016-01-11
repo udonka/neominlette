@@ -7,15 +7,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var login = require('./routes/login');
-var signup = require('./routes/signup');
-var logout = require('./routes/logout');
-var roulette = require('./routes/roulette');
-var home = require('./routes/home');
-var facebook = require('./routes/facebook');
-var twitter = require('./routes/twitter');
+var branding_router = require('./routes/index');
+var users_router = require('./routes/users');
+var login_router = require('./routes/login');
+var signup_router = require('./routes/signup');
+var logout_router = require('./routes/logout');
+var roulette_router = require('./routes/roulette');
+var home_router = require('./routes/home');
+var facebook_router = require('./routes/facebook');
+var twitter_router = require('./routes/twitter');
 
 var app = express();
 //add
@@ -37,7 +37,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 //edit
-app.use(session({
+
+app.use(session({ // ???? using session and passport.session?
   secret: 'secret',
   store: new MongoStore({
     db: 'session',
@@ -49,21 +50,23 @@ app.use(session({
     maxAge: 60 * 60 * 10000
   }
 }));
+
+
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash()); //it enables flash
+app.use(express.static(path.join(__dirname, 'public'))); //enable access to local dir
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
-app.use('/login', login);
-app.use('/signup', signup);
-app.get('/logout', logout);
-app.use('/roulette', roulette);
-app.use('/users', users);
-app.use('/home', home);
-app.use('/facebook', facebook);
-app.use('/twitter', twitter);
-app.use('/', routes);
+app.use('/login', login_router);
+app.use('/signup', signup_router);
+app.get('/logout', logout_router);
+app.use('/roulette', roulette_router);
+app.use('/users', users_router);
+app.use('/home', home_router);
+app.use('/facebook', facebook_router);
+app.use('/twitter', twitter_router);
+app.use('/', branding_router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -76,6 +79,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
+
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);

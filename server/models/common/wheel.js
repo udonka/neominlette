@@ -7,6 +7,8 @@ if(isServer()){
   var _ = require('underscore'); //node_moduleから探してくれる
   var Angle = require('./angle').Angle; //同じディレクトリ
   var LabelStopper = require('./labelstopper').LabelStopper;//同じディレクトリ
+
+
 }
 
 
@@ -28,6 +30,10 @@ var Wheel = function(theta, v, labelStoppers){
 
   //速度(角速度)
   this.v = v;
+
+  //速度の向き
+  this.direction = v >= 0 ? true:false;
+  this.old_direction = this.direction;
 
   //質量
   this.m = GLOBAL.m;
@@ -162,6 +168,11 @@ Wheel.prototype._internalMove = function(f) { //float
 
   if(isNaN(a)) console.log("a is NaN");
 
+  this.old_direction = this.direction;
+
+
+  this.direction = this.v >= 0 ? true:false;
+
   this.v += a * GLOBAL.dx ;
   
   if (!this.isMoving()){
@@ -175,7 +186,23 @@ Wheel.prototype._internalMove = function(f) { //float
   if(isNaN(this.v)) console.log("v is NaN");
 
 
-  this.ang.add( this.v *GLOBAL.dx );
+  if((this.direction && !this.old_direction ) || (!this.direction && this.old_direction )){
+
+    console.log("direction changed");
+
+  }
+
+
+  var diff = this.v *GLOBAL.dx; // d [rad]
+  var step = diff/(2*Math.PI)*200;
+  var stepabs = Math.ceil(Math.abs(step));
+
+  var stepnum = stepabs > 9 ? 9:stepabs;
+  console.log("int step" + stepnum);
+
+
+
+  this.ang.add( diff );
 
   var ang = this.getAngle();
   //console.log("r:%d v:%d f:%d", this.getAngle(), this.getVelocity(),f);

@@ -66,6 +66,8 @@ function sio(HTTPserver){
       //モデルに対して力を行使
 
 
+      socket.room = rooms[ data.room+''] = 
+        rooms[ data.room+''] || new Room(data.room, sio); //sio is for broadcast comm
 
       //if model is not movable
       if(!socket.room.wheel.getMovable()){

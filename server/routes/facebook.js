@@ -5,12 +5,14 @@ var passport = require('passport');
 var model = require('../models/users.js');
 var User = model.User;
 
+/*
 var isAuthenticated = function(req, res, next){
     if(req.isAuthenticated()){
       res.redirect('/home');
     }
     return next();
 }
+*/
 
 router.get('/', passport.authenticate('facebook', {scope: 'email'}));
 
